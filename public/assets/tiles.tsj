@@ -1,0 +1,19 @@
+{ "columns":1,
+ "image":"..\/..\/..\/..\/..\/Downloads\/tile plataformas coop 1.png",
+ "imageheight":64,
+ "imagewidth":32,
+ "margin":0,
+ "name":"tiles",
+ "spacing":0,
+ "tilecount":2,
+ "tiledversion":"1.11.2",
+ "tileheight":32,
+ "tiles":[
+        {
+         "id":1,
+         "type":"colisionable"
+        }],
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.10"
+}
