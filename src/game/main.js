@@ -1,5 +1,6 @@
 import { Boot } from './scenes/Boot';
 import { Coop } from './scenes/Coop';
+import { Versus } from './scenes/Versus';
 import { Game as MainGame } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
@@ -29,6 +30,7 @@ const config = {
         Preloader,
         Coop,
         MainMenu,
+        Versus,
         MainGame,
         GameOver
     ]

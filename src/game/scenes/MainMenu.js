@@ -24,5 +24,10 @@ export class MainMenu extends Scene
             this.scene.start('Coop');
 
         });
+
+        this .input.keyboard.once('keydown-SPACE', () => {
+
+            this.scene.start('Versus');
+        });
     }
 }
