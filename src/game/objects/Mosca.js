@@ -1,6 +1,6 @@
-export default class Mosca extends Phaser.GameObjects.Ellipse {
+export default class Mosca extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
-        super(scene, x, y, 16, 12, 0x000000); // mosca simple (ovalito negro)
+        super(scene, x, y, 'mosca spritesheet'); // usa el mismo key
         this.scene = scene;
         this.scene.add.existing(this);
 
@@ -10,6 +10,7 @@ export default class Mosca extends Phaser.GameObjects.Ellipse {
 
         this.setVisible(false);
         this.setActive(false);
+        this.setScale(1.5); // ajusta el tamaño si es necesario
     }
 
     // Activar mosca desde pool
@@ -17,12 +18,14 @@ export default class Mosca extends Phaser.GameObjects.Ellipse {
         this.x = x;
         this.y = y;
 
-        this.velX = direccion * Phaser.Math.Between(100, 150); // izquierda o derecha
-        this.amplitud = Phaser.Math.Between(5, 20);           // oscilación vertical
+        this.velX = direccion * Phaser.Math.Between(100, 150);
+        this.amplitud = Phaser.Math.Between(5, 20);
         this.tiempo = 0;
 
         this.setVisible(true);
         this.setActive(true);
+
+        this.play('mosca_fly'); // ← reproduce la animación
     }
 
     // Movimiento errático
