@@ -19,6 +19,7 @@ export class Versus extends Scene
     });
 }
 create() {
+    this.add.image(480, 270, 'fondo')
     // Retículas (jugador 1 con WASD, jugador 2 con flechas)
     this.reticle1 = new Reticle(this, 200, 100, 0xff0000, {
       left: this.input.keyboard.addKey("A"),

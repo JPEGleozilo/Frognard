@@ -1,7 +1,7 @@
 import Mosca from "./Mosca.js";
 
 export default class MoscaPool {
-    constructor(scene, cantidad = 10) {
+    constructor(scene, cantidad = 20) {
         this.scene = scene;
         this.pool = [];
 
@@ -24,11 +24,11 @@ export default class MoscaPool {
 
         if (lado === 0) {
             // Aparece en el borde izquierdo y va a la derecha
-            x = 10;
+            x = 30;
             direccion = 1;
         } else {
             // Aparece en el borde derecho y va a la izquierda
-            x = this.scene.sys.canvas.width - 10;
+            x = this.scene.sys.canvas.width - 30;
             direccion = -1;
         }
 

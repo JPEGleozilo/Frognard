@@ -7,8 +7,10 @@ export default class ScoreManager {
         };
 
         // Textos en pantalla
-        this.scoreTextP1 = scene.add.text(20, 20, 'Jugador 1: 0', { fontSize: '16px', fill: '#fff' });
-        this.scoreTextP2 = scene.add.text(20, 40, 'Jugador 2: 0', { fontSize: '16px', fill: '#fff' });
+        //texto verde 
+        this.scoreTextP1 = scene.add.text(200, 510, '0', { fontSize: '32px', fill: '#0f0' });
+        //texto rojo
+        this.scoreTextP2 = scene.add.text(700, 510, '0', { fontSize: '32px', fill: '#f00' });
     }
 
     // Observer: recibe notificación de captura
@@ -20,9 +22,9 @@ export default class ScoreManager {
     // Refrescar textos
     updateUI(playerId) {
         if (playerId === 'player1') {
-            this.scoreTextP1.setText('Jugador 1: ' + this.scores.player1);
+            this.scoreTextP1.setText(this.scores.player1);
         } else if (playerId === 'player2') {
-            this.scoreTextP2.setText('Jugador 2: ' + this.scores.player2);
+            this.scoreTextP2.setText(this.scores.player2);
         }
     }
 }

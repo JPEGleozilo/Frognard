@@ -43,6 +43,9 @@ export class Preloader extends Scene
 
         this.load.image("mosca", "assets/mosca.png");
 
+        this.load.image("fondo", "assets/fondo 1.png");
+        
+
         this.load.spritesheet("mosca spritesheet", "assets/mosca spritesheet.png", { frameWidth: 24, frameHeight: 24 });
     }
 
