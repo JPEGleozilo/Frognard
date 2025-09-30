@@ -63,5 +63,6 @@ export class MainMenu extends Scene
                 this.scene.start("Coop")
             }
         };
+        });
     }
 }
