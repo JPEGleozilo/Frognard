@@ -11,39 +11,19 @@ export class MainMenu extends Scene
     {
         this.add.image(512, 384, 'background');
 
-        this.add.image(960/2, 160, 'logo');
+        this.add.image(512, 300, 'logo');
 
-        this.cursor = this.input.keyboard.createCursorKeys();
-        this.enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-        this.state = "neutral";
-
-        this.coopText = this.add.text(960/3, 400, 'cooperativo', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5);
-
-        this.vsText = this.add.text((960/3)*2, 400, 'versus', {
+        this.add.text(512, 460, 'Main Menu', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
-        console.log("create finalizado");
-    }
 
-    update () {
-        if (this.cursor.right.isDown && this.state != "vs"){
-            this.state = "vs";
-            console.log("vs");
-        } else if (this.cursor.left.isDown && this.state != "coop"){
-            this.state = "coop";
-            console.log("coop");
-        }
+        this.input.once('pointerdown', () => {
 
-        // Usar una variable para guardar el tamaño actual
-        if (!this.vsFontSize) this.vsFontSize = 38;
-        if (!this.coopFontSize) this.coopFontSize = 38;
+            this.scene.start('Coop');
 
+<<<<<<< HEAD
         if (this.state === "vs" && this.vsFontSize !== 48) {
             this.vsText.setColor("#000000").setStroke("#FFFFFF").setFontSize(44);
             this.vsFontSize = 48;
@@ -63,6 +43,8 @@ export class MainMenu extends Scene
                 this.scene.start("Coop")
             }
         };
+=======
+>>>>>>> parent of 79dcb19 (prueba de main menu)
         });
     }
 }

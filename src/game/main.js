@@ -1,6 +1,10 @@
 import { Boot } from './scenes/Boot';
 import { Coop } from './scenes/Coop';
+<<<<<<< HEAD
 import { Versus } from './scenes/Versus';
+=======
+import { Game as MainGame } from './scenes/Game';
+>>>>>>> parent of 79dcb19 (prueba de main menu)
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
@@ -29,7 +33,11 @@ const config = {
         Preloader,
         Coop,
         MainMenu,
+<<<<<<< HEAD
         Versus,
+=======
+        MainGame,
+>>>>>>> parent of 79dcb19 (prueba de main menu)
         GameOver
     ]
 };
