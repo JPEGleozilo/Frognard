@@ -8,9 +8,26 @@ export default class ScoreManager {
 
         // Textos en pantalla
         //texto verde 
-        this.scoreTextP1 = scene.add.text(200, 510, '0', { fontSize: '32px', fill: '#0f0' });
-        //texto rojo
-        this.scoreTextP2 = scene.add.text(700, 510, '0', { fontSize: '32px', fill: '#f00' });
+        this.scoreTextP1 = scene.add.text(200, 510, '0', {
+            fontSize: '28px',           // aumenta el tamaño
+            fill: 'rgba(32, 209, 32, 1)',
+            fontFamily: 'Arial Black',
+            fontStyle: 'bold',
+            stroke: '#000',             // borde negro
+            strokeThickness: 4          // grosor del borde
+        });
+        this.scoreTextP1.setStyle({ fontWeight: 'bold' });
+
+        //texto azul
+        this.scoreTextP2 = scene.add.text(700, 510, '0', {
+            fontSize: '28px',
+            fill: 'rgba(91, 100, 129, 1)',
+            fontFamily: 'Arial Black',
+            fontStyle: 'bold',
+            stroke: '#000',
+            strokeThickness: 4
+        });
+        this.scoreTextP2.setStyle({ fontWeight: 'bold' });
     }
 
     // Observer: recibe notificación de captura

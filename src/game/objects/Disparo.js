@@ -12,6 +12,14 @@ export default class Disparo {
 
         this.line = this.scene.add.line(0, 0, 0, 0, 0, 0, color).setOrigin(0, 0);
         this.line.setLineWidth(6);
+        this.line.setAlpha(0); // ← Haz la línea invisible
+
+        // --- Sprite visual de la lengua ---
+        this.lengua = this.scene.add.sprite(jugador.x, jugador.y, 'lengua');
+        this.lengua.setScale(2);
+        this.lengua.setOrigin(0, 0.5);
+        this.lengua.setVisible(false);
+        this.lengua.setDepth(100);
 
         this.angle = Phaser.Math.Angle.Between(jugador.x, jugador.y, mira.x, mira.y);
 
@@ -35,13 +43,27 @@ export default class Disparo {
             }
         }
 
-        // actualizar visual
+        // calcular el ángulo entre el jugador y la mira
+        this.angle = Phaser.Math.Angle.Between(this.jugador.x, this.jugador.y, this.mira.x, this.mira.y);
+
+        // Calcula el final de la lengua
         let endX = this.jugador.x + Math.cos(this.angle) * this.length;
         let endY = this.jugador.y + Math.sin(this.angle) * this.length;
 
-        // Solo actualiza la línea si existe
+        // Actualiza la línea lógica (invisible)
         if (this.line) {
             this.line.setTo(this.jugador.x, this.jugador.y, endX, endY);
+        }
+
+        // --- Actualiza la lengua visual ---
+        if (this.lengua) {
+            this.lengua.x = this.jugador.x;
+            this.lengua.y = this.jugador.y;
+            this.lengua.rotation = this.angle;
+            this.lengua.displayWidth = this.length;
+            this.lengua.displayHeight = 20; // ajusta al alto real de tu sprite
+            this.lengua.setVisible(this.active);
+            this.lengua.setDepth(100); // asegúrate que esté al frente
         }
 
         // si atrapó mosca → moverla con el disparo
@@ -79,6 +101,10 @@ export default class Disparo {
                 this.jugador.capturedMosca = null;
             }
         }
+        if (this.lengua) {
+            this.lengua.destroy();
+            this.lengua = null;
+        }
         this.active = false;
     }
 
@@ -94,9 +120,16 @@ export default class Disparo {
             if (!this.line) {
                 this.line = this.scene.add.line(0, 0, 0, 0, 0, 0, this.color).setOrigin(0, 0);
                 this.line.setLineWidth(6);
+                this.line.setAlpha(0); // ← Haz la línea invisible
             }
-
-            this.line.setVisible(true);
+            // Si la lengua fue destruida, créala de nuevo
+            if (!this.lengua) {
+                this.lengua = this.scene.add.sprite(this.jugador.x, this.jugador.y, 'lengua');
+                this.lengua.setScale(2);
+                this.lengua.setOrigin(0, 0.5);
+                this.lengua.setDepth(100);
+            }
+            this.lengua.setVisible(true);
         }
     }
 }

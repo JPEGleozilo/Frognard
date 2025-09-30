@@ -10,7 +10,7 @@ import { AUTO, Game, Physics } from 'phaser';
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
-    type: AUTO,
+    type: Phaser.AUTO,
     width: 960,
     height: 540,
     parent: 'game-container',

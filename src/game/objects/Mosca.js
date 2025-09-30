@@ -10,7 +10,7 @@ export default class Mosca extends Phaser.GameObjects.Sprite {
 
         this.setVisible(false);
         this.setActive(false);
-        this.setScale(1.5); // ajusta el tamaño si es necesario
+        this.setScale(1); // ajusta el tamaño si es necesario
     }
 
     // Activar mosca desde pool

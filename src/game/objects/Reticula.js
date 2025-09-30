@@ -5,6 +5,13 @@ export default class Reticle extends Phaser.GameObjects.Rectangle {
     super(scene, x, y, 20, 20, color); 
     scene.add.existing(this);
 
+    this.setAlpha(0); // ← Haz el rectángulo invisible
+
+    // --- Sprite visual de la mira ---
+    this.miraSprite = scene.add.sprite(x, y, 'mira');
+    this.miraSprite.setOrigin(0.5);
+    this.miraSprite.setDepth(100);
+
     this.keys = keys;
     this.speed = 200;
 
@@ -22,5 +29,11 @@ export default class Reticle extends Phaser.GameObjects.Rectangle {
     if (this.keys.right.isDown && this.x + velocity <= this.maxX) this.x += velocity;
     if (this.keys.up.isDown && this.y - velocity >= this.minY) this.y -= velocity;
     if (this.keys.down.isDown && this.y + velocity <= this.maxY) this.y += velocity;
+
+    // --- Actualiza la posición del sprite de la mira ---
+    if (this.miraSprite) {
+      this.miraSprite.x = this.x;
+      this.miraSprite.y = this.y;
+    }
   }
 }
