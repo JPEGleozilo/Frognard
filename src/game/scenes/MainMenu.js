@@ -23,28 +23,6 @@ export class MainMenu extends Scene
 
             this.scene.start('Coop');
 
-<<<<<<< HEAD
-        if (this.state === "vs" && this.vsFontSize !== 48) {
-            this.vsText.setColor("#000000").setStroke("#FFFFFF").setFontSize(44);
-            this.vsFontSize = 48;
-            this.coopText.setColor("#FFFFFF").setStroke("#000000").setFontSize(38);
-            this.coopFontSize = 38;
-            console.log("cambio");
-        } else if (this.state === "coop" && this.coopFontSize !== 48) {
-            this.coopText.setColor("#000000").setStroke("#FFFFFF").setFontSize(44);
-            this.coopFontSize = 48;
-            this.vsText.setColor("#FFFFFF").setStroke("#000000").setFontSize(38);
-            this.vsFontSize = 38;
-            console.log("cambio");
-        };
-
-        if (this.enter.isDown) {
-            if (this.state === "coop") {
-                this.scene.start("Coop")
-            }
-        };
-=======
->>>>>>> parent of 79dcb19 (prueba de main menu)
         });
     }
 }
