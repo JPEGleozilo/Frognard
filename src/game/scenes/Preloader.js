@@ -40,6 +40,21 @@ export class Preloader extends Scene
         this.load.image("frognard", "assets/frognard.png");
 
         this.load.image("boton", "assets/boton.png");
+
+        this.load.image("mosca", "assets/mosca.png");
+
+        this.load.image("fondo", "assets/fondo 1.png");
+
+        this.load.image("mira", "assets/Mira.png" )
+
+        this.load.spritesheet("rana", "assets/rana.png", { frameWidth: 52, frameHeight: 52 });
+
+        this.load.spritesheet("rata", "assets/rata.png", { frameWidth: 52, frameHeight: 52 });
+        
+
+        this.load.spritesheet("mosca spritesheet", "assets/mosca spritesheet.png", { frameWidth: 52, frameHeight: 52 });
+
+        this.load.spritesheet("lengua", "assets/lengua.png", { frameWidth: 540, frameHeight: 20 });
     }
 
     create ()
