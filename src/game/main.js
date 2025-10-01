@@ -1,6 +1,5 @@
 import { Boot } from './scenes/Boot';
 import { Coop } from './scenes/Coop';
-<<<<<<< HEAD
 import { Versus } from './scenes/Versus';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
