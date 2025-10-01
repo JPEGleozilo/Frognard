@@ -61,8 +61,9 @@ export class MainMenu extends Scene
         if (this.enter.isDown) {
             if (this.state === "coop") {
                 this.scene.start("Coop")
-            }
+            } else if (this.state === "vs") {
+                this.scene.start("Versus")
+            };
         };
-        });
     }
 }
