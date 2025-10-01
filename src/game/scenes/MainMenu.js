@@ -11,19 +11,9 @@ export class MainMenu extends Scene
     {
         this.add.image(512, 384, 'background');
 
-        this.add.image(960/2, 160, 'logo');
+        this.add.image(512, 300, 'logo');
 
-        this.cursor = this.input.keyboard.createCursorKeys();
-        this.enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-        this.state = "neutral";
-
-        this.coopText = this.add.text(960/3, 400, 'cooperativo', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5);
-
-        this.vsText = this.add.text((960/3)*2, 400, 'versus', {
+        this.add.text(512, 460, 'Main Menu', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

@@ -1,5 +1,6 @@
 import { Boot } from './scenes/Boot';
 import { Coop } from './scenes/Coop';
+<<<<<<< HEAD
 import { Versus } from './scenes/Versus';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
@@ -9,7 +10,7 @@ import { AUTO, Game, Physics } from 'phaser';
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
-    type: AUTO,
+    type: Phaser.AUTO,
     width: 960,
     height: 540,
     parent: 'game-container',
