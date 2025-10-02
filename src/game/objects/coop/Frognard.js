@@ -8,7 +8,7 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        //Physics
+        //Físicas
         this.setOrigin(0, 1);
         this.setCollideWorldBounds(true);
         this.body.setSize(this.width * 0.5, this.height);
@@ -37,6 +37,10 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
             this.setGravityY(this.gravedadBaja);
         } else {
             this.setGravityY(0);
+        }
+
+        if (this.scene.cursors.T.isDown) {
+            this.scene.inputLengua = true
         }
     }
 }

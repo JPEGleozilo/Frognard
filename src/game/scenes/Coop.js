@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import Frognard from "../objects/Frognard.js";
+import Frognard from "../objects/coop/Frognard.js";
 
 export class Coop extends Scene
 {

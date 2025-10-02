@@ -14,7 +14,6 @@ const config = {
     height: 540,
     parent: 'game-container',
     backgroundColor: '#028af8',
-    debug: true,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
@@ -22,7 +21,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 1000 },
-            debug: false
+            debug: true
         }
     },
     scene: [

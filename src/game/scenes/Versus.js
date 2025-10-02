@@ -1,9 +1,9 @@
 import { Scene } from 'phaser';
-import Reticle from "../objects/Reticula.js";
-import Personaje from "../objects/Personaje.js";
-import MoscaPool from "../objects/MoscaPool.js";
-import WeaponManager from "../objects/WeaponManager.js";
-import ScoreManager from '../objects/ScoreManager.js';
+import Reticle from "../objects/versus/Reticula.js";
+import Personaje from "../objects/versus/Personaje.js";
+import MoscaPool from "../objects/versus/MoscaPool.js";
+import WeaponManager from "../objects/versus/WeaponManager.js";
+import ScoreManager from '../objects/versus/ScoreManager.js';
 
 export class Versus extends Scene
 {

@@ -33,35 +33,38 @@ export class Preloader extends Scene
         this.load.setPath('public');
 
         this.load.image('logo', 'assets/logo.png');
-
-        this.load.tilemapTiledJSON("nivel1", "tilemaps/nivel1.json");
-        this.load.image("tiles", "assets/tiles.png");
+        console.log("logo cargado");
 
         this.load.image("frognard", "assets/frognard.png");
-
-        this.load.image("boton", "assets/boton.png");
-
-        this.load.image("mosca", "assets/mosca.png");
+        console.log("frognard cargado");
 
         this.load.image("fondo", "assets/fondo 1.png");
+        console.log("fondo cargado");
 
-        this.load.image("mira", "assets/Mira.png" )
+        this.load.image("mira", "assets/Mira.png" );
+        console.log("mira cargado");
 
         this.load.spritesheet("rana", "assets/rana.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("rana cargado");
 
         this.load.spritesheet("rata", "assets/rata.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("rata cargado");
         
 
         this.load.spritesheet("mosca spritesheet", "assets/mosca spritesheet.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("mosca cargado");
 
         this.load.spritesheet("lengua", "assets/lengua.png", { frameWidth: 540, frameHeight: 20 });
+        console.log("lengua cargado");
+
+        console.log("--TODO CARGADO--");
     }
 
     create ()
     {
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
-
+        
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start('MainMenu');
     }
