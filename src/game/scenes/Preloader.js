@@ -35,9 +35,6 @@ export class Preloader extends Scene
         this.load.image('logo', 'assets/logo.png');
         console.log("logo cargado");
 
-        this.load.image("frognard", "assets/frognard.png");
-        console.log("frognard cargado");
-
         this.load.image("fondo", "assets/fondo 1.png");
         console.log("fondo cargado");
 
@@ -57,7 +54,15 @@ export class Preloader extends Scene
         this.load.spritesheet("lengua", "assets/lengua.png", { frameWidth: 540, frameHeight: 20 });
         console.log("lengua cargado");
 
-        console.log("--TODO CARGADO--");
+        console.log("--VERSUS CARGADO--");
+
+        this.load.image("frognard", "assets/frognard.png");
+        console.log("frognard cargado");
+
+        this.load.image("patrones", "assets/tileset.png");
+        console.log("tileset cargado");
+
+        this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json")
     }
 
     create ()

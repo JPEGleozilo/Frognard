@@ -11,7 +11,7 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         //Físicas
         this.setOrigin(0, 1);
         this.setCollideWorldBounds(true);
-        this.body.setSize(this.width * 0.5, this.height);
+        this.body.setSize(this.width * 0.5, this.height - 4);
         this.body.setOffset(this.width * 0.25, 0);
         this.velocidad = 200;
         this.salto = -500;

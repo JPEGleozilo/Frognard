@@ -10,12 +10,19 @@ export class Coop extends Scene
 
     create ()
     {
-        this.frognard = new Frognard(this, 200, 200);
+        this.add.image(480, 270, 'fondo').setDepth(-1)        
+        
+        this.frognard = new Frognard(this, 200, 200).setDepth(2);
 
-        if (!this.physics) {
-            console.error('Physics plugin no habilitado. Añade physics:{ default: "arcade", ... } al config de Phaser.');
-        return;
-        }
+        var mapa1 = this.make.tilemap({key: "mapaNivel1"});
+        var patrones = mapa1.addTilesetImage("tileset", "patrones");
+        var piso = mapa1.createLayer("bloques", patrones, 0, 0).setDepth(2);
+        mapa1.createLayer("superficie", patrones, 0 , 0).setDepth(1);
+
+        piso.setCollisionByProperty({collider: true});
+
+        this.physics.add.collider(this.frognard, piso);
+
     }
 
     update ()
