@@ -22,25 +22,33 @@ export class Coop extends Scene
         mapa1.createLayer("superficie", patrones, 0 , 0).setDepth(1);
 
         piso.setCollisionByProperty({collider: true});
+        piso.setCollisionCategory([2]);
 
         this.physics.add.collider(this.frognard, piso);
-        this.physics.add.collider(this.lengua, piso, this.lengua.volver(this.frognard.body.x, this.frognard.body.y), null, this.lengua);
+        this.physics.add.collider(this.lengua, piso, () => {
+            this.lengua.triggerVuelta();
+        }, null, this.lengua);
 
-        this.lenguaOut = false;
+        this.physics.add.overlap(this.frognard, this.lengua, () => {
+            this.lengua.desactivar();
+        })
+
+        this.physics.world.on("worldbounds", (body,up,down,left,right) => {
+            if (body.gameObject === this.lengua) {
+                this.lengua.triggerVuelta();
+            };
+        })
     }
 
     update ()
     {
         this.frognard.update();
         this.inputLengua = this.frognard.getInputLengua();
+        this.lengua.volviendo(this.frognard.body.x, this.frognard.body.y);
 
-        if (this.inputLengua === true && this.lenguaOut === false) {
-            console.log("hola")
-            this.lenguaOut = true
+        if (this.inputLengua === true) {
             this.angulo = this.frognard.getCurrentAngle();
             this.lengua.disparar(this.frognard.body.x, this.frognard.body.y, this.angulo);
-        } else if (this.inputLengua === false || this.lenguaOut === true){
-            this.angulo = null
         };
     }
 }
