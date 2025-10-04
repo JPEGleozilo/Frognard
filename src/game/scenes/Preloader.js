@@ -62,6 +62,12 @@ export class Preloader extends Scene
         this.load.image("patrones", "assets/tileset.png");
         console.log("tileset cargado");
 
+        this.load.image("boton horizontal", "assets/boton.png");
+        console.log("boton horizontal cargado");
+
+        this.load.image("boton vertical", "assets/botonVert.png");
+        console.log("boton vertical cargado");
+
         this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json")
     }
 

@@ -8,7 +8,7 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
     this.setScale(0.25);
     this.setOrigin(0.5);
     this.setCollideWorldBounds(false);
-    this.setCollidesWith([1, 2]);
+    this.setCollidesWith([1, 2, 3]);
     this.body.onWorldBounds = true;
     this.setDepth(1);
     this.setVisible(false);
@@ -26,7 +26,7 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
             this.angulo = angulo;
             this.lenguaOut = true;
             this.setCollideWorldBounds(true);
-            this.setCollidesWith([1, 2]);
+            this.setCollidesWith([1, 2, 3]);
             this.log = false;
         
             this.setX(this.x + this.width/2);
@@ -63,7 +63,7 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
 
     triggerVuelta() {
         this.vuelta = true;
-        this.body.setCollidesWith([0, 1]);
+        this.body.setCollidesWith([0, 1, 3]);
     }
 
     desactivar() {
