@@ -4,6 +4,7 @@ import Lengua from "../objects/coop/Lengua.js";
 import BotonH from '../objects/coop/BotonH.js';
 import BotonV from '../objects/coop/BotonV.js';
 import Palanca from '../objects/coop/Palanca.js';
+import Puerta from "../objects/coop/Puerta.js";
 
 export class Coop extends Scene
 {
@@ -28,6 +29,8 @@ export class Coop extends Scene
         this.botonesV = this.physics.add.group();
         this.palancas = this.physics.add.group();
 
+        this.puertas = this.physics.add.group();
+
         this.capaInterruptores = mapa1.getObjectLayer("interruptores");
         this.capaInterruptores.objects.forEach(objeto => {
             if (objeto.type === "Horizontal") {
@@ -39,6 +42,14 @@ export class Coop extends Scene
             } else if (objeto.type === "Palanca") {
                 new Palanca (this, objeto.x, objeto.y, objeto.name);
                 console.log(objeto.name, " palanca");
+            }
+        })
+
+        this.capaAccionables = mapa1.getObjectLayer("accionables");
+        this.capaAccionables.objects.forEach(objeto => {
+            if (objeto.type === "puerta") {
+                new Puerta (this, objeto.x, objeto.y, objeto.name);
+                console.log(objeto.name, " puerta");
             }
         })
 

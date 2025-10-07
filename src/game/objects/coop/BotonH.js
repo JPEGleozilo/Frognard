@@ -18,7 +18,7 @@ export default class BotonH extends Phaser.Physics.Arcade.Sprite {
         this.body.setAllowGravity(false);
 
         this.scene.physics.add.collider(this, scene.frognard, () => {
-            console.log(this.distintivo);
+            ;
         });
     }
 }

@@ -13,6 +13,10 @@ const config = {
     width: 960,
     height: 540,
     parent: 'game-container',
+    render: {
+    pixelArt: true,
+    antialias: false
+    },
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH

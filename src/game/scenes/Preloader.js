@@ -68,7 +68,10 @@ export class Preloader extends Scene
         this.load.image("boton vertical", "assets/botonVert.png");
         console.log("boton vertical cargado");
 
-        this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json")
+        this.load.image("puerta", "assets/puerta.png");
+        console.log("puerta cargado");
+
+        this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
     }
 
     create ()

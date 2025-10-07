@@ -63,8 +63,9 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
 
     triggerVuelta() {
         this.vuelta = true;
-        this.body.setCollidesWith([0, 1, 3]);
+        this.body.setCollidesWith([1]);
     }
+
 
     desactivar() {
         if (this.vuelta === true) {
