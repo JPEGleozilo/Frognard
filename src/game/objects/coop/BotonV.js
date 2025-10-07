@@ -20,6 +20,9 @@ export default class BotonV extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.add.collider(this, scene.lengua, () => {
             console.log(this.distintivo);
             scene.lengua.triggerVuelta();
+            this.scene.accionable.children.iterate(obj => {
+                obj.toggle(this.distintivo);
+            });
         });
     }
 }

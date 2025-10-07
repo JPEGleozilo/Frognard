@@ -4,7 +4,7 @@ import Lengua from "../objects/coop/Lengua.js";
 import BotonH from '../objects/coop/BotonH.js';
 import BotonV from '../objects/coop/BotonV.js';
 import Palanca from '../objects/coop/Palanca.js';
-import Puerta from "../objects/coop/Puerta.js";
+import Accionable from "../objects/coop/Accionable.js";
 
 export class Coop extends Scene
 {
@@ -28,8 +28,8 @@ export class Coop extends Scene
         this.botonesH = this.physics.add.group();
         this.botonesV = this.physics.add.group();
         this.palancas = this.physics.add.group();
-
-        this.puertas = this.physics.add.group();
+        
+        this.accionable = this.physics.add.group();
 
         this.capaInterruptores = mapa1.getObjectLayer("interruptores");
         this.capaInterruptores.objects.forEach(objeto => {
@@ -47,10 +47,8 @@ export class Coop extends Scene
 
         this.capaAccionables = mapa1.getObjectLayer("accionables");
         this.capaAccionables.objects.forEach(objeto => {
-            if (objeto.type === "puerta") {
-                new Puerta (this, objeto.x, objeto.y, objeto.name);
-                console.log(objeto.name, " puerta");
-            }
+            new Accionable (this, objeto.x, objeto.y, objeto.name, objeto.type);
+            console.log(objeto.name, " puerta");
         })
 
         piso.setCollisionByProperty({collider: true});
@@ -60,7 +58,7 @@ export class Coop extends Scene
         this.physics.add.collider(this.lengua, piso, () => {
             this.lengua.triggerVuelta();
         }, null, this.lengua);
-
+        this.physics.add.collider(this.frognard, this.accionable);
         this.physics.add.overlap(this.frognard, this.lengua, () => {
             this.lengua.desactivar();
         })
@@ -82,5 +80,9 @@ export class Coop extends Scene
             this.angulo = this.frognard.getCurrentAngle();
             this.lengua.disparar(this.frognard.body.x, this.frognard.body.y, this.angulo);
         };
+
+        this.accionable.children.iterate(obj => {
+            obj.frenada();
+        });
     }
 }
