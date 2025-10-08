@@ -7,25 +7,20 @@ export class Preloader extends Scene
         super('Preloader');
     }
 
-    init ()
-    {
-        //  We loaded this image in our Boot Scene, so we can display it here
-        this.add.image(512, 384, 'background');
+     init() {
+        const centerX = this.scale.width / 2;
+        const centerY = this.scale.height / 2;
 
-        //  A simple progress bar. This is the outline of the bar.
-        this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
+        // Marco del progreso
+        this.add.rectangle(centerX, centerY + 200, 468, 32).setStrokeStyle(2, 0xffffff);
 
-        //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-        const bar = this.add.rectangle(512-230, 384, 4, 28, 0xffffff);
+        // Barra de progreso (inicialmente vacía)
+        this.bar = this.add.rectangle(centerX - 230, centerY + 200, 4, 28, 0xffffff).setOrigin(0, 0.5);
 
-        //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
-        this.load.on('progress', (progress) => {
-
-            //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
-            bar.width = 4 + (460 * progress);
-
-        });
+        // Sprite de animación de carga (primero frame)
+        this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(1);
     }
+
 
     preload ()
     {
@@ -37,6 +32,10 @@ export class Preloader extends Scene
 
         this.load.image("fondo", "assets/fondo 1.png");
         console.log("fondo cargado");
+
+        this.load.spritesheet("carga", "assets/cargaanim.png", { frameWidth: 960, frameHeight: 540 });
+        console.log("carga cargado");
+        
 
         this.load.image('MiraRana', 'assets/MiraRana.png');
         console.log("mira rana cargado");
@@ -81,10 +80,35 @@ export class Preloader extends Scene
         console.log("puerta cargado");
 
         this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
+
+           // --- Actualización visual durante la carga ---
+        this.load.on('progress', (progress) => {
+            // Actualiza barra
+            this.bar.width = 4 + (460 * progress);
+
+            // Actualiza frame de sprite según progreso
+            if (this.cargaAnim) {
+                const totalFrames = 6; // Ajusta según tu spritesheet
+                const frame = Math.floor(progress * (totalFrames - 1));
+                this.cargaAnim.setFrame(frame);
+            }
+        });
+       // Cuando la carga termina
+        this.load.on('complete', () => {
+            // Asegura que el sprite muestre el último frame
+            if (this.cargaAnim) this.cargaAnim.setFrame(5);
+
+            // Pequeña pausa antes de cambiar de escena (opcional)
+            this.time.delayedCall(1000, () => {
+                this.scene.start('MainMenu');
+            });
+        });
     }
+
 
     create ()
     {
+        
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
         
