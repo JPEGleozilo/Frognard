@@ -26,15 +26,21 @@ export class MainMenu extends Scene
         this.add.image(vsX - 30, textY - 60, 'rana').setOrigin(0.5, 1);     // Cambia 'vs_icon' por el key de tu asset
         this.add.image(vsX +20, textY - 60, 'rata').setOrigin(0.5, 1); // Añade otro icono para el modo versus
 
-        this.coopText = this.add.text(coopX, textY, 'cooperativo', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#1fd70eff',
-            stroke: '#536066ff', strokeThickness: 8,
+        this.coopText = this.add.text(coopX, textY, 'COOPERATIVO', {
+            fontFamily: '"VT323", monospace', // Cambia aquí
+            fontSize: 38,
+            color: '#1fd70eff',
+            stroke: '#536066ff',
+            strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        this.vsText = this.add.text(vsX, textY, 'versus', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#536066ff',
-            stroke: '#1fd70eff', strokeThickness: 8,
+        this.vsText = this.add.text(vsX, textY, 'VERSUS', {
+            fontFamily: '"VT323", monospace', // Cambia aquí
+            fontSize: 38,
+            color: '#536066ff',
+            stroke: '#1fd70eff',
+            strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
     }
