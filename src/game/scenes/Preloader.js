@@ -33,7 +33,7 @@ export class Preloader extends Scene
         this.load.image("fondo", "assets/fondo 1.png");
         console.log("fondo cargado");
 
-        this.load.spritesheet("carga", "assets/cargaanim.png", { frameWidth: 960, frameHeight: 540 });
+        //this.load.spritesheet("carga", "assets/cargaanim.png", { frameWidth: 960, frameHeight: 540 });
         console.log("carga cargado");
         
 
@@ -70,10 +70,10 @@ export class Preloader extends Scene
         this.load.image("patrones", "assets/tileset.png");
         console.log("tileset cargado");
 
-        this.load.image("boton horizontal", "assets/boton.png");
+        this.load.spritesheet("boton horizontal", "assets/boton.png", { frameWidth: 62, frameHeight: 32 });
         console.log("boton horizontal cargado");
 
-        this.load.image("boton vertical", "assets/botonVert.png");
+        this.load.spritesheet("boton vertical", "assets/boton (1).png", { frameWidth: 32, frameHeight: 62 });
         console.log("boton vertical cargado");
 
         this.load.image("puerta", "assets/puerta.png");
@@ -81,7 +81,13 @@ export class Preloader extends Scene
 
         this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
 
-           // --- Actualización visual durante la carga ---
+       
+    }
+
+
+    create ()
+    {
+         // --- Actualización visual durante la carga ---
         this.load.on('progress', (progress) => {
             // Actualiza barra
             this.bar.width = 4 + (460 * progress);
@@ -103,11 +109,6 @@ export class Preloader extends Scene
                 this.scene.start('MainMenu');
             });
         });
-    }
-
-
-    create ()
-    {
         
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
