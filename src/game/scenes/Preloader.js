@@ -38,11 +38,17 @@ export class Preloader extends Scene
         this.load.image("fondo", "assets/fondo 1.png");
         console.log("fondo cargado");
 
-        this.load.image("mira", "assets/Mira.png" );
-        console.log("mira cargado");
+        this.load.image('MiraRana', 'assets/MiraRana.png');
+        console.log("mira rana cargado");
+
+        this.load.image('MiraRata', 'assets/MiraRata.png');
+        console.log("mira rata cargado");
 
         this.load.spritesheet("rana", "assets/rana.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rana cargado");
+
+        this.load.spritesheet("rana disparo", "assets/ranadisparo.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("rata disparo cargado");
 
         this.load.spritesheet("rata", "assets/rata.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rata cargado");
@@ -50,6 +56,9 @@ export class Preloader extends Scene
 
         this.load.spritesheet("mosca spritesheet", "assets/mosca spritesheet.png", { frameWidth: 52, frameHeight: 52 });
         console.log("mosca cargado");
+
+        this.load.spritesheet("mosca dorada spritesheet", "assets/mosca dorada spritesheet.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("mosca dorada cargado");
 
         this.load.spritesheet("lengua", "assets/lengua.png", { frameWidth: 540, frameHeight: 20 });
         console.log("lengua cargado");

@@ -4,30 +4,49 @@ export default class Disparo {
         this.jugador = jugador;
         this.mira = mira;
         this.color = color;
+        this.active = false;
 
-        this.maxLength = Phaser.Math.Distance.Between(jugador.x, jugador.y, mira.x, mira.y);
+        this.maxLength = 0; // ← Inicialmente cero
         this.speed = 12;
-        this.extending = true;
+        this.extending = false; // ← No está extendiendo al crear
         this.length = 0;
 
         this.line = this.scene.add.line(0, 0, 0, 0, 0, 0, color).setOrigin(0, 0);
-        this.line.setLineWidth(6);
         this.line.setAlpha(0); // ← Haz la línea invisible
+        this.line.setLineWidth(6);
 
         // --- Sprite visual de la lengua ---
         this.lengua = this.scene.add.sprite(jugador.x, jugador.y, 'lengua');
+        this.lengua.setVisible(false); // ← Siempre invisible al crear
         this.lengua.setScale(2);
         this.lengua.setOrigin(0, 0.5);
-        this.lengua.setVisible(false);
         this.lengua.setDepth(100);
 
-        this.angle = Phaser.Math.Angle.Between(jugador.x, jugador.y, mira.x, mira.y);
+        this.angle = 0; // ← No calcules el ángulo aún
 
-        this.targetMosca = null; // ← guarda la mosca atrapada
-        this.active = true;
+        this.targetMosca = null;
     }
 
-    update(moscaPool) {
+    disparar() {
+        if (!this.active) {
+            // Calcula el ángulo y longitud solo al disparar
+            this.angle = Phaser.Math.Angle.Between(this.jugador.x, this.jugador.y, this.mira.x, this.mira.y);
+            this.maxLength = Phaser.Math.Distance.Between(this.jugador.x, this.jugador.y, this.mira.x, this.mira.y);
+
+            this.length = 0;
+            this.extending = true;
+            this.active = true;
+
+            // Inicializa la posición y visibilidad correctamente
+            this.lengua.x = this.jugador.x;
+            this.lengua.y = this.jugador.y;
+            this.lengua.rotation = this.angle;
+            this.lengua.displayWidth = 0;
+            this.lengua.setVisible(true);
+        }
+    }
+
+    update(moscaPool, moscaDoradaPool) {
         if (!this.active || !this.line) return; // <-- evita el error si la línea no existe
 
         if (this.extending) {
@@ -57,13 +76,13 @@ export default class Disparo {
 
         // --- Actualiza la lengua visual ---
         if (this.lengua) {
+            this.lengua.setVisible(this.active);
             this.lengua.x = this.jugador.x;
             this.lengua.y = this.jugador.y;
             this.lengua.rotation = this.angle;
             this.lengua.displayWidth = this.length;
-            this.lengua.displayHeight = 20; // ajusta al alto real de tu sprite
-            this.lengua.setVisible(this.active);
-            this.lengua.setDepth(100); // asegúrate que esté al frente
+            this.lengua.displayHeight = 30; // ajusta al alto real de tu sprite
+             this.lengua.setDepth(100); // asegúrate que esté al frente
         }
 
         // si atrapó mosca → moverla con el disparo
@@ -74,16 +93,28 @@ export default class Disparo {
 
         // check colisiones solo cuando se extiende y no tiene mosca
         if (this.extending && !this.targetMosca) {
+            // Moscas normales
             moscaPool.pool.forEach(m => {
                 if (m.active && Phaser.Math.Distance.Between(m.x, m.y, endX, endY) < 15) {
                     this.targetMosca = m;
-                    m.active = false; // bloquear para que no lo agarre otro
-                    // Notificar al personaje que atrapó una mosca
+                    m.active = false;
                     if (this.jugador.captureMosca) {
                         this.jugador.captureMosca(m);
                     }
                 }
             });
+            // Moscas doradas
+            if (moscaDoradaPool) {
+                moscaDoradaPool.pool.forEach(m => {
+                    if (m.active && Phaser.Math.Distance.Between(m.x, m.y, endX, endY) < 15) {
+                        this.targetMosca = m;
+                        m.active = false;
+                        if (this.jugador.captureMosca) {
+                            this.jugador.captureMosca(m);
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -106,30 +137,5 @@ export default class Disparo {
             this.lengua = null;
         }
         this.active = false;
-    }
-
-    disparar() {
-        if (!this.active) {
-            this.length = 0;
-            this.extending = true;
-            this.active = true;
-            this.angle = Phaser.Math.Angle.Between(this.jugador.x, this.jugador.y, this.mira.x, this.mira.y);
-            this.maxLength = Phaser.Math.Distance.Between(this.jugador.x, this.jugador.y, this.mira.x, this.mira.y);
-
-            // Si la línea fue destruida, créala de nuevo
-            if (!this.line) {
-                this.line = this.scene.add.line(0, 0, 0, 0, 0, 0, this.color).setOrigin(0, 0);
-                this.line.setLineWidth(6);
-                this.line.setAlpha(0); // ← Haz la línea invisible
-            }
-            // Si la lengua fue destruida, créala de nuevo
-            if (!this.lengua) {
-                this.lengua = this.scene.add.sprite(this.jugador.x, this.jugador.y, 'lengua');
-                this.lengua.setScale(2);
-                this.lengua.setOrigin(0, 0.5);
-                this.lengua.setDepth(100);
-            }
-            this.lengua.setVisible(true);
-        }
     }
 }

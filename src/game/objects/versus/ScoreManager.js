@@ -9,7 +9,7 @@ export default class ScoreManager {
         // Textos en pantalla
         //texto verde 
         this.scoreTextP1 = scene.add.text(200, 510, '0', {
-            fontSize: '28px',           // aumenta el tamaño
+            fontSize: '24px',           // aumenta el tamaño
             fill: 'rgba(32, 209, 32, 1)',
             fontFamily: 'Arial Black',
             fontStyle: 'bold',
@@ -31,8 +31,8 @@ export default class ScoreManager {
     }
 
     // Observer: recibe notificación de captura
-    onMoscaCaptured(playerId) {
-        this.scores[playerId] += 1;
+    onMoscaCaptured(playerId, puntos = 1) {
+        this.scores[playerId] += puntos;
         this.updateUI(playerId);
     }
 

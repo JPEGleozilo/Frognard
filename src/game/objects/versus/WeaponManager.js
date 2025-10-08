@@ -16,9 +16,9 @@ export default class WeaponManager {
         }
     }
 
-    update(moscaPool) {
+    update(moscaPool, moscaDoradaPool) {
         if (this.disparo && this.disparo.active) {
-            this.disparo.update(moscaPool);
+            this.disparo.update(moscaPool, moscaDoradaPool);
         }
     }
 }

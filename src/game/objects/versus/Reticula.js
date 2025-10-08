@@ -1,17 +1,18 @@
 import Phaser from "phaser";
 
 export default class Reticle extends Phaser.GameObjects.Rectangle {
-  constructor(scene, x, y, color, keys, bounds = { minX: 0, maxX: 958, minY: 0, maxY: 360 }) {
+  constructor(scene, x, y, color, keys, spriteName = 'mira', bounds = { minX: 0, maxX: 958, minY: 0, maxY: 360 }) {
     super(scene, x, y, 20, 20, color); 
     scene.add.existing(this);
 
     this.setAlpha(0); // ← Haz el rectángulo invisible
 
     // --- Sprite visual de la mira ---
-    this.miraSprite = scene.add.sprite(x, y, 'mira');
+    this.miraSprite = scene.add.sprite(x, y, spriteName);
     this.miraSprite.setOrigin(0.5);
     this.miraSprite.setDepth(100);
-
+    this.miraSprite.setScale(1);
+    this.miraSprite.setTint(color); // ← Usa el color recibido
     this.keys = keys;
     this.speed = 200;
 
