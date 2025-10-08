@@ -32,7 +32,7 @@ export class Preloader extends Scene
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('public');
 
-        this.load.image('logo', 'assets/logo.png');
+        this.load.image('logo', 'assets/frognardtitulo.png');
         console.log("logo cargado");
 
         this.load.image("fondo", "assets/fondo 1.png");
