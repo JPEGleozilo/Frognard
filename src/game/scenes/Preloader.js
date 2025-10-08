@@ -11,21 +11,20 @@ export class Preloader extends Scene
         const centerX = this.scale.width / 2;
         const centerY = this.scale.height / 2;
 
-        this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(1);
+        // Marco del progreso
+        this.add.rectangle(centerX, centerY + 200, 468, 32).setStrokeStyle(2, 0xffffff);
 
-        this.cargaFinal = false;
+        // Barra de progreso (inicialmente vacía)
+        this.bar = this.add.rectangle(centerX - 230, centerY + 200, 4, 28, 0xffffff).setOrigin(0, 0.5);
+
+        // Sprite de animación de carga (primero frame)
+        this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(1);
     }
 
-     preload () {
-        this.anims.create({
-        key: 'carga_anim',
-        frames: this.anims.generateFrameNumbers('carga', { start: 0, end: 5 }),
-        frameRate: 1.5
-        });
 
-        this.cargaAnim.play('carga_anim');
-        
-
+    preload ()
+    {
+        //  Load the assets for the game - Replace with your own assets
         this.load.setPath('public');
 
         this.load.image('logo', 'assets/frognardtitulo.png');
@@ -34,13 +33,10 @@ export class Preloader extends Scene
         this.load.image("fondo", "assets/fondo 1.png");
         console.log("fondo cargado");
 
-<<<<<<< HEAD
         //this.load.spritesheet("carga", "assets/cargaanim.png", { frameWidth: 960, frameHeight: 540 });
         console.log("carga cargado");
         
 
-=======
->>>>>>> 9d1199b8902de60a4e0fd0d0bd80b791d3ad842d
         this.load.image('MiraRana', 'assets/MiraRana.png');
         console.log("mira rana cargado");
 
@@ -85,7 +81,6 @@ export class Preloader extends Scene
 
         this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
 
-<<<<<<< HEAD
        
     }
 
@@ -96,11 +91,19 @@ export class Preloader extends Scene
         this.load.on('progress', (progress) => {
             // Actualiza barra
             this.bar.width = 4 + (460 * progress);
-=======
->>>>>>> 9d1199b8902de60a4e0fd0d0bd80b791d3ad842d
 
+            // Actualiza frame de sprite según progreso
+            if (this.cargaAnim) {
+                const totalFrames = 6; // Ajusta según tu spritesheet
+                const frame = Math.floor(progress * (totalFrames - 1));
+                this.cargaAnim.setFrame(frame);
+            }
+        });
+       // Cuando la carga termina
+        this.load.on('complete', () => {
+            // Asegura que el sprite muestre el último frame
+            if (this.cargaAnim) this.cargaAnim.setFrame(5);
 
-<<<<<<< HEAD
             // Pequeña pausa antes de cambiar de escena (opcional)
             this.time.delayedCall(1000, () => {
                 this.scene.start('MainMenu');
@@ -112,16 +115,5 @@ export class Preloader extends Scene
         
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start('MainMenu');
-=======
-        this.cargaFinal = true;
-    }
-
-    update() {
-        if (this.cargaFinal === true && this.cargaAnim.anims.currentFrame.index === 5){
-            this.time.delayedCall(2000, () => {
-                this.scene.start("MainMenu");
-            });
-        }
->>>>>>> 9d1199b8902de60a4e0fd0d0bd80b791d3ad842d
     }
 }
