@@ -27,7 +27,7 @@ export default class Disparo {
         this.active = true;
     }
 
-    update(moscaPool) {
+    update(moscaPool, moscaDoradaPool) {
         if (!this.active || !this.line) return; // <-- evita el error si la línea no existe
 
         if (this.extending) {
@@ -74,16 +74,28 @@ export default class Disparo {
 
         // check colisiones solo cuando se extiende y no tiene mosca
         if (this.extending && !this.targetMosca) {
+            // Moscas normales
             moscaPool.pool.forEach(m => {
                 if (m.active && Phaser.Math.Distance.Between(m.x, m.y, endX, endY) < 15) {
                     this.targetMosca = m;
-                    m.active = false; // bloquear para que no lo agarre otro
-                    // Notificar al personaje que atrapó una mosca
+                    m.active = false;
                     if (this.jugador.captureMosca) {
                         this.jugador.captureMosca(m);
                     }
                 }
             });
+            // Moscas doradas
+            if (moscaDoradaPool) {
+                moscaDoradaPool.pool.forEach(m => {
+                    if (m.active && Phaser.Math.Distance.Between(m.x, m.y, endX, endY) < 15) {
+                        this.targetMosca = m;
+                        m.active = false;
+                        if (this.jugador.captureMosca) {
+                            this.jugador.captureMosca(m);
+                        }
+                    }
+                });
+            }
         }
     }
 

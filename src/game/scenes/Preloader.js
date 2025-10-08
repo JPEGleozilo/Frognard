@@ -54,6 +54,9 @@ export class Preloader extends Scene
         this.load.spritesheet("mosca spritesheet", "assets/mosca spritesheet.png", { frameWidth: 52, frameHeight: 52 });
         console.log("mosca cargado");
 
+        this.load.spritesheet("mosca dorada spritesheet", "assets/mosca dorada spritesheet.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("mosca dorada cargado");
+
         this.load.spritesheet("lengua", "assets/lengua.png", { frameWidth: 540, frameHeight: 20 });
         console.log("lengua cargado");
 

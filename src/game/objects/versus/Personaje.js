@@ -1,4 +1,5 @@
 import Disparo from "./Disparo.js";
+import MoscaDoradaPool from "./MoscaDoradaPool.js";
 
 export default class Personaje extends Phaser.GameObjects.Rectangle {
     constructor(scene, x, y, color, reticula, teclaDisparo, playerId) {
@@ -30,8 +31,8 @@ export default class Personaje extends Phaser.GameObjects.Rectangle {
         this.capturedMosca = null;
     }
 
-    update(time, delta, moscaPool) {
-        this.disparo.update(moscaPool);
+    update(time, delta, moscaPool, moscaDoradaPool) {
+        this.disparo.update(moscaPool, moscaDoradaPool);
 
         // --- Sincroniza el sprite con el rectángulo ---
         this.sprite.x = this.x;
@@ -44,9 +45,10 @@ export default class Personaje extends Phaser.GameObjects.Rectangle {
     captureMosca(mosca) {
         if (!this.capturedMosca) {
             this.capturedMosca = mosca;
-
-            // 🔔 Avisar al ScoreManager de la escena
-            this.scene.scoreManager.onMoscaCaptured(this.playerId);
+            // Detecta si es dorada
+            const puntos = mosca.texture.key === 'mosca dorada spritesheet' ? 5 : 1;
+            // Avisar al ScoreManager con el puntaje
+            this.scene.scoreManager.onMoscaCaptured(this.playerId, puntos);
         }
     }
 }
