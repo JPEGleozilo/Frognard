@@ -47,6 +47,9 @@ export class Preloader extends Scene
         this.load.spritesheet("rana", "assets/rana.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rana cargado");
 
+        this.load.spritesheet("rana disparo", "assets/ranadisparo.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("rata disparo cargado");
+
         this.load.spritesheet("rata", "assets/rata.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rata cargado");
         

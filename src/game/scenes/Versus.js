@@ -68,6 +68,12 @@ create() {
         frameRate: 8,
         repeat: -1
     });
+    this.anims.create({
+        key: 'rana_disparo_anim',
+        frames: this.anims.generateFrameNumbers('rana disparo', { start: 0, end: 8 }), // ajusta los frames según tu spritesheet
+        frameRate: 10,
+        repeat: 0
+    });
 }
 
   update(time, delta) {
