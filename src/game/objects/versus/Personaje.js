@@ -20,7 +20,7 @@ export default class Personaje extends Phaser.GameObjects.Rectangle {
         }
 
         this.sprite = this.scene.add.sprite(x, y, spriteKey);
-        this.sprite.setScale(1);
+        this.sprite.setScale(2);
         this.sprite.setOrigin(0.5);
         this.sprite.setDepth(1);
 

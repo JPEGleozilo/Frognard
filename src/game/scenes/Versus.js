@@ -17,27 +17,29 @@ export class Versus extends Scene
         frameWidth: 24, // ajusta según tu imagen
         frameHeight: 24 // ajusta según tu imagen
     });
+    
+ 
 }
 create() {
     this.add.image(480, 270, 'fondo')
     // Retículas (jugador 1 con WASD, jugador 2 con flechas)
-    this.reticle1 = new Reticle(this, 200, 100, 0xff0000, {
+    this.reticle1 = new Reticle(this, 200, 100, 0x00ff00, {
       left: this.input.keyboard.addKey("A"),
       right: this.input.keyboard.addKey("D"),
       up: this.input.keyboard.addKey("W"),
       down: this.input.keyboard.addKey("S"),
-    });
+    }, 'MiraRana');
 
-    this.reticle2 = new Reticle(this, 700, 100, 0x0000ff, {
+    this.reticle2 = new Reticle(this, 700, 100, 0xaaaaaa, {
       left: this.input.keyboard.addKey("LEFT"),
       right: this.input.keyboard.addKey("RIGHT"),
       up: this.input.keyboard.addKey("UP"),
       down: this.input.keyboard.addKey("DOWN"),
-    });
+    }, 'MiraRata');
 
     // Personajes (jugador 1 y jugador 2)
-    this.rana = new Personaje(this, 300, 500, 0x00ff00, this.reticle1, "Q", 'player1');
-    this.rata = new Personaje(this, 600, 500, 0xaaaaaa, this.reticle2, "P", 'player2');
+    this.rana = new Personaje(this, 300, 480, 0x00ff00, this.reticle1, "Q", 'player1');
+    this.rata = new Personaje(this, 600, 480, 0xaaaaaa, this.reticle2, "P", 'player2');
 
     
 
@@ -45,7 +47,7 @@ create() {
     this.weaponRana = new WeaponManager(this, this.rana, this.miraRana, 0x00ff00);
     this.weaponRata = new WeaponManager(this, this.rata, this.miraRata, 0x808080);
 
-    this.moscaPool = new MoscaPool(this, 25); // pool de 15 moscas
+    this.moscaPool = new MoscaPool(this, 25);
 
     // Controles de disparo
     this.input.keyboard.on("keydown_Q", () => this.weaponRana.shoot());

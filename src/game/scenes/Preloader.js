@@ -38,8 +38,11 @@ export class Preloader extends Scene
         this.load.image("fondo", "assets/fondo 1.png");
         console.log("fondo cargado");
 
-        this.load.image("mira", "assets/Mira.png" );
-        console.log("mira cargado");
+        this.load.image('MiraRana', 'assets/MiraRana.png');
+        console.log("mira rana cargado");
+
+        this.load.image('MiraRata', 'assets/MiraRata.png');
+        console.log("mira rata cargado");
 
         this.load.spritesheet("rana", "assets/rana.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rana cargado");

@@ -9,7 +9,7 @@ export default class ScoreManager {
         // Textos en pantalla
         //texto verde 
         this.scoreTextP1 = scene.add.text(200, 510, '0', {
-            fontSize: '28px',           // aumenta el tamaño
+            fontSize: '24px',           // aumenta el tamaño
             fill: 'rgba(32, 209, 32, 1)',
             fontFamily: 'Arial Black',
             fontStyle: 'bold',
@@ -20,7 +20,7 @@ export default class ScoreManager {
 
         //texto azul
         this.scoreTextP2 = scene.add.text(700, 510, '0', {
-            fontSize: '28px',
+            fontSize: '24px',
             fill: 'rgba(91, 100, 129, 1)',
             fontFamily: 'Arial Black',
             fontStyle: 'bold',
