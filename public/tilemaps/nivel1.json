@@ -68,6 +68,12 @@
                  "id":1,
                  "name":"1",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"duration",
+                         "type":"int",
+                         "value":5000
+                        }],
                  "rotation":0,
                  "type":"Vertical",
                  "visible":true,

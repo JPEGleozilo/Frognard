@@ -37,7 +37,7 @@ export class Coop extends Scene
                 new BotonH (this, objeto.x, objeto.y, objeto.name);
                 console.log(objeto.name, " horizontal");
             } else if (objeto.type === "Vertical") {
-                new BotonV (this, objeto.x, objeto.y, objeto.name);
+                new BotonV (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value);
                 console.log(objeto.name, " vertical");
             } else if (objeto.type === "Palanca") {
                 new Palanca (this, objeto.x, objeto.y, objeto.name);

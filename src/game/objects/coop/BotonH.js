@@ -12,7 +12,7 @@ export default class BotonH extends Phaser.Physics.Arcade.Sprite {
 
         this.setOrigin(1, 1);
         this.setScale(1); // Usa 1 para no distorsionar el sprite
-        // this.setCollisionCategory([3]); // Solo si usas Matter.js, no Arcade
+        this.setCollisionCategory([3]);
 
         this.scene.botonesH.add(this);
         this.body.setImmovable(true);

@@ -5,7 +5,7 @@ export default class Accionable extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y);
 
         this.y = y;
-        this.originalY = y;
+        this.scene.y = y;
         this.distintivo = distintivo;
         this.tipo = tipo;
     
@@ -39,6 +39,7 @@ export default class Accionable extends Phaser.Physics.Arcade.Sprite {
                 } else if (this.abierto === true && this.activo === false) {
                         this.setVelocityY(120);
                         this.activo = true;
+                        
                 }
             }
         }   
@@ -46,12 +47,20 @@ export default class Accionable extends Phaser.Physics.Arcade.Sprite {
     
     frenada(){
         if (this.activo === true){
-            console.log (this.originalY);
-            if (this.body.y > (this.originalY - 64) || this.body.y === this.originalY) {
-                console.log(this.activo)
+            console.log (this.scene.y);
+            if (this.y < (this.scene.y - 65) || this.y > this.scene.y + 2) {
+                console.log(this.y);
                 this.setVelocityY(0);
                 this.abierto = true;
                 this.activo = false;
+
+                if (this.y < (this.scene.y - 65)){
+                    this.abierto = true;
+                    this.y += 6;
+                } else {
+                    this.abierto = false;
+                    this.y -= 6;
+                }
             }
         }
     }
