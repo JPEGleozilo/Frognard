@@ -11,19 +11,21 @@ export class Preloader extends Scene
         const centerX = this.scale.width / 2;
         const centerY = this.scale.height / 2;
 
-        // Marco del progreso
-        this.add.rectangle(centerX, centerY + 200, 468, 32).setStrokeStyle(2, 0xffffff);
-
-        // Barra de progreso (inicialmente vacía)
-        this.bar = this.add.rectangle(centerX - 230, centerY + 200, 4, 28, 0xffffff).setOrigin(0, 0.5);
-
-        // Sprite de animación de carga (primero frame)
-        this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(1);
+          this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(1);
+    
+        this.cargaFinal = false;
     }
 
 
     preload ()
     {
+        this.anims.create({
+        key: 'carga_anim',
+        frames: this.anims.generateFrameNumbers('carga', { start: 0, end: 5 }),
+        frameRate: 1.5
+        });
+
+        this.cargaAnim.play('carga_anim');
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('public');
 
@@ -34,7 +36,7 @@ export class Preloader extends Scene
         console.log("fondo cargado");
 
         //this.load.spritesheet("carga", "assets/cargaanim.png", { frameWidth: 960, frameHeight: 540 });
-        console.log("carga cargado");
+        //console.log("carga cargado");
         
 
         this.load.image('MiraRana', 'assets/MiraRana.png');
@@ -81,39 +83,14 @@ export class Preloader extends Scene
 
         this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
 
-       
+        this.cargaFinal = true;
     }
 
-
-    create ()
-    {
-         // --- Actualización visual durante la carga ---
-        this.load.on('progress', (progress) => {
-            // Actualiza barra
-            this.bar.width = 4 + (460 * progress);
-
-            // Actualiza frame de sprite según progreso
-            if (this.cargaAnim) {
-                const totalFrames = 6; // Ajusta según tu spritesheet
-                const frame = Math.floor(progress * (totalFrames - 1));
-                this.cargaAnim.setFrame(frame);
-            }
-        });
-       // Cuando la carga termina
-        this.load.on('complete', () => {
-            // Asegura que el sprite muestre el último frame
-            if (this.cargaAnim) this.cargaAnim.setFrame(5);
-
-            // Pequeña pausa antes de cambiar de escena (opcional)
-            this.time.delayedCall(1000, () => {
-                this.scene.start('MainMenu');
+    update() {
+        if (this.cargaFinal === true && this.cargaAnim.anims.currentFrame.index === 5){
+            this.time.delayedCall(2000, () => {
+                this.scene.start("MainMenu");
             });
-        });
-        
-        //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-        //  For example, you can define global animations here, so we can use them in other scenes.
-        
-        //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('MainMenu');
+        }
     }
 }
