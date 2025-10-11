@@ -4,6 +4,7 @@ import { Versus } from './scenes/Versus';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
+import { ModificadorRuleta } from './scenes/ModificadorRuleta';
 import { AUTO, Game, Physics } from 'phaser';
 
 //  Find out more information about the Game Config at:
@@ -33,7 +34,8 @@ const config = {
         Coop,
         MainMenu,
         Versus,
-        GameOver
+        GameOver,
+        ModificadorRuleta,
     ]
 };
 
