@@ -10,7 +10,6 @@ import ModificadorManager from "../objects/versus/ModificadorManager.js";
 
 function keyToInternalName(key) {
   switch (key) {
-    case "controles_invertidos": return "controlesInvertidos";
     case "pantalla_invertida": return "pantallaInvertida";
     case "moscas_pequeñas": return "moscasPequeñas";
     case "moscas_rapidas": return "moscasRapidas";
@@ -26,6 +25,8 @@ function keyToInternalName(key) {
 export class Versus extends Scene {
   constructor() {
     super('Versus');
+    this.prevPad1Pressed = false;
+    this.prevPad2Pressed = false;
   }
 
   create() {
@@ -72,6 +73,20 @@ export class Versus extends Scene {
     // Controles de disparo
     this.input.keyboard.on("keydown_Q", () => this.weaponRana.shoot());
     this.input.keyboard.on("keydown_P", () => this.weaponRata.shoot());
+
+    // Guardar referencia a los gamepads
+    this.gamepad1 = null;
+    this.gamepad2 = null;
+
+    this.input.gamepad.on('connected', pad => {
+      if (!this.gamepad1) {
+        this.gamepad1 = pad;
+        console.log("Gamepad 1 conectado:", pad.id);
+      } else if (!this.gamepad2) {
+        this.gamepad2 = pad;
+        console.log("Gamepad 2 conectado:", pad.id);
+      }
+    });
 
     // ScoreManager
     this.scoreManager = new ScoreManager(this);
@@ -138,6 +153,41 @@ export class Versus extends Scene {
   }
 
   update(time, delta) {
+    // Movimiento con joystick izquierdo para jugador 1
+    if (this.gamepad1) {
+      const axisX = this.gamepad1.axes.length > 0 ? this.gamepad1.axes[0].getValue() : 0;
+      const axisY = this.gamepad1.axes.length > 1 ? this.gamepad1.axes[1].getValue() : 0;
+      const deadzone = 0.2;
+      const velocidad = (this.reticle1.speed || 200) * (this.velocidadReticula ?? 1) * (delta / 1000);
+
+      if (Math.abs(axisX) > deadzone) {
+        this.reticle1.x += axisX * velocidad ;
+        this.reticle1.x = Phaser.Math.Clamp(this.reticle1.x, this.reticle1.minX, this.reticle1.maxX);
+      }
+      if (Math.abs(axisY) > deadzone) {
+        this.reticle1.y += axisY * velocidad;
+        this.reticle1.y = Phaser.Math.Clamp(this.reticle1.y, this.reticle1.minY, this.reticle1.maxY);
+      }
+    }
+
+    // Movimiento con joystick izquierdo para jugador 2
+    if (this.gamepad2) {
+      const axisX = this.gamepad2.axes.length > 0 ? this.gamepad2.axes[0].getValue() : 0;
+      const axisY = this.gamepad2.axes.length > 1 ? this.gamepad2.axes[1].getValue() : 0;
+      const deadzone = 0.2;
+      const velocidad = (this.reticle2.speed || 200) * (this.velocidadReticula ?? 1) * (delta / 1000);
+
+
+      if (Math.abs(axisX) > deadzone) {
+        this.reticle2.x += axisX * velocidad
+        this.reticle2.x = Phaser.Math.Clamp(this.reticle2.x, this.reticle2.minX, this.reticle2.maxX);
+      }
+      if (Math.abs(axisY) > deadzone) {
+        this.reticle2.y += axisY * velocidad;
+        this.reticle2.y = Phaser.Math.Clamp(this.reticle2.y, this.reticle2.minY, this.reticle2.maxY);
+      }
+    }
+
     this.reticle1.update(time, delta);
     this.reticle2.update(time, delta);
     this.roundManager.update(time, delta);
@@ -146,6 +196,28 @@ export class Versus extends Scene {
     this.rata.update(time, delta, this.moscaPool, this.moscaDoradaPool);
     this.moscaPool.update(time, delta);
     this.moscaDoradaPool.update(time, delta);
+
+    // --- Disparo con gamepad SOUTH ---
+    // Jugador 1
+    if (this.gameplayEnabled && this.gamepad1) {
+      const pressed = this.gamepad1.buttons[0].pressed;
+      if (pressed && !this.prevPad1Pressed) {
+        this.weaponRana.shoot();
+        console.log("Disparo jugador 1 con botón 0");
+      }
+      this.prevPad1Pressed = pressed;
+    }
+
+    // Jugador 2
+    if (this.gameplayEnabled && this.gamepad2) {
+      const pressed = this.gamepad2.buttons[0].pressed;
+      if (pressed && !this.prevPad2Pressed) {
+        this.weaponRata.shoot();
+        console.log("Disparo jugador 2 con botón 0");
+      }
+      this.prevPad2Pressed = pressed;
+    }
+
     this.weaponRana.update(this.moscaPool, this.moscaDoradaPool);
     this.weaponRata.update(this.moscaPool, this.moscaDoradaPool);
   }

@@ -3,7 +3,6 @@ export default class ModificadorManager {
         this.scene = scene;
         this.modificadoresActivos = [];
         this.todosLosModificadores = [
-            "controlesInvertidos",
             "pantallaInvertida",
             "moscasPequeñas",
             "moscasRapidas",
@@ -57,7 +56,6 @@ export default class ModificadorManager {
     resetVisualsForReapply() {
         // ejemplo: restaurar cámara, retículas, moscas para reaplicar (no tocar pool)
         this.scene.cameras.main.setRotation(0);
-        this.scene.controlesInvertidos = false;
         this.scene.velocidadReticula = this.scene.velocidadReticula ?? 1;
 
         // Restablecer moscas activas a parámetros base si hace falta
@@ -88,9 +86,6 @@ export default class ModificadorManager {
         switch (nombre) {
             case "pantallaInvertida":
                 this.scene.cameras.main.setRotation(Math.PI);
-                break;
-            case "controlesInvertidos":
-                this.scene.controlesInvertidos = true;
                 break;
             case "moscasPequeñas":
   this.efectosMosca.escalar = 0.6;

@@ -26,13 +26,11 @@ export default class Reticle extends Phaser.GameObjects.Rectangle {
     const velocidadBase = this.speed || 200;
     const velocidad = velocidadBase * (this.scene.velocidadReticula ?? 1) * (delta / 1000);
 
-    // Si controles invertidos está activo, multiplica la dirección por -1
-    const invertido = this.scene.controlesInvertidos ? -1 : 1;
 
-    if (this.keys.left.isDown && this.x - velocidad * invertido >= this.minX) this.x -= velocidad * invertido;
-    if (this.keys.right.isDown && this.x + velocidad * invertido <= this.maxX) this.x += velocidad * invertido;
-    if (this.keys.up.isDown && this.y - velocidad * invertido >= this.minY) this.y -= velocidad * invertido;
-    if (this.keys.down.isDown && this.y + velocidad * invertido <= this.maxY) this.y += velocidad * invertido;
+    if (this.keys.left.isDown && this.x - velocidad  >= this.minX) this.x -= velocidad ;
+    if (this.keys.right.isDown && this.x + velocidad  <= this.maxX) this.x += velocidad ;
+    if (this.keys.up.isDown && this.y - velocidad  >= this.minY) this.y -= velocidad ;
+    if (this.keys.down.isDown && this.y + velocidad  <= this.maxY) this.y += velocidad ;
 
     if (this.miraSprite) {
         this.miraSprite.x = this.x;

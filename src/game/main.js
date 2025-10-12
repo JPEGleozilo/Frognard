@@ -28,6 +28,12 @@ const config = {
             debug: true
         }
     },
+    input: {
+        gamepad: true, // Esto habilita el soporte de gamepad
+        keyboard: true,
+        mouse: true,
+        touch: true
+    },
     scene: [
         Boot,
         Preloader,
