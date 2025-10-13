@@ -12,6 +12,7 @@ export default class Accionable extends Phaser.Physics.Arcade.Sprite {
         if (this.tipo === "puerta") {
             this.setTexture("puerta");
             this.scene.accionable.add(this);
+            this.y -= 2;
         }
         
         //Existencia
