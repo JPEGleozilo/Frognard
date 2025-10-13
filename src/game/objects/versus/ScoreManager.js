@@ -8,10 +8,10 @@ export default class ScoreManager {
 
         // Textos en pantalla
         //texto verde 
-        this.scoreTextP1 = scene.add.text(200, 510, '0', {
-            fontSize: '24px',           // aumenta el tamaño
+        this.scoreTextP1 = scene.add.text(200, 450, '00', {
+            fontSize: '36px',           // aumenta el tamaño
             fill: 'rgba(32, 209, 32, 1)',
-            fontFamily: 'Arial Black',
+            fontFamily: "PIXELYA",
             fontStyle: 'bold',
             stroke: '#000',             // borde negro
             strokeThickness: 4          // grosor del borde
@@ -19,10 +19,10 @@ export default class ScoreManager {
         this.scoreTextP1.setStyle({ fontWeight: 'bold' });
 
         //texto azul
-        this.scoreTextP2 = scene.add.text(700, 510, '0', {
-            fontSize: '28px',
+        this.scoreTextP2 = scene.add.text(700, 450, '00', {
+            fontSize: '36px',
             fill: 'rgba(91, 100, 129, 1)',
-            fontFamily: 'Arial Black',
+            fontFamily: "PIXELYA",
             fontStyle: 'bold',
             stroke: '#000',
             strokeThickness: 4
@@ -43,5 +43,12 @@ export default class ScoreManager {
         } else if (playerId === 'player2') {
             this.scoreTextP2.setText(this.scores.player2);
         }
+    }
+
+    getScores() {
+        return {
+            player1: this.scores.player1,
+            player2: this.scores.player2
+        };
     }
 }

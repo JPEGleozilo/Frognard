@@ -113,12 +113,12 @@ case "moscasFantasmas":
                 if (this.scene.moscaPool?.pool) {
                     // evento que periódicamente cambia direcciones
                     this._erraticEvent = this.scene.time.addEvent({
-                        delay: 800,
+                        delay: 1000,
                         loop: true,
                         callback: () => {
                             this.scene.moscaPool.pool.forEach(m => {
                                 if (m && m.active) {
-                                    m.velX = -m.velX * Phaser.Math.FloatBetween(0.9, 1.3);
+                                    m.velX = -m.velX * Phaser.Math.FloatBetween(1, 1);
                                     m.amplitud = Phaser.Math.Between(120, 470);
                                 }
                             });

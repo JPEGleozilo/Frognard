@@ -36,15 +36,40 @@ export class Versus extends Scene {
     this.cameras.main.setBounds(0, 0, 960, 540);
 
     // Crear manejadores
-    this.roundManager = new RoundManager(this, 30000, 3); // 1 min por ronda
+    this.roundManager = new RoundManager(this, 10000, 3);
     this.modManager = new ModificadorManager(this);
 
     // HUD simple
-    this.roundText = this.add.text(16, 16, "Ronda: -", { fontSize: "18px", color: "#ffffff" });
-    this.timerText = this.add.text(16, 40, "Tiempo: 0", { fontSize: "18px", color: "#ffffff" });
+    const centerX = this.scale.width / 2;
+    const timerY = 35;
 
-    // Retículas
-    this.reticle1 = new Reticle(this, 200, 100, 0x00ff00, {
+    // Timer y fondo (ya tienes esto)
+    this.timerText = this.add.text(centerX + 2, timerY, "00", {
+      fontFamily: "PIXELYA",
+      fontSize: "54px",
+      color: "#ff0000"
+      }).setOrigin(0.5); // Centra el texto
+    this.timerText.setDepth(0.2);
+
+    this.pantallaTimer = this.add.rectangle(centerX, 20, 120, 100, 0x000000)
+      .setAlpha(0.9)
+      .setDepth(0.1)
+      .setOrigin(0.5);
+
+    // --- LUCES DE RONDA ---
+    this.rondaLights = [];
+    const lightsY = timerY + 60; // Debajo del timer
+    const lightsSpacing = 40;
+    for (let i = 0; i < 3; i++) {
+      const x = centerX + lightsSpacing * (i - 1); // -1, 0, 1 para centrar
+      const circle = this.add.circle(x, lightsY, 10, 0x444444)
+        .setStrokeStyle(2, 0xffffff)
+        .setDepth(0.3);
+      this.rondaLights.push(circle);
+    }
+
+        // Retículas
+    this.reticle1 = new Reticle(this, 200, 80, 0x00ff00, {
       left: this.input.keyboard.addKey("A"),
       right: this.input.keyboard.addKey("D"),
       up: this.input.keyboard.addKey("W"),
@@ -116,23 +141,28 @@ export class Versus extends Scene {
 
     // --- EVENTOS DEL ROUND MANAGER ---
     this.events.on("roundStart", ({ round, maxRounds }) => {
-      this.roundText.setText(`Ronda: ${round} / ${maxRounds}`);
-      this.timerText.setText("Tiempo: 60");
+      this.timerText.setText("60");
       this.gameplayEnabled = true;
-
-      // reaplicar efectos acumulados (en caso de que estén)
-        this.modManager.aplicarModificadoresActivos();
-
-
+      this.modManager.aplicarModificadoresActivos();
       if (this.moscaPool?.resume) this.moscaPool.resume();
+
+      // Actualiza las luces de ronda (de izquierda a derecha)
+      for (let i = 0; i < this.rondaLights.length; i++) {
+        if (i < round) {
+          this.rondaLights[i].setFillStyle(0xffd700); // Encendida (amarillo/dorado)
+        } else {
+          this.rondaLights[i].setFillStyle(0x444444); // Apagada (gris)
+        }
+      }
     });
 
     this.events.on("roundTick", ({ seconds }) => {
-      this.timerText.setText(`Tiempo: ${seconds}`);
-    });
+  const formatted = seconds < 10 ? `0${seconds}` : `${seconds}`;
+  this.timerText.setText(formatted);
+});
 
     this.events.on("roundEnd", ({ round }) => {
-      this.timerText.setText("Tiempo: 0");
+      this.timerText.setText("00");
       this.gameplayEnabled = false;
       if (this.moscaPool?.pause) this.moscaPool.pause();
 
@@ -235,7 +265,22 @@ export class Versus extends Scene {
 
   endGameSequence() {
     console.log("🏁 Rondas finalizadas. Mostrar resultados o pantalla final.");
-    // ejemplo: this.scene.start('Resultados', { scores: this.scoreManager.getScores() });
+
+    // Obtén los scores
+    const scores = this.scoreManager.getScores();
+
+    // Determina el ganador
+    let winner = 'empate';
+    if (scores.player1 > scores.player2) winner = 'rana';
+    else if (scores.player2 > scores.player1) winner = 'rata';
+
+    // Envía los datos a la escena final
+    this.scene.start('VersusFinal', {
+      winner,
+      frogFlies: scores.player1,
+      ratFlies: scores.player2,
+      scores
+    });
   }
 
   mostrarRuletaModificadores(proximaRonda) {

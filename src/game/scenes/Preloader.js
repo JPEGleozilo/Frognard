@@ -39,6 +39,10 @@ export class Preloader extends Scene
         //console.log("carga cargado");
         
 
+        this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'assets/fonts/MiFuente.ttf'));
+        console.log("fuente cargada");
+
+        
         this.load.image('MiraRana', 'assets/MiraRana.png');
         console.log("mira rana cargado");
 

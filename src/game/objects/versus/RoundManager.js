@@ -1,5 +1,5 @@
 export default class RoundManager {
-  constructor(scene, roundDurationMs = 30000, maxRounds = 3) {
+  constructor(scene, roundDurationMs = 10000, maxRounds = 3) {
     this.scene = scene;
     this.roundDuration = roundDurationMs;
     this.maxRounds = maxRounds;
