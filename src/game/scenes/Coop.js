@@ -16,14 +16,23 @@ export class Coop extends Scene
     create ()
     {
         this.add.image(480, 270, 'fondo').setDepth(-1)        
-        
-        this.frognard = new Frognard(this, 200, 200).setDepth(2);
-        this.lengua = new Lengua(this);
 
         var mapa1 = this.make.tilemap({key: "mapaNivel1"});
         var patrones = mapa1.addTilesetImage("tileset", "patrones");
         var piso = mapa1.createLayer("bloques", patrones, 0, 0).setDepth(2);
         mapa1.createLayer("superficie", patrones, 0 , 0).setDepth(1);
+        var final = mapa1.createLayer("final", patrones, 0, 0).setDepth(3);
+
+        this.capaSpawns = mapa1.getObjectLayer("spawn");
+        this.capaSpawns.objects.forEach(objeto => {
+            if (objeto.name === "Frognard") {
+                this.spawnX = objeto.x;
+                this.spawnY = objeto.y;
+            }
+        })
+
+        this.frognard = new Frognard(this, this.spawnX, this.spawnY).setDepth(2);
+        this.lengua = new Lengua(this);
 
         this.botonesH = this.physics.add.group();
         this.botonesV = this.physics.add.group();
@@ -51,8 +60,11 @@ export class Coop extends Scene
             console.log(objeto.name, " puerta");
         })
 
+
         piso.setCollisionByProperty({collider: true});
         piso.setCollisionCategory([2]);
+
+        final.setCollisionByProperty({collider: true});
 
         this.physics.add.collider(this.frognard, piso);
         this.physics.add.collider(this.lengua, piso, () => {
@@ -61,6 +73,12 @@ export class Coop extends Scene
         this.physics.add.collider(this.frognard, this.accionable);
         this.physics.add.overlap(this.frognard, this.lengua, () => {
             this.lengua.desactivar();
+        })
+
+
+        //Me voy al super tengo que arreglar esto
+        this.physics.add.overlap(this.frognard, final, () => {
+            console.log ("terminaste");
         })
 
         this.physics.world.on("worldbounds", (body) => {

@@ -28,10 +28,7 @@ export default class BotonH extends Phaser.Physics.Arcade.Sprite {
         this.setFrame(valor ? 1 : 0); // Frame 1 si apretado, 0 si no
     }
 
-    // Si quieres que se desactive cuando el jugador se va:
     update() {
-        // Aquí puedes checar si sigue colisionando, si no, desactiva
-        // Ejemplo simple (ajusta según tu lógica):
         if (!this.body.touching.none) {
             this.setApretado(true);
         } else {

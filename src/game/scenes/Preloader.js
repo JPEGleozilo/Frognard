@@ -109,7 +109,11 @@ export class Preloader extends Scene
         this.load.image("puerta", "assets/puerta.png");
         console.log("puerta cargado");
 
+        this.load.image("caja", "assets/caja.png");
+        console.log("caja cargado");
+
         this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
+        this.load.tilemapTiledJSON("mapaNivel2", "tilemaps/nivel2.json");
 
         this.cargaFinal = true;
     }
