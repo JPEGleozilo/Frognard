@@ -7,6 +7,25 @@ import ScoreManager from '../objects/versus/ScoreManager.js';
 import MoscaDoradaPool from '../objects/versus/MoscaDoradaPool.js';
 import RoundManager from "../objects/versus/RoundManager.js";
 import ModificadorManager from "../objects/versus/ModificadorManager.js";
+import { INPUT_ACTIONS } from "../utils/InputSystem.js";
+
+
+const PLAYER_INPUTS = {
+  player1: {
+    [INPUT_ACTIONS.LEFT]: ["A"],
+    [INPUT_ACTIONS.RIGHT]: ["D"],
+    [INPUT_ACTIONS.UP]: ["W"],
+    [INPUT_ACTIONS.DOWN]: ["S"],
+    [INPUT_ACTIONS.SOUTH]: ["Q", { type: "gamepad", index: 0 }]
+  },
+  player2: {
+    [INPUT_ACTIONS.LEFT]: ["LEFT"],
+    [INPUT_ACTIONS.RIGHT]: ["RIGHT"],
+    [INPUT_ACTIONS.UP]: ["UP"],
+    [INPUT_ACTIONS.DOWN]: ["DOWN"],
+    [INPUT_ACTIONS.SOUTH]: ["P", { type: "gamepad", index: 0 }]
+  }
+};
 
 function keyToInternalName(key) {
   switch (key) {
@@ -107,9 +126,6 @@ export class Versus extends Scene {
       if (!this.gamepad1) {
         this.gamepad1 = pad;
         console.log("Gamepad 1 conectado:", pad.id);
-      } else if (!this.gamepad2) {
-        this.gamepad2 = pad;
-        console.log("Gamepad 2 conectado:", pad.id);
       }
     });
 
@@ -138,6 +154,23 @@ export class Versus extends Scene {
 
     // Bloquear inputs hasta que empiece la ronda
     this.gameplayEnabled = false;
+
+    // Registrar teclas para ambos jugadores
+    this.keys = {
+      player1: {},
+      player2: {}
+    };
+
+    Object.entries(PLAYER_INPUTS.player1).forEach(([action, inputs]) => {
+      this.keys.player1[action] = inputs
+        .filter(i => typeof i === "string")
+        .map(k => this.input.keyboard.addKey(k));
+    });
+    Object.entries(PLAYER_INPUTS.player2).forEach(([action, inputs]) => {
+      this.keys.player2[action] = inputs
+        .filter(i => typeof i === "string")
+        .map(k => this.input.keyboard.addKey(k));
+    });
 
     // --- EVENTOS DEL ROUND MANAGER ---
     this.events.on("roundStart", ({ round, maxRounds }) => {
@@ -178,45 +211,83 @@ export class Versus extends Scene {
       this.endGameSequence();
     });
 
+    this.events.on('shutdown', this.shutdown, this);
+
     // Iniciar todas las rondas
     this.roundManager.startAll();
   }
 
   update(time, delta) {
-    // Movimiento con joystick izquierdo para jugador 1
+    // --- Movimiento retícula jugador 1 ---
+    let dx1 = 0, dy1 = 0;
+    if (this.keys.player1[INPUT_ACTIONS.LEFT].some(k => k.isDown)) dx1 -= 1;
+    if (this.keys.player1[INPUT_ACTIONS.RIGHT].some(k => k.isDown)) dx1 += 1;
+    if (this.keys.player1[INPUT_ACTIONS.UP].some(k => k.isDown)) dy1 -= 1;
+    if (this.keys.player1[INPUT_ACTIONS.DOWN].some(k => k.isDown)) dy1 += 1;
+
+    const velocidad1 = (this.reticle1.speed || 10) * (this.velocidadReticula ?? 1) * (delta / 1000);
+
+    // Teclado
+    this.reticle1.x = Phaser.Math.Clamp(this.reticle1.x + dx1 * velocidad1, this.reticle1.minX, this.reticle1.maxX);
+    this.reticle1.y = Phaser.Math.Clamp(this.reticle1.y + dy1 * velocidad1, this.reticle1.minY, this.reticle1.maxY);
+
+    // Joystick izquierdo
     if (this.gamepad1) {
       const axisX = this.gamepad1.axes.length > 0 ? this.gamepad1.axes[0].getValue() : 0;
       const axisY = this.gamepad1.axes.length > 1 ? this.gamepad1.axes[1].getValue() : 0;
       const deadzone = 0.2;
-      const velocidad = (this.reticle1.speed || 200) * (this.velocidadReticula ?? 1) * (delta / 1000);
-
       if (Math.abs(axisX) > deadzone) {
-        this.reticle1.x += axisX * velocidad ;
-        this.reticle1.x = Phaser.Math.Clamp(this.reticle1.x, this.reticle1.minX, this.reticle1.maxX);
+        this.reticle1.x = Phaser.Math.Clamp(this.reticle1.x + axisX * velocidad1 * 2, this.reticle1.minX, this.reticle1.maxX);
       }
       if (Math.abs(axisY) > deadzone) {
-        this.reticle1.y += axisY * velocidad;
-        this.reticle1.y = Phaser.Math.Clamp(this.reticle1.y, this.reticle1.minY, this.reticle1.maxY);
+        this.reticle1.y = Phaser.Math.Clamp(this.reticle1.y + axisY * velocidad1 * 2, this.reticle1.minY, this.reticle1.maxY);
       }
     }
 
-    // Movimiento con joystick izquierdo para jugador 2
+    // --- Movimiento retícula jugador 2 ---
+    let dx2 = 0, dy2 = 0;
+    if (this.keys.player2[INPUT_ACTIONS.LEFT].some(k => k.isDown)) dx2 -= 1;
+    if (this.keys.player2[INPUT_ACTIONS.RIGHT].some(k => k.isDown)) dx2 += 1;
+    if (this.keys.player2[INPUT_ACTIONS.UP].some(k => k.isDown)) dy2 -= 1;
+    if (this.keys.player2[INPUT_ACTIONS.DOWN].some(k => k.isDown)) dy2 += 1;
+
+    const velocidad2 = (this.reticle2.speed || 200) * (this.velocidadReticula ?? 1) * (delta / 1000);
+
+    // Teclado
+    this.reticle2.x = Phaser.Math.Clamp(this.reticle2.x + dx2 * velocidad2, this.reticle2.minX, this.reticle2.maxX);
+    this.reticle2.y = Phaser.Math.Clamp(this.reticle2.y + dy2 * velocidad2, this.reticle2.minY, this.reticle2.maxY);
+
+    // Joystick izquierdo
     if (this.gamepad2) {
       const axisX = this.gamepad2.axes.length > 0 ? this.gamepad2.axes[0].getValue() : 0;
       const axisY = this.gamepad2.axes.length > 1 ? this.gamepad2.axes[1].getValue() : 0;
       const deadzone = 0.2;
-      const velocidad = (this.reticle2.speed || 200) * (this.velocidadReticula ?? 1) * (delta / 1000);
-
-
       if (Math.abs(axisX) > deadzone) {
-        this.reticle2.x += axisX * velocidad
-        this.reticle2.x = Phaser.Math.Clamp(this.reticle2.x, this.reticle2.minX, this.reticle2.maxX);
+        this.reticle2.x = Phaser.Math.Clamp(this.reticle2.x + axisX * velocidad2 * 2, this.reticle2.minX, this.reticle2.maxX);
       }
       if (Math.abs(axisY) > deadzone) {
-        this.reticle2.y += axisY * velocidad;
-        this.reticle2.y = Phaser.Math.Clamp(this.reticle2.y, this.reticle2.minY, this.reticle2.maxY);
+        this.reticle2.y = Phaser.Math.Clamp(this.reticle2.y + axisY * velocidad2 * 2, this.reticle2.minY, this.reticle2.maxY);
       }
     }
+
+    // --- Disparo jugador 1 ---
+    const shootKey1 = this.keys.player1[INPUT_ACTIONS.SOUTH][0];
+    const shootKey2 = this.keys.player2[INPUT_ACTIONS.SOUTH][0];
+
+    // Teclado
+    if (Phaser.Input.Keyboard.JustDown(shootKey1)) this.weaponRana.shoot();
+    if (Phaser.Input.Keyboard.JustDown(shootKey2)) this.weaponRata.shoot();
+
+    // Gamepad
+    if (this.gamepad1 && this.gamepad1.buttons[0].pressed && !this.prevPad1Pressed) {
+      this.weaponRana.shoot();
+    }
+    this.prevPad1Pressed = this.gamepad1 ? this.gamepad1.buttons[0].pressed : false;
+
+    if (this.gamepad2 && this.gamepad2.buttons[0].pressed && !this.prevPad2Pressed) {
+      this.weaponRata.shoot();
+    }
+    this.prevPad2Pressed = this.gamepad2 ? this.gamepad2.buttons[0].pressed : false;
 
     this.reticle1.update(time, delta);
     this.reticle2.update(time, delta);
@@ -227,26 +298,8 @@ export class Versus extends Scene {
     this.moscaPool.update(time, delta);
     this.moscaDoradaPool.update(time, delta);
 
-    // --- Disparo con gamepad SOUTH ---
-    // Jugador 1
-    if (this.gameplayEnabled && this.gamepad1) {
-      const pressed = this.gamepad1.buttons[0].pressed;
-      if (pressed && !this.prevPad1Pressed) {
-        this.weaponRana.shoot();
-        console.log("Disparo jugador 1 con botón 0");
-      }
-      this.prevPad1Pressed = pressed;
-    }
 
-    // Jugador 2
-    if (this.gameplayEnabled && this.gamepad2) {
-      const pressed = this.gamepad2.buttons[0].pressed;
-      if (pressed && !this.prevPad2Pressed) {
-        this.weaponRata.shoot();
-        console.log("Disparo jugador 2 con botón 0");
-      }
-      this.prevPad2Pressed = pressed;
-    }
+
 
     this.weaponRana.update(this.moscaPool, this.moscaDoradaPool);
     this.weaponRata.update(this.moscaPool, this.moscaDoradaPool);
@@ -300,5 +353,12 @@ export class Versus extends Scene {
   });
 }
 
-
+shutdown() {
+  this.gamepad1 = null;
+  this.gamepad2 = null;
+  this.prevPad1Pressed = false;
+  this.prevPad2Pressed = false;
 }
+}
+
+
