@@ -55,7 +55,7 @@ export class Versus extends Scene {
     this.cameras.main.setBounds(0, 0, 960, 540);
 
     // Crear manejadores
-    this.roundManager = new RoundManager(this, 10000, 3);
+    this.roundManager = new RoundManager(this, 30000, 3);
     this.modManager = new ModificadorManager(this);
 
     // HUD simple
