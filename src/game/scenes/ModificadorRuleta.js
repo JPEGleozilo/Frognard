@@ -1,7 +1,6 @@
 import { Scene } from 'phaser';
 
 const MODIFICADORES_INFO = [
-  { key: 'controles_invertidos', nombre: 'Controles Invertidos', descripcion: 'Invierte las direcciones del jugador.', icono: 'controles_invertidos' },
   { key: 'pantalla_invertida', nombre: 'Pantalla Invertida', descripcion: 'La pantalla se muestra al revés.', icono: 'pantalla_invertida' },
   { key: 'moscas_pequeñas', nombre: 'Moscas Pequeñas', descripcion: 'Las moscas son más pequeñas y difíciles de ver.', icono: 'moscas_pequeñas' },
   { key: 'moscas_rapidas', nombre: 'Moscas Rápidas', descripcion: 'Las moscas se mueven más rápido.', icono: 'moscas_rapidas' },
