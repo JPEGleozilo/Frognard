@@ -22,17 +22,6 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
 
         //Controles teclado
         this.scene.cursors = this.scene.input.keyboard.addKeys ("UP, DOWN, LEFT, RIGHT, ,A ,D, L, T");
-
-        //Controles gamepad
-        this.joystick = null;
-        this.input.gamepad.on('connected', pad => {
-            this.joystick = pad;
-        });
-        this.input.gamepad.on("down", pad => {
-            if (this.joystick === null) {
-                this.joystick = pad;
-            }
-        })     
     }
       
     

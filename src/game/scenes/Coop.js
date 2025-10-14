@@ -75,12 +75,6 @@ export class Coop extends Scene
             this.lengua.desactivar();
         })
 
-
-        //Me voy al super tengo que arreglar esto
-        this.physics.add.overlap(this.frognard, final, () => {
-            console.log ("terminaste");
-        })
-
         this.physics.world.on("worldbounds", (body) => {
             if (body.gameObject === this.lengua) {
                 this.lengua.triggerVuelta();
