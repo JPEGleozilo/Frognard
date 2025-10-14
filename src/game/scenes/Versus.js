@@ -126,7 +126,10 @@ export class Versus extends Scene {
       if (!this.gamepad1) {
         this.gamepad1 = pad;
         console.log("Gamepad 1 conectado:", pad.id);
-      }
+      } else if (this.gamepad1) {
+        this.gamepad2 = pad;
+        console.log("Gamepad 2 conectado :", pad.id)
+      };
     });
 
     // ScoreManager

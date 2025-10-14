@@ -60,7 +60,7 @@ export default class Accionable extends Phaser.Physics.Arcade.Sprite {
                     this.y += 6;
                 } else {
                     this.abierto = false;
-                    this.y -= 10;
+                    this.y -= 6;
                 }
             }
         }
