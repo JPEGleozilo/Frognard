@@ -12,7 +12,6 @@ export default class Reticle extends Phaser.GameObjects.Rectangle {
     this.miraSprite.setOrigin(0.5);
     this.miraSprite.setDepth(100);
     this.miraSprite.setScale(1);
-    this.miraSprite.setTint(color); // ← Usa el color recibido
     this.keys = keys;
     this.speed = 200;
 
@@ -24,17 +23,18 @@ export default class Reticle extends Phaser.GameObjects.Rectangle {
   }
 
   update(time, delta) {
-    const velocity = this.speed * (delta / 1000);
+    const velocidadBase = this.speed || 200;
+    const velocidad = velocidadBase * (this.scene.velocidadReticula ?? 1) * (delta / 1000);
 
-    if (this.keys.left.isDown && this.x - velocity >= this.minX) this.x -= velocity;
-    if (this.keys.right.isDown && this.x + velocity <= this.maxX) this.x += velocity;
-    if (this.keys.up.isDown && this.y - velocity >= this.minY) this.y -= velocity;
-    if (this.keys.down.isDown && this.y + velocity <= this.maxY) this.y += velocity;
 
-    // --- Actualiza la posición del sprite de la mira ---
+    if (this.keys.left.isDown && this.x - velocidad  >= this.minX) this.x -= velocidad ;
+    if (this.keys.right.isDown && this.x + velocidad  <= this.maxX) this.x += velocidad ;
+    if (this.keys.up.isDown && this.y - velocidad  >= this.minY) this.y -= velocidad ;
+    if (this.keys.down.isDown && this.y + velocidad  <= this.maxY) this.y += velocidad ;
+
     if (this.miraSprite) {
-      this.miraSprite.x = this.x;
-      this.miraSprite.y = this.y;
+        this.miraSprite.x = this.x;
+        this.miraSprite.y = this.y;
     }
   }
 }
