@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import InputSystem from '../../utils/InputSystem';
 
 export default class Frognard extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
@@ -20,64 +21,72 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         this.gravedadBaja = -400;
         this.currentAngle = {x: 1 ,y: 0};
 
-        //Controles teclado
-        this.scene.cursors = this.scene.input.keyboard.addKeys ("UP, DOWN, LEFT, RIGHT, ,A ,D, L, T");
-
-        //Controles gamepad
-        this.joystick = null;
-        this.input.gamepad.on('connected', pad => {
-            this.joystick = pad;
-        });
-        this.input.gamepad.on("down", pad => {
-            if (this.joystick === null) {
-                this.joystick = pad;
-            }
-        })     
+        this.inputSystem = new InputSystem(this.input);
+        this.inputSystem.configureKeyboard({
+            [INPUT_ACTIONS.LEFT]: [Phaser.Input.Keyboard.KeyCodes.A],
+            [INPUT_ACTIONS.RIGHT]: [Phaser.Input.Keyboard.KeyCodes.D],
+            [INPUT_ACTIONS.SOUTH]: [Phaser.Input.Keyboard.KeyCodes.T]
+        }, "player1");
+        this.inputSystem.configureKeyboard({
+            [INPUT_ACTIONS.UP]: [Phaser.Input.Keyboard.KeyCodes.UP],
+            [INPUT_ACTIONS.DOWN]: [Phaser.Input.Keyboard.KeyCodes.DOWN],
+            [INPUT_ACTIONS.LEFT]: [Phaser.Input.Keyboard.KeyCodes.LEFT],
+            [INPUT_ACTIONS.RIGHT]: [Phaser.Input.Keyboard.KeyCodes.RIGHT],
+            [INPUT_ACTIONS.SOUTH]: [Phaser.Input.Keyboard.KeyCodes.L]
+        }, "player2");
     }
       
     
     update() {
         this.setVelocityX (0);
 
-        if (this.scene.cursors.D.isDown || this.joystick?.axes[0].getValue()  > 0.1) {
+        if (this.inputSystem.isJustPressed(INPUT_ACTIONS.RIGHT, "player1")) {
             this.setVelocityX(this.velocidad);
             this.currentAngle = {x: 1, y: 0};
         };
-        if (this.scene.cursors.A.isDown || this.joystick?.axes[0].getValue()  < -0.1) {
+        if (this.inputSystem.isJustPressed(INPUT_ACTIONS.LEFT, "player1")) {
             this.setVelocityX(-this.velocidad);
             this.currentAngle = {x: -1, y: 0};
         };
-        if (this.scene.cursors.L.isDown && this.body.onFloor()) {
+        if (this.inputSystem.isJustPressed(INPUT_ACTIONS.SOUTH, "player2") && this.body.onFloor()) {
             this.setVelocityY(this.salto);
-        } else if (this.scene.cursors.L.isDown && !this.body.onFloor()) {
+        } else if (this.inputSystem.isJustPressed(INPUT_ACTIONS.SOUTH, "player2") && !this.body.onFloor()) {
             this.setGravityY(this.gravedadBaja);
         } else {
             this.setGravityY(0);
         };
 
-        if (Phaser.Input.Keyboard.JustDown(this.scene.cursors.T)) {
+        if (this.inputSystem.isJustPressed(INPUT_ACTIONS.SOUTH, "player1")) {
             this.scene.inputLengua = true
         } else {
             this.scene.inputLengua = false
         };
 
-        if (this.scene.cursors.RIGHT.isDown && this.scene.cursors.UP.isDown && this.scene.cursors.DOWN.isUp){
-            this.currentAngle = {x: Math.sqrt(1), y: -Math.sqrt(1)};
-        } else if (this.scene.cursors.LEFT.isDown && this.scene.cursors.UP.isDown && this.scene.cursors.DOWN.isUp){
-            this.currentAngle = {x: -Math.sqrt(1), y: -Math.sqrt(1)};
-        }  else if (this.scene.cursors.RIGHT.isDown && this.scene.cursors.UP.isUp && this.scene.cursors.DOWN.isDown){
-            this.currentAngle = {x: Math.sqrt(1), y: Math.sqrt(1)};
-        }  else if (this.scene.cursors.LEFT.isDown && this.scene.cursors.UP.isUp && this.scene.cursors.DOWN.isDown){
-            this.currentAngle = {x: -Math.sqrt(1), y: Math.sqrt(1)};
-        } else if (this.scene.cursors.UP.isDown && this.scene.cursors.RIGHT.isUp && this.scene.cursors.LEFT.isUp){
-            this.currentAngle = {x: 0, y: -1};
-        } else if (this.scene.cursors.DOWN.isDown && this.scene.cursors.RIGHT.isUp && this.scene.cursors.LEFT.isUp){
-            this.currentAngle = {x: 0, y: 1};
-        } else if (this.scene.cursors.RIGHT.isDown && this.scene.cursors.UP.isUp && this.scene.cursors.DOWN.isUp){
-            this.currentAngle = {x: 1, y: 0};
-        } else if (this.scene.cursors.LEFT.isDown && this.scene.cursors.UP.isUp && this.scene.cursors.DOWN.isUp){
-            this.currentAngle = {x: -1, y: 0};
-        };
+        if (this.inputSystem.isJustPressed(INPUT_ACTIONS.RIGHT, "player2")){
+            this.currentAngle.x = 1;
+            if (this.currentAngle.y != 0){
+                this.currentAngle.x = Math.sqrt(1)
+            };
+        } else if (this.inputSystem.isJustPressed(INPUT_ACTIONS.LEFT, "player2")){
+            this.currentAngle.x = -1;
+            if (this.currentAngle.y != 0){
+                this.currentAngle.x = -Math.sqrt(1)
+            };
+        }
+
+        if (this.inputSystem.isJustPressed(INPUT_ACTIONS.UP, "player2")){
+            this.currentAngle.y = -1;
+            if (this.currentAngle.x != 0){
+                this.currentAngle.y = -Math.sqrt(1)
+            };
+        } else if (this.inputSystem.isJustPressed(INPUT_ACTIONS.DOWN, "player2")){
+            this.currentAngle.y = 1;
+            if (this.currentAngle.x != 0){
+                this.currentAngle.y = Math.sqrt(1)
+            };
+        }
+
+        this.currentAngle = {x: 0, y: 0};
     }
 
     getCurrentAngle() {

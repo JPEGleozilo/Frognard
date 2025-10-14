@@ -7,6 +7,7 @@ import ScoreManager from '../objects/versus/ScoreManager.js';
 import MoscaDoradaPool from '../objects/versus/MoscaDoradaPool.js';
 import RoundManager from "../objects/versus/RoundManager.js";
 import ModificadorManager from "../objects/versus/ModificadorManager.js";
+import InputSystem, { INPUT_ACTIONS } from "../utils/InputSystem.js";
 
 function keyToInternalName(key) {
   switch (key) {
