@@ -4,7 +4,6 @@ import { Versus } from './scenes/Versus';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
-import { ModificadorRuleta } from './scenes/ModificadorRuleta';
 import { AUTO, Game, Physics } from 'phaser';
 
 //  Find out more information about the Game Config at:
@@ -28,20 +27,13 @@ const config = {
             debug: true
         }
     },
-    input: {
-        gamepad: true, // Esto habilita el soporte de gamepad
-        keyboard: true,
-        mouse: true,
-        touch: true
-    },
     scene: [
         Boot,
         Preloader,
         Coop,
         MainMenu,
         Versus,
-        GameOver,
-        ModificadorRuleta,
+        GameOver
     ]
 };
 

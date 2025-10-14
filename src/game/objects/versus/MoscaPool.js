@@ -14,40 +14,26 @@ export default class MoscaPool {
     }
 
     spawnMosca() {
-  const libre = this.pool.find(m => !m.active);
-  if (!libre) return;
+        const libre = this.pool.find(m => !m.active);
+        if (!libre) return;
 
-  const lado = Phaser.Math.Between(0, 1);
-  let x, direccion;
-  const y = Phaser.Math.Between(100, 300);
+        // Decide aleatoriamente el lado de aparición
+        const lado = Phaser.Math.Between(0, 1); // 0 = izquierda, 1 = derecha
+        let x, direccion;
+        const y = Phaser.Math.Between(100, 300);
 
-  if (lado === 0) {
-    x = 30;
-    direccion = 1;
-  } else {
-    x = this.scene.sys.canvas.width - 30;
-    direccion = -1;
-  }
+        if (lado === 0) {
+            // Aparece en el borde izquierdo y va a la derecha
+            x = 30;
+            direccion = 1;
+        } else {
+            // Aparece en el borde derecho y va a la izquierda
+            x = this.scene.sys.canvas.width - 30;
+            direccion = -1;
+        }
 
-  libre.spawn(x, y, direccion);
-
-  // 🔥 Aplicar los efectos persistentes de los modificadores activos
-  const efectos = this.scene.modManager?.efectosMosca;
-  if (efectos) {
-    if (efectos.escalar !== 1) libre.setScale(efectos.escalar);
-    if (efectos.velMultiplicador !== 1) libre.velX *= efectos.velMultiplicador;
-    if (efectos.fantasmas) {
-      this.scene.tweens.add({
-        targets: libre,
-        alpha: { from: 0.1, to: 1 },
-        duration: 3500,
-        yoyo: true,
-        repeat: -1,
-      });
+        libre.spawn(x, y, direccion);
     }
-  }
-}
-
 
     update(time, delta) {
         // Spawn automático cada cierto tiempo

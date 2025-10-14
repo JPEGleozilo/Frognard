@@ -64,30 +64,6 @@ export class Preloader extends Scene
         this.load.spritesheet("lengua", "assets/lengua.png", { frameWidth: 540, frameHeight: 20 });
         console.log("lengua cargado");
 
-        this.load.image("controles_invertidos", "assets/controles_invertidos.png");
-        console.log("controles_invertidos cargado");
-
-        this.load.image("pantalla_invertida", "assets/pantalla_invertida.png");
-        console.log("pantalla_invertida cargado");
-
-        this.load.image("moscas_pequeñas", "assets/moscas_pequeñas.png");
-        console.log("moscas_pequenas cargado");
-
-        this.load.image("moscas_rapidas", "assets/moscas_rapidas.png");
-        console.log("moscas_rapidas cargado");
-
-        this.load.image("moscas_fantasmas", "assets/moscas_fantasmas.png");
-        console.log("moscas_fantasmas cargado");
-
-        this.load.image("reticulas_rapidas", "assets/reticulas_rapidas.png");
-        console.log("reticulas_rapidas cargado");
-
-        this.load.image("reticulas_lentas", "assets/reticulas_lentas.png");
-        console.log("reticulas_lentas cargado");
-
-        this.load.image("moscas_locas", "assets/moscas_locas.png");
-        console.log("moscas_locas cargado");
-
         console.log("--VERSUS CARGADO--");
 
         this.load.image("frognard", "assets/frognard.png");

@@ -43,7 +43,6 @@ export default class Disparo {
             this.lengua.rotation = this.angle;
             this.lengua.displayWidth = 0;
             this.lengua.setVisible(true);
-            if (this.line) this.line.setAlpha(0);
         }
     }
 
