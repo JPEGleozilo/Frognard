@@ -25,9 +25,14 @@ export class Preloader extends Scene
         frameRate: 1.5
         });
 
+        this.load.setPath('./public/assets/fonts');
+
+         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'fonts/MiFuente.ttf'));
+        console.log("fuente cargada");
+
         this.cargaAnim.play('carga_anim');
         //  Load the assets for the game - Replace with your own assets
-        this.load.setPath('/assets');
+        this.load.setPath('./public/assets');
 
         this.load.image('logo', 'frognardtitulo.png');
         console.log("logo cargado");
@@ -37,10 +42,6 @@ export class Preloader extends Scene
 
         //this.load.spritesheet("carga", "cargaanim.png", { frameWidth: 960, frameHeight: 540 });
         //console.log("carga cargado");
-        
-
-        this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'fonts/MiFuente.ttf'));
-        console.log("fuente cargada");
 
         
         this.load.image('MiraRana', 'MiraRana.png');
@@ -112,7 +113,7 @@ export class Preloader extends Scene
         this.load.image("caja", "caja.png");
         console.log("caja cargado");
 
-        
+        this.load.setPath('./public/tilemaps');
 
         this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
         this.load.tilemapTiledJSON("mapaNivel2", "tilemaps/nivel2.json");
