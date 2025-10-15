@@ -55,6 +55,7 @@ export class VersusFinal extends Scene {
         }).setOrigin(0.5).setInteractive();
 
         btn.on('pointerdown', () => {
+            this.scene.stop("Versus")
             this.scene.start('MainMenu');
         });
     }
