@@ -27,7 +27,7 @@ export class Preloader extends Scene
 
         this.load.setPath('/assets/fonts');
 
-         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'fonts/MiFuente.ttf'));
+         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'MiFuente.ttf'));
         console.log("fuente cargada");
 
         this.cargaAnim.play('carga_anim');
@@ -115,8 +115,8 @@ export class Preloader extends Scene
 
         this.load.setPath('/tilemaps');
 
-        this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
-        this.load.tilemapTiledJSON("mapaNivel2", "tilemaps/nivel2.json");
+        this.load.tilemapTiledJSON("mapaNivel1", "nivel1.json");
+        this.load.tilemapTiledJSON("mapaNivel2", "nivel2.json");
 
         this.cargaFinal = true;
     }
