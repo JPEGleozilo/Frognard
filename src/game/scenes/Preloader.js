@@ -27,7 +27,7 @@ export class Preloader extends Scene
 
         this.load.setPath('/assets/fonts');
 
-         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'MiFuente.ttf'));
+         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'PIXELYA Trial.ttf'));
         console.log("fuente cargada");
 
         this.cargaAnim.play('carga_anim');
