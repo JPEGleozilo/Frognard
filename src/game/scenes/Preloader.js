@@ -27,90 +27,92 @@ export class Preloader extends Scene
 
         this.cargaAnim.play('carga_anim');
         //  Load the assets for the game - Replace with your own assets
-        this.load.setPath('public');
+        this.load.setPath('/assets');
 
-        this.load.image('logo', 'assets/frognardtitulo.png');
+        this.load.image('logo', 'frognardtitulo.png');
         console.log("logo cargado");
 
-        this.load.image("fondo", "assets/fondo 1.png");
+        this.load.image("fondo", "fondo 1.png");
         console.log("fondo cargado");
 
-        //this.load.spritesheet("carga", "assets/cargaanim.png", { frameWidth: 960, frameHeight: 540 });
+        //this.load.spritesheet("carga", "cargaanim.png", { frameWidth: 960, frameHeight: 540 });
         //console.log("carga cargado");
         
 
-        this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'assets/fonts/MiFuente.ttf'));
+        this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'fonts/MiFuente.ttf'));
         console.log("fuente cargada");
 
         
-        this.load.image('MiraRana', 'assets/MiraRana.png');
+        this.load.image('MiraRana', 'MiraRana.png');
         console.log("mira rana cargado");
 
-        this.load.image('MiraRata', 'assets/MiraRata.png');
+        this.load.image('MiraRata', 'MiraRata.png');
         console.log("mira rata cargado");
 
-        this.load.spritesheet("rana", "assets/rana.png", { frameWidth: 52, frameHeight: 52 });
+        this.load.spritesheet("rana", "rana.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rana cargado");
 
-        this.load.spritesheet("rana disparo", "assets/ranadisparo.png", { frameWidth: 52, frameHeight: 52 });
+        this.load.spritesheet("rana disparo", "ranadisparo.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rata disparo cargado");
 
-        this.load.spritesheet("rata", "assets/rata.png", { frameWidth: 52, frameHeight: 52 });
+        this.load.spritesheet("rata", "rata.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rata cargado");
         
 
-        this.load.spritesheet("mosca spritesheet", "assets/mosca spritesheet.png", { frameWidth: 52, frameHeight: 52 });
+        this.load.spritesheet("mosca spritesheet", "mosca spritesheet.png", { frameWidth: 52, frameHeight: 52 });
         console.log("mosca cargado");
 
-        this.load.spritesheet("mosca dorada spritesheet", "assets/mosca dorada spritesheet.png", { frameWidth: 52, frameHeight: 52 });
+        this.load.spritesheet("mosca dorada spritesheet", "mosca dorada spritesheet.png", { frameWidth: 52, frameHeight: 52 });
         console.log("mosca dorada cargado");
 
-        this.load.spritesheet("lengua", "assets/lengua.png", { frameWidth: 540, frameHeight: 20 });
+        this.load.spritesheet("lengua", "lengua.png", { frameWidth: 540, frameHeight: 20 });
         console.log("lengua cargado");
 
-        this.load.image("controles_invertidos", "assets/controles_invertidos.png");
+        this.load.image("controles_invertidos", "controles_invertidos.png");
         console.log("controles_invertidos cargado");
 
-        this.load.image("pantalla_invertida", "assets/pantalla_invertida.png");
+        this.load.image("pantalla_invertida", "pantalla_invertida.png");
         console.log("pantalla_invertida cargado");
 
-        this.load.image("moscas_pequeñas", "assets/moscas_pequeñas.png");
+        this.load.image("moscas_pequeñas", "moscas_pequeñas.png");
         console.log("moscas_pequenas cargado");
 
-        this.load.image("moscas_rapidas", "assets/moscas_rapidas.png");
+        this.load.image("moscas_rapidas", "moscas_rapidas.png");
         console.log("moscas_rapidas cargado");
 
-        this.load.image("moscas_fantasmas", "assets/moscas_fantasmas.png");
+        this.load.image("moscas_fantasmas", "moscas_fantasmas.png");
         console.log("moscas_fantasmas cargado");
 
-        this.load.image("reticulas_rapidas", "assets/reticulas_rapidas.png");
+        this.load.image("reticulas_rapidas", "reticulas_rapidas.png");
         console.log("reticulas_rapidas cargado");
 
-        this.load.image("reticulas_lentas", "assets/reticulas_lentas.png");
+        this.load.image("reticulas_lentas", "reticulas_lentas.png");
         console.log("reticulas_lentas cargado");
 
-        this.load.image("moscas_locas", "assets/moscas_locas.png");
+        this.load.image("moscas_locas", "moscas_locas.png");
         console.log("moscas_locas cargado");
 
         console.log("--VERSUS CARGADO--");
 
-        this.load.image("frognard", "assets/frognard.png");
+        this.load.image("frognard", "frognard.png");
         console.log("frognard cargado");
 
-        this.load.image("patrones", "assets/tileset.png");
+        this.load.image("patrones", "tileset.png");
         console.log("tileset cargado");
 
-        this.load.spritesheet("boton horizontal", "assets/boton.png", { frameWidth: 62, frameHeight: 32 });
+        this.load.spritesheet("boton horizontal", "boton.png", { frameWidth: 62, frameHeight: 32 });
         console.log("boton horizontal cargado");
 
-        this.load.spritesheet("boton vertical", "assets/boton (1).png", { frameWidth: 32, frameHeight: 62 });
+        this.load.spritesheet("boton vertical", "boton (1).png", { frameWidth: 32, frameHeight: 62 });
         console.log("boton vertical cargado");
 
-        this.load.image("puerta", "assets/puerta.png");
+        this.load.image("puerta", "puerta.png");
         console.log("puerta cargado");
 
-        this.load.image("caja", "assets/caja.png");
+        this.load.image("caja", "caja.png");
         console.log("caja cargado");
+
+        
 
         this.load.tilemapTiledJSON("mapaNivel1", "tilemaps/nivel1.json");
         this.load.tilemapTiledJSON("mapaNivel2", "tilemaps/nivel2.json");
