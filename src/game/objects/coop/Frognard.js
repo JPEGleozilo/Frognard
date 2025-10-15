@@ -72,11 +72,11 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
 
         // === Saltar (teclado o botón A de cualquier mando) ===
         const saltoTeclado = this.scene.cursors.L.isDown;
-        const saltoJoy2 = this.joystick2?.buttons?.[0]?.pressed ?? false;
+        const saltoJoy = this.joystick2?.buttons?.[0]?.pressed ?? false;
 
-        if ((saltoTeclado || saltoJoy2) && this.body.onFloor()) {
+        if ((saltoTeclado || saltoJoy) && this.body.onFloor()) {
             this.setVelocityY(this.salto);
-        } else if ((saltoTeclado || saltoJoy2) && !this.body.onFloor()) {
+        } else if ((saltoTeclado || saltoJoy) && !this.body.onFloor()) {
             this.setGravityY(this.gravedadBaja);
         } else {
             this.setGravityY(0);
@@ -106,10 +106,10 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
 
         // === Disparo de lengua (solo un toque) ===
         const disparoTeclado = Phaser.Input.Keyboard.JustDown(this.scene.cursors.T);
-        const disparoJoy1 = this.joystick1?.buttons?.[0]?.pressed ?? false;
+        const disparoJoy = this.joystick1?.buttons?.[0]?.pressed ?? false;
 
         // Evita mantener presionado
-        if ((disparoTeclado || disparoJoy1) && !this.lenguaCooldown) {
+        if ((disparoTeclado || disparoJoy) && !this.lenguaCooldown) {
             this.scene.inputLengua = true;
             this.lenguaCooldown = true;
 
