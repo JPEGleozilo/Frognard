@@ -138,5 +138,6 @@ export default class Disparo {
             this.lengua = null;
         }
         this.active = false;
+
     }
 }

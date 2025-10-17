@@ -26,6 +26,7 @@ export default class WeaponManager {
             if (this.jugador.playerId === 'player2') {
                 this.jugador.sprite.setTexture('rata disparo');
                 this.jugador.sprite.play('rata_disparo_anim');
+                this.jugador.sprite.setDepth(200);
             }
         }
     }

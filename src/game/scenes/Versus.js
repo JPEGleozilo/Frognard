@@ -158,7 +158,13 @@ export class Versus extends Scene {
     this.anims.create({
       key: 'rana_disparo_anim',
       frames: this.anims.generateFrameNumbers('rana disparo', { start: 0, end: 8 }),
-      frameRate: 10,
+      frameRate: 9,
+      repeat: 0
+    });
+    this.anims.create({
+      key: 'rata_disparo_anim',
+      frames: this.anims.generateFrameNumbers('rata disparo', { start: 0, end: 8 }),
+      frameRate: 9,
       repeat: 0
     });
 
