@@ -83,6 +83,8 @@ export class Preloader extends Scene
         this.load.image("moscas_fantasmas", "moscas_fantasmas.png");
         console.log("moscas_fantasmas cargado");
 
+        this.load.image("mosca_impostor", "mosca_impostor.png");
+
         this.load.image("reticulas_rapidas", "reticulas_rapidas.png");
         console.log("reticulas_rapidas cargado");
 

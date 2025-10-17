@@ -143,7 +143,7 @@ export class VersusFinal extends Scene {
         // Estadísticas finales
         this.time.delayedCall(5000, () => {
             statsText.setText(
-                `Moscas recolectadas:\n\n     Rana: ${this.frogFlies}\n   Rata: ${this.ratFlies}`
+                `Moscas recolectadas:\n\n    Rana: ${this.frogFlies}\n   Rata: ${this.ratFlies}`
             );
 
             this.tweens.add({

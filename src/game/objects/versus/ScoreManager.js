@@ -32,6 +32,9 @@ export default class ScoreManager {
     // Observer: recibe notificación de captura
     onMoscaCaptured(playerId, puntos = 1) {
         this.scores[playerId] += puntos;
+        if (this.scores[playerId] < 0) {
+        this.scores[playerId] = 0;
+    }
         this.updateUI(playerId);
     }
 

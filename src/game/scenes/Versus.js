@@ -1,10 +1,11 @@
 import { Scene } from 'phaser';
 import Reticle from "../objects/versus/Reticula.js";
 import Personaje from "../objects/versus/Personaje.js";
-import MoscaPool from "../objects/versus/MoscaPool.js";
 import WeaponManager from "../objects/versus/WeaponManager.js";
 import ScoreManager from '../objects/versus/ScoreManager.js';
+import MoscaPool from "../objects/versus/MoscaPool.js";
 import MoscaDoradaPool from '../objects/versus/MoscaDoradaPool.js';
+import MoscaImpostorPool from '../objects/versus/MoscaImpostorPool.js';
 import RoundManager from "../objects/versus/RoundManager.js";
 import ModificadorManager from "../objects/versus/ModificadorManager.js";
 import { INPUT_ACTIONS } from "../utils/InputSystem.js";
@@ -112,6 +113,7 @@ export class Versus extends Scene {
     // Pools de moscas
     this.moscaPool = new MoscaPool(this, 25);
     this.moscaDoradaPool = new MoscaDoradaPool(this, 5);
+    this.moscaImpostorPool = new MoscaImpostorPool(this, 10);
 
     // Controles de disparo
     this.input.keyboard.on("keydown_Q", () => this.weaponRana.shoot());
@@ -306,13 +308,14 @@ export class Versus extends Scene {
     this.reticle2.update(time, delta);
     this.roundManager.update(time, delta);
 
-    this.rana.update(time, delta, this.moscaPool, this.moscaDoradaPool);
-    this.rata.update(time, delta, this.moscaPool, this.moscaDoradaPool);
+    this.rana.update(time, delta, this.moscaPool, this.moscaDoradaPool, this.moscaImpostorPool);
+    this.rata.update(time, delta, this.moscaPool, this.moscaDoradaPool, this.moscaImpostorPool);
     this.moscaPool.update(time, delta);
     this.moscaDoradaPool.update(time, delta);
+    this.moscaImpostorPool.update(time, delta);
 
-    this.weaponRana.update(this.moscaPool, this.moscaDoradaPool);
-    this.weaponRata.update(this.moscaPool, this.moscaDoradaPool);
+    this.weaponRana.update(this.moscaPool, this.moscaDoradaPool, this.moscaImpostorPool);
+    this.weaponRata.update(this.moscaPool, this.moscaDoradaPool, this.moscaImpostorPool);
   }
 
   showRoundBanner(text) {
