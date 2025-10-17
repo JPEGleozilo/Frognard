@@ -4,30 +4,29 @@ export default class ScoreManager {
         this.scores = {
             player1: 0,
             player2: 0
+            
         };
-
+        
         // Textos en pantalla
         //texto verde 
-        this.scoreTextP1 = scene.add.text(200, 450, '00', {
-            fontSize: '36px',           // aumenta el tamaño
-            fill: 'rgba(32, 209, 32, 1)',
+        this.scoreTextP1 = scene.add.text(200, 450, '', {
+            fontSize: '38px',          
+            fill: 'rgba(16, 145, 15, 1)',
             fontFamily: "PIXELYA",
             fontStyle: 'bold',
-            stroke: '#000',             // borde negro
-            strokeThickness: 4          // grosor del borde
         });
-        this.scoreTextP1.setStyle({ fontWeight: 'bold' });
+    
 
         //texto azul
-        this.scoreTextP2 = scene.add.text(700, 450, '00', {
-            fontSize: '36px',
+        this.scoreTextP2 = scene.add.text(700, 450, '', {
+            fontSize: '38px',
             fill: 'rgba(91, 100, 129, 1)',
             fontFamily: "PIXELYA",
             fontStyle: 'bold',
-            stroke: '#000',
-            strokeThickness: 4
+            
         });
-        this.scoreTextP2.setStyle({ fontWeight: 'bold' });
+        this.updateUI('player1');
+        this.updateUI('player2');
     }
 
     // Observer: recibe notificación de captura
@@ -37,14 +36,25 @@ export default class ScoreManager {
     }
 
     // Refrescar textos
-    updateUI(playerId) {
-        if (playerId === 'player1') {
-            this.scoreTextP1.setText(this.scores.player1);
-        } else if (playerId === 'player2') {
-            this.scoreTextP2.setText(this.scores.player2);
-        }
+updateUI(playerId) {
+    const scoreStrP1 = String(this.scores.player1).padStart(3, '000');
+    const scoreStrP2 = String(this.scores.player2).padStart(3, '000');
+    if (playerId === 'player1') {
+        this.scoreTextP1.setText(scoreStrP1);
+    } else if (playerId === 'player2') {
+        this.scoreTextP2.setText(scoreStrP2);
+    }
+}
+
+    //actualizar puntajes al inico
+    updateScores(player1Score, player2Score) {
+        this.scores.player1 = player1Score;
+        this.scores.player2 = player2Score;
+        this.updateUI('player1');
+        this.updateUI('player2');
     }
 
+    
     getScores() {
         return {
             player1: this.scores.player1,
@@ -52,3 +62,4 @@ export default class ScoreManager {
         };
     }
 }
+

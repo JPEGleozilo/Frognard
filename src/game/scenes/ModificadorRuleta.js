@@ -5,7 +5,6 @@ const MODIFICADORES_INFO = [
   { key: 'moscas_pequeñas', nombre: 'Moscas Pequeñas', descripcion: 'Las moscas son más pequeñas y difíciles de ver.', icono: 'moscas_pequeñas' },
   { key: 'moscas_rapidas', nombre: 'Moscas Rápidas', descripcion: 'Las moscas se mueven más rápido.', icono: 'moscas_rapidas' },
   { key: 'moscas_fantasmas', nombre: 'Moscas Fantasmas', descripcion: 'Las moscas se vuelven parcialmente transparentes.', icono: 'moscas_fantasmas' },
-  { key: 'moscas_locas', nombre: 'Moscas Locas', descripcion: 'Las moscas cambian de dirección erráticamente.', icono: 'moscas_locas' },
   { key: 'reticulas_lentas', nombre: 'Retículas Lentas', descripcion: 'Las retículas de ambos jugadores se mueven más despacio.', icono: 'reticulas_lentas' },
   { key: 'reticulas_rapidas', nombre: 'Retículas Rápidas', descripcion: 'Las retículas de ambos jugadores se mueven más rápido.', icono: 'reticulas_rapidas' },
 ];

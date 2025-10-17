@@ -7,20 +7,19 @@ export default class ModificadorManager {
             "moscasPequeñas",
             "moscasRapidas",
             "moscasFantasmas",
-            "moscasLocas",
             "reticulasLentas",
             "reticulasRapidas",
         ];
 
-        // Si necesitás timers internos para ciertos modificadores, guardalos aquí
+        // timers / estado interno
         this._erraticEvent = null;
         this.efectosMosca = {
             escalar: 1,
             velMultiplicador: 1,
             fantasmas: false,
             locas: false
-    };
-}
+        };
+    }
 
     // (Si aún mantienes seleccionarSegunRonda, está bien; la ruleta la puede llamar y setear modificadoresActivos)
     seleccionarSegunRonda(rondaActual) {
@@ -53,85 +52,96 @@ export default class ModificadorManager {
         });
     }
 
+    // limpiar efectos visuales y de movimiento antes de reaplicar
     resetVisualsForReapply() {
-        // ejemplo: restaurar cámara, retículas, moscas para reaplicar (no tocar pool)
         this.scene.cameras.main.setRotation(0);
-        this.scene.velocidadReticula = this.scene.velocidadReticula ?? 1;
+        this.scene.velocidadReticula = 1;
 
-        // Restablecer moscas activas a parámetros base si hace falta
-        if (this.scene.moscaPool && this.scene.moscaPool.pool) {
-            this.scene.moscaPool.pool.forEach(m => {
-                if (m && m.active) {
-                    m.setScale(1);
-                    m.alpha = 1;
-                    // si Mosca tiene propiedades base, podrías restaurarlas aquí
-                }
-            });
+        // restaura moscas normales y doradas
+        const resetOne = (m) => {
+            if (!m || !m.active) return;
+            m.setScale(1);
+            m.alpha = 1;
+            if (m.baseVelXOriginal != null) {
+                m.velX = m.baseVelXOriginal;
+            }
+            if (m.baseAmplitudOriginal != null) {
+                m.amplitud = m.baseAmplitudOriginal;
+            }
+        };
+
+        if (this.scene.moscaPool?.pool) {
+            this.scene.moscaPool.pool.forEach(resetOne);
+        }
+        if (this.scene.moscaDoradaPool?.pool) {
+            this.scene.moscaDoradaPool.pool.forEach(resetOne);
         }
 
-        // cancelar event erratic si existiera (por reaplicar)
+        // cancelar event erratic si existiera
         if (this._erraticEvent) {
             this._erraticEvent.remove(false);
             this._erraticEvent = null;
         }
+
+        // reset efecto
+        this.efectosMosca = { escalar: 1, velMultiplicador: 1, fantasmas: false, locas: false };
     }
 
     aplicarModificador(nombre) {
-        // Si recibe un objeto, usa el campo nombre
         if (typeof nombre === 'object' && nombre.nombre) {
             nombre = nombre.nombre;
         }
         console.log("Aplicando modificador:", nombre);
 
+        // helper para aplicar a todas las moscas activas
+        const applyToAllActive = (fn) => {
+            if (this.scene.moscaPool?.pool) this.scene.moscaPool.pool.forEach(m => m && m.active && fn(m));
+            if (this.scene.moscaDoradaPool?.pool) this.scene.moscaDoradaPool.pool.forEach(m => m && m.active && fn(m));
+        };
+
         switch (nombre) {
             case "pantallaInvertida":
                 this.scene.cameras.main.setRotation(Math.PI);
                 break;
+
             case "moscasPequeñas":
-  this.efectosMosca.escalar = 0.6;
-  this.scene.moscaPool?.pool.forEach(m => { if (m.active) m.setScale(0.6); });
-  break;
-
-case "moscasRapidas":
-  this.efectosMosca.velMultiplicador = 2;
-  this.scene.moscaPool?.pool.forEach(m => { if (m.active) m.velX *= 1.5; });
-  break;
-
-case "moscasFantasmas":
-  this.efectosMosca.fantasmas = true;
-  this.scene.moscaPool?.pool.forEach(m => {
-    if (m.active) this.scene.tweens.add({
-      targets: m,
-      alpha: { from: 0.1, to: 1 },
-      duration: 3500,
-      yoyo: true,
-      repeat: -1,
-    });
-  });
-  break;
-            case "moscasLocas":
-                if (this.scene.moscaPool?.pool) {
-                    // evento que periódicamente cambia direcciones
-                    this._erraticEvent = this.scene.time.addEvent({
-                        delay: 1000,
-                        loop: true,
-                        callback: () => {
-                            this.scene.moscaPool.pool.forEach(m => {
-                                if (m && m.active) {
-                                    m.velX = -m.velX * Phaser.Math.FloatBetween(1, 1);
-                                    m.amplitud = Phaser.Math.Between(120, 470);
-                                }
-                            });
-                        }
-                    });
-                }
+                this.efectosMosca.escalar = 0.6;
+                applyToAllActive(m => m.setScale(0.6));
                 break;
+
+            case "moscasRapidas":
+                this.efectosMosca.velMultiplicador = 1.5;
+                applyToAllActive(m => {
+                    // asegúrate de tener base original
+                    if (m.baseVelXOriginal == null) m.baseVelXOriginal = m.velX;
+                    m.velX = m.baseVelXOriginal * this.efectosMosca.velMultiplicador;
+                });
+                break;
+
+            case "moscasFantasmas":
+                this.efectosMosca.fantasmas = true;
+                applyToAllActive(m => {
+                    // crea tween de alpha si no existe
+                    if (!m._fantasmaTween) {
+                        m._fantasmaTween = this.scene.tweens.add({
+                            targets: m,
+                            alpha: { from: 0.1, to: 1 },
+                            duration: 3500,
+                            yoyo: true,
+                            repeat: -1,
+                        });
+                    }
+                });
+                break;
+
             case "reticulasLentas":
                 this.scene.velocidadReticula = (this.scene.velocidadReticula ?? 1) * 0.6;
                 break;
+
             case "reticulasRapidas":
                 this.scene.velocidadReticula = (this.scene.velocidadReticula ?? 1) * 1.4;
                 break;
+
             default:
                 console.warn("Modificador desconocido:", nombre);
         }
@@ -139,8 +149,7 @@ case "moscasFantasmas":
 
     // limpiar todo (cuando reinicias el juego por ejemplo)
     reset() {
-  this.modificadoresActivos = [];
-  this.efectosMosca = { escalar: 1, velMultiplicador: 1, fantasmas: false, locas: false };
-  this.resetVisualsForReapply();
-}
+        this.modificadoresActivos = [];
+        this.resetVisualsForReapply();
+    }
 }

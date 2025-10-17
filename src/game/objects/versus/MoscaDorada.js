@@ -1,6 +1,6 @@
 export default class MoscaDorada extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
-        super(scene, x, y, 'mosca dorada spritesheet'); // usa el mismo key
+        super(scene, x, y, 'mosca dorada spritesheet');
         this.scene = scene;
         this.scene.add.existing(this);
 
@@ -10,10 +10,12 @@ export default class MoscaDorada extends Phaser.GameObjects.Sprite {
 
         this.setVisible(false);
         this.setActive(false);
-        this.setScale(1); // ajusta el tamaño si es necesario
+        this.setScale(1);
+
+        this.baseVelXOriginal = null;
+        this.baseAmplitudOriginal = null;
     }
 
-    // Activar mosca desde pool
     spawn(x, y, direccion) {
         this.x = x;
         this.y = y;
@@ -22,29 +24,38 @@ export default class MoscaDorada extends Phaser.GameObjects.Sprite {
         this.amplitud = Phaser.Math.Between(5, 20);
         this.tiempo = 0;
 
+        if (this.baseVelXOriginal == null) this.baseVelXOriginal = this.velX;
+        if (this.baseAmplitudOriginal == null) this.baseAmplitudOriginal = this.amplitud;
+
         this.setVisible(true);
         this.setActive(true);
 
-        this.play('mosca_fly_golden'); // ← reproduce la animación
+        this.play('mosca_fly_golden');
     }
 
-    // Movimiento errático
     update(time, delta) {
         if (!this.active) return;
 
-        this.tiempo += delta * 0.005; // control de oscilación
+        this.tiempo += delta * 0.005;
         this.x += this.velX * (delta / 1000);
-        this.y += Math.sin(this.tiempo) * 0.8; // zig-zag suave
+        this.y += Math.sin(this.tiempo) * 0.8;
 
-        // Si se va de pantalla → return to pool
         if (this.x < -20 || this.x > this.scene.sys.canvas.width + 20) {
             this.despawn();
         }
     }
 
-    // Resetear y volver a pool
     despawn() {
         this.setVisible(false);
         this.setActive(false);
+
+        if (this.baseVelXOriginal != null) this.velX = this.baseVelXOriginal;
+        if (this.baseAmplitudOriginal != null) this.amplitud = this.baseAmplitudOriginal;
+
+        if (this._fantasmaTween) {
+            this._fantasmaTween.stop();
+            this._fantasmaTween = null;
+            this.alpha = 1;
+        }
     }
 }
