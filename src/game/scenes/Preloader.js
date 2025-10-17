@@ -22,12 +22,12 @@ export class Preloader extends Scene
         this.anims.create({
         key: 'carga_anim',
         frames: this.anims.generateFrameNumbers('carga', { start: 0, end: 5 }),
-        frameRate: 1.5
+        frameRate: 2
         });
 
         this.load.setPath('/assets/fonts');
 
-         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'font', 'PIXELYA Trial.ttf'));
+         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'PIXELYA', 'PIXELYA Trial.ttf'));
         console.log("fuente cargada");
 
         this.cargaAnim.play('carga_anim');
@@ -39,10 +39,6 @@ export class Preloader extends Scene
 
         this.load.image("fondo", "fondo 1.png");
         console.log("fondo cargado");
-
-        //this.load.spritesheet("carga", "cargaanim.png", { frameWidth: 960, frameHeight: 540 });
-        //console.log("carga cargado");
-
         
         this.load.image('MiraRana', 'MiraRana.png');
         console.log("mira rana cargado");
@@ -98,16 +94,31 @@ export class Preloader extends Scene
         this.load.image("frognard", "frognard.png");
         console.log("frognard cargado");
 
+        this.load.spritesheet("frognard caminar", "caminar y apuntar 128x64.png",
+        { frameWidth: 128, frameHeight: 64 });
+
+        this.load.spritesheet("frognard salto", "frognardsalto.png",
+        { frameWidth: 128, frameHeight: 64 });
+
+        this.load.spritesheet("frognard idle", "idle 128x64.png", 
+        { frameWidth: 128, frameHeight: 64 });
+
+        this.load.spritesheet("palanca", "Animacion palanca.png", 
+        { frameWidth: 54, frameHeight: 32 });
+
         this.load.image("patrones", "tileset.png");
         console.log("tileset cargado");
 
-        this.load.spritesheet("boton horizontal", "boton.png", { frameWidth: 62, frameHeight: 32 });
+        this.load.spritesheet("boton horizontal", "boton Horizontal.png", 
+        { frameWidth: 64, frameHeight: 22 });
         console.log("boton horizontal cargado");
 
-        this.load.spritesheet("boton vertical", "boton (1).png", { frameWidth: 32, frameHeight: 62 });
+        this.load.spritesheet("boton vertical", "boton Vertical.png", 
+        { frameWidth: 32, frameHeight: 64 });
         console.log("boton vertical cargado");
 
-        this.load.image("puerta", "puerta.png");
+        this.load.spritesheet("puerta", "puerta.png", 
+        { frameWidth: 28, frameHeight: 64});
         console.log("puerta cargado");
 
         this.load.image("caja", "caja.png");

@@ -21,10 +21,9 @@ export default class BotonV extends Phaser.Physics.Arcade.Sprite {
         
         this.scene.physics.add.collider(this, scene.lengua, () => {
             scene.lengua.triggerVuelta();
-            const puertaMoviendose = this.scene.accionable.getChildren().some(a => a.distintivo === this.distintivo && a.activo === true);
-            if (puertaMoviendose) return;
+            const PUERTAMOVIENDOSE = this.scene.accionable.getChildren().some(a => a.distintivo === this.distintivo && a.activo === true);
+            if (PUERTAMOVIENDOSE) return;
             if (this.apretado === true) return;
-            this.apretado = true;
             this.setApretado(true);
             console.log(this.distintivo, " apretado");
             this.scene.accionable.children.iterate(obj => {

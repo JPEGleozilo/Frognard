@@ -2,15 +2,16 @@ import Phaser from 'phaser';
 
 export default class Palanca extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, distintivo) {
-        super(scene, x, y, 'boton');
+        super(scene, x, y, 'palanca', 0);
         this.distintivo = distintivo;
+        this.apretado = false;
 
         //Existencia
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        this.setOrigin(1, 1);
-        this.setScale(32);
+        this.setOrigin(0.5, 1);
+        this.setScale(1);
         this.setCollisionCategory([3]);
 
         this.scene.palancas.add(this);
@@ -18,12 +19,37 @@ export default class Palanca extends Phaser.Physics.Arcade.Sprite {
         this.body.setAllowGravity(false);
 
         this.scene.physics.add.collider(this, scene.frognard, () => {
-            console.log(this.distintivo);
+            const PUERTAMOVIENDOSE = this.scene.accionable.getChildren().some(a => a.distintivo === this.distintivo && a.activo === true);
+            if (PUERTAMOVIENDOSE) return;
+            if (this.apretado === true) {
+
+            };
+            this.apretado = true;
+            this.togglePalanca(true);
+            console.log(this.distintivo, " apretado");
+            this.scene.accionable.children.iterate(obj => {
+                obj.toggle(this.distintivo);
+            });
         })
         
         this.scene.physics.add.collider(this, scene.lengua, () => {
-            console.log(this.distintivo);
             scene.lengua.triggerVuelta();
+            if (this.apretado === true) {
+                this.togglePalanca(false);
+            } else if (this.apretado === false) {
+                this.togglePalanca(true);
+            }
+            
         });
+    }
+    
+    togglePalanca(valor) {
+        this.apretado = valor;
+        const PUERTAMOVIENDOSE = this.scene.accionable.getChildren().some(a => a.distintivo === this.distintivo && a.activo === true);
+        if (PUERTAMOVIENDOSE) return;
+        this.scene.accionable.children.iterate(obj => {
+            obj.toggle(this.distintivo);
+        });
+        this.setFrame(valor ? 1 : 0); // Cambia el frame según el estado
     }
 }
