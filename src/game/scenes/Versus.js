@@ -194,6 +194,38 @@ export class Versus extends Scene {
       this.modManager.aplicarModificadoresActivos();
       if (this.moscaPool?.resume) this.moscaPool.resume();
 
+     // === PANEL DE INFORMACIÓN DE MOSCAS ===
+    const panelX = this.cameras.main.width / 2;
+    const panelY = 485;
+
+    const fondoPanel = this.add.rectangle(panelX, panelY, 130, 100, 0x000000, 0.4)
+        .setOrigin(0.5)
+        .setStrokeStyle(2, 0xffffff)
+        .setDepth(200);
+
+    const estiloTexto = {
+        fontFamily: 'pixelFont',
+        fontSize: '20px',
+        color: '#ffffff',
+        align: 'center'
+    };
+
+    // Iconos + texto
+    const baseY = panelY ;
+    const espacio = 30;
+
+    // Mosca normal
+    const moscaNormal = this.add.sprite(panelX - 25, baseY - espacio, 'mosca spritesheet').setScale(1).setDepth(201);
+    this.add.text(moscaNormal.x + 20, baseY - espacio, '=  +1', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+
+    // Mosca dorada
+    const moscaDorada = this.add.sprite(panelX - 25, baseY, 'mosca dorada spritesheet').setScale(1).setDepth(201);
+    this.add.text(moscaDorada.x + 20, baseY, '=  +5', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+
+    // Mosca impostora
+    const moscaImpostor = this.add.sprite(panelX - 25, baseY + espacio, 'mosca_impostor').setScale(1).setDepth(201);
+    this.add.text(moscaImpostor.x + 20, baseY + espacio, '=  -3', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+
       // Actualiza las luces de ronda (de izquierda a derecha)
       for (let i = 0; i < this.rondaLights.length; i++) {
         if (i < round) {

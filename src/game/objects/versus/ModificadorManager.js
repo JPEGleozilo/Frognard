@@ -97,6 +97,7 @@ export default class ModificadorManager {
         const applyToAllActive = (fn) => {
             if (this.scene.moscaPool?.pool) this.scene.moscaPool.pool.forEach(m => m && m.active && fn(m));
             if (this.scene.moscaDoradaPool?.pool) this.scene.moscaDoradaPool.pool.forEach(m => m && m.active && fn(m));
+            if (this.scene.moscaImpostorPool?.pool) this.scene.moscaImpostorPool.pool.forEach(m => m && m.active && fn(m));
         };
 
         switch (nombre) {
@@ -105,8 +106,8 @@ export default class ModificadorManager {
                 break;
 
             case "moscasPequeñas":
-                this.efectosMosca.escalar = 0.6;
-                applyToAllActive(m => m.setScale(0.6));
+                this.efectosMosca.escalar = 0.7;
+                applyToAllActive(m => m.setScale(0.7));
                 break;
 
             case "moscasRapidas":
