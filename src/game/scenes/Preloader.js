@@ -89,6 +89,9 @@ export class Preloader extends Scene
         this.load.image("reticulas_lentas", "reticulas_lentas.png");
         console.log("reticulas_lentas cargado");
 
+        this.load.image("fondo_versus", "fondo3.png");
+        console.log("fondo versus cargado");
+
         console.log("--VERSUS CARGADO--");
 
         this.load.image("frognard", "frognard.png");

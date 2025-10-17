@@ -53,7 +53,6 @@ export class ModificadorRuleta extends Scene {
   // Duplicamos lista para loop continuo
   this.itemsLoop = [...this.itemsData, ...this.itemsData, ...this.itemsData];
   this.spacing = 150;
-  this.add.circle(centerX, centerY, 5, 0xff0000);
 
   this.icons = this.itemsLoop.map((mod, i) => {
     const icon = this.add.image(i * this.spacing, 0, mod.icono)

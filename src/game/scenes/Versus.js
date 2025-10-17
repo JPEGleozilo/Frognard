@@ -48,13 +48,10 @@ export class Versus extends Scene {
   }
 
   create() {
-    this.add.image(480, 270, 'fondo');
+    this.add.image(480, 270, 'fondo_versus');
 
     //crear camara
     this.cameras.main.setBounds(0, 0, 960, 540);
-
-    //agregar un suelo 
-    const suelo = this.add.rectangle(480, 540, 960, 80, 0x8a8a8a);
 
     // Crear manejadores
     this.roundManager = new RoundManager(this, 30000, 3);
