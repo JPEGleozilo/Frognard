@@ -49,10 +49,13 @@ export class Preloader extends Scene
         this.load.spritesheet("rana", "rana.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rana cargado");
 
-        this.load.spritesheet("rana disparo", "ranadisparo.png", { frameWidth: 52, frameHeight: 52 });
-        console.log("rata disparo cargado");
+        this.load.spritesheet("rana disparo", "ranadisparo2.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("rana disparo cargado");
 
         this.load.spritesheet("rata", "rata.png", { frameWidth: 52, frameHeight: 52 });
+        console.log("rata cargado");
+
+        this.load.spritesheet("rata disparo", "ratadisparo.png", { frameWidth: 52, frameHeight: 52 });
         console.log("rata cargado");
         
 
@@ -85,9 +88,6 @@ export class Preloader extends Scene
 
         this.load.image("reticulas_lentas", "reticulas_lentas.png");
         console.log("reticulas_lentas cargado");
-
-        this.load.image("moscas_locas", "moscas_locas.png");
-        console.log("moscas_locas cargado");
 
         console.log("--VERSUS CARGADO--");
 

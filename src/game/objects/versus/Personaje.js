@@ -34,6 +34,14 @@ export default class Personaje extends Phaser.GameObjects.Rectangle {
                 this.sprite.setTexture('rana');
             }
         });
+        this.sprite.on('animationcomplete', (anim) => {
+            if (anim.key === 'rata_disparo_anim') {
+                this.sprite.setTexture('rata');
+                this.sprite.setDepth(200);
+            }
+         
+        });
+        
     }
 
     update(time, delta, moscaPool, moscaDoradaPool) {
@@ -56,6 +64,11 @@ export default class Personaje extends Phaser.GameObjects.Rectangle {
                 if (this.playerId === 'player1') {
                     this.sprite.setTexture('rana disparo');
                     this.sprite.play('rana_disparo_anim');
+                }
+                if (this.playerId === 'player2') {
+                    this.sprite.setTexture('rata disparo');
+                    this.sprite.play('rata_disparo_anim');
+                    this.sprite.setDepth(200);
                 }
             }
         }

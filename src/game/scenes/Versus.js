@@ -33,7 +33,6 @@ function keyToInternalName(key) {
     case "moscas_pequeñas": return "moscasPequeñas";
     case "moscas_rapidas": return "moscasRapidas";
     case "moscas_fantasmas": return "moscasFantasmas";
-    case "moscas_locas": return "moscasLocas";
     case "reticulas_lentas": return "reticulasLentas";
     case "reticulas_rapidas": return "reticulasRapidas";
     default: return key;
@@ -54,6 +53,9 @@ export class Versus extends Scene {
     //crear camara
     this.cameras.main.setBounds(0, 0, 960, 540);
 
+    //agregar un suelo 
+    const suelo = this.add.rectangle(480, 540, 960, 80, 0x8a8a8a);
+
     // Crear manejadores
     this.roundManager = new RoundManager(this, 30000, 3);
     this.modManager = new ModificadorManager(this);
@@ -62,12 +64,12 @@ export class Versus extends Scene {
     const centerX = this.scale.width / 2;
     const timerY = 35;
 
-    // Timer y fondo (ya tienes esto)
+    // Timer y fondo
     this.timerText = this.add.text(centerX + 2, timerY, "00", {
       fontFamily: "PIXELYA",
       fontSize: "54px",
       color: "#ff0000"
-      }).setOrigin(0.5); // Centra el texto
+      }).setOrigin(0.5); 
     this.timerText.setDepth(0.2);
 
     this.pantallaTimer = this.add.rectangle(centerX, 20, 120, 100, 0x000000)
@@ -77,10 +79,10 @@ export class Versus extends Scene {
 
     // --- LUCES DE RONDA ---
     this.rondaLights = [];
-    const lightsY = timerY + 60; // Debajo del timer
+    const lightsY = timerY + 60; 
     const lightsSpacing = 40;
     for (let i = 0; i < 3; i++) {
-      const x = centerX + lightsSpacing * (i - 1); // -1, 0, 1 para centrar
+      const x = centerX + lightsSpacing * (i - 1); 
       const circle = this.add.circle(x, lightsY, 10, 0x444444)
         .setStrokeStyle(2, 0xffffff)
         .setDepth(0.3);
@@ -103,8 +105,8 @@ export class Versus extends Scene {
     }, 'MiraRata');
 
     // Personajes
-    this.rana = new Personaje(this, 300, 480, 0x00ff00, this.reticle1, "Q", 'player1');
-    this.rata = new Personaje(this, 600, 480, 0xaaaaaa, this.reticle2, "P", 'player2');
+    this.rana = new Personaje(this, 325, 480, 0x00ff00, this.reticle1, "Q", 'player1');
+    this.rata = new Personaje(this, 650, 480, 0xaaaaaa, this.reticle2, "P", 'player2');
 
     // Managers de armas
     this.weaponRana = new WeaponManager(this, this.rana, this.reticle1, 0x00ff00);
@@ -135,6 +137,11 @@ export class Versus extends Scene {
     // ScoreManager
     this.scoreManager = new ScoreManager(this);
 
+    this.time.delayedCall(100, () => {
+  this.scoreManager.updateUI('player1');
+  this.scoreManager.updateUI('player2');
+  });
+
     // Animaciones
     this.anims.create({
       key: 'mosca_fly',
@@ -151,7 +158,13 @@ export class Versus extends Scene {
     this.anims.create({
       key: 'rana_disparo_anim',
       frames: this.anims.generateFrameNumbers('rana disparo', { start: 0, end: 8 }),
-      frameRate: 10,
+      frameRate: 9,
+      repeat: 0
+    });
+    this.anims.create({
+      key: 'rata_disparo_anim',
+      frames: this.anims.generateFrameNumbers('rata disparo', { start: 0, end: 8 }),
+      frameRate: 9,
       repeat: 0
     });
 
@@ -301,9 +314,6 @@ export class Versus extends Scene {
     this.moscaPool.update(time, delta);
     this.moscaDoradaPool.update(time, delta);
 
-
-
-
     this.weaponRana.update(this.moscaPool, this.moscaDoradaPool);
     this.weaponRata.update(this.moscaPool, this.moscaDoradaPool);
   }
@@ -343,7 +353,7 @@ export class Versus extends Scene {
   const posiblesMods = this.modManager.todosLosModificadores;
 
   this.scene.launch('ModificadorRuleta', {
-    modificadores: posiblesMods, // se pasa lista completa con key, nombre, icono, etc.
+    modificadores: posiblesMods,
     onResultado: (elegido) => {
       const internalName = keyToInternalName(elegido.key);
       if (!this.modManager.modificadoresActivos.includes(internalName)) {
