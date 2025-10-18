@@ -166,7 +166,12 @@ export class Versus extends Scene {
       frameRate: 7,
       repeat: 0
     });
-
+    this.anims.create({
+      key: 'animacion_controles_vs',
+      frames: this.anims.generateFrameNumbers('animacion_controles_vs', { start: 0, end: 5 }),
+      frameRate: 4,
+      repeat: -1
+    });
     // Bloquear inputs hasta que empiece la ronda
     this.gameplayEnabled = false;
 
@@ -198,6 +203,12 @@ export class Versus extends Scene {
     const panelX = this.cameras.main.width / 2;
     const panelY = 485;
 
+    // === animacion controles versus a los lados==
+    const animacionIzquierda = this.add.sprite(120, panelY + 20, 'animacion_controles_vs').setScale(1).setDepth(201);
+    animacionIzquierda.play('animacion_controles_vs');
+    const animacionDerecha = this.add.sprite(840, panelY + 20, 'animacion_controles_vs').setScale(1).setDepth(201);
+    animacionDerecha.play('animacion_controles_vs');
+
     const fondoPanel = this.add.rectangle(panelX, panelY, 130, 100, 0x000000, 0.4)
         .setOrigin(0.5)
         .setStrokeStyle(2, 0xffffff)
@@ -216,15 +227,15 @@ export class Versus extends Scene {
 
     // Mosca normal
     const moscaNormal = this.add.sprite(panelX - 25, baseY - espacio, 'mosca spritesheet').setScale(1).setDepth(201);
-    this.add.text(moscaNormal.x + 20, baseY - espacio, '=  +1', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+    this.add.text(moscaNormal.x + 20, baseY - espacio, '=  + 1', estiloTexto).setOrigin(0, 0.5).setDepth(201);
 
     // Mosca dorada
     const moscaDorada = this.add.sprite(panelX - 25, baseY, 'mosca dorada spritesheet').setScale(1).setDepth(201);
-    this.add.text(moscaDorada.x + 20, baseY, '=  +5', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+    this.add.text(moscaDorada.x + 20, baseY, '=  + 5', estiloTexto).setOrigin(0, 0.5).setDepth(201);
 
     // Mosca impostora
     const moscaImpostor = this.add.sprite(panelX - 25, baseY + espacio, 'mosca_impostor').setScale(1).setDepth(201);
-    this.add.text(moscaImpostor.x + 20, baseY + espacio, '=  -3', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+    this.add.text(moscaImpostor.x + 20, baseY + espacio, '=  - 3', estiloTexto).setOrigin(0, 0.5).setDepth(201);
 
       // Actualiza las luces de ronda (de izquierda a derecha)
       for (let i = 0; i < this.rondaLights.length; i++) {
@@ -246,7 +257,7 @@ export class Versus extends Scene {
       this.gameplayEnabled = false;
       if (this.moscaPool?.pause) this.moscaPool.pause();
 
-      this.showRoundBanner(`Ronda ${round} finalizada`);
+      this.showRoundBanner(``);
 
       if (round < this.roundManager.maxRounds) {
         this.mostrarRuletaModificadores(round + 1);
