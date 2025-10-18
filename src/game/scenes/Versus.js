@@ -17,14 +17,14 @@ const PLAYER_INPUTS = {
     [INPUT_ACTIONS.RIGHT]: ["D"],
     [INPUT_ACTIONS.UP]: ["W"],
     [INPUT_ACTIONS.DOWN]: ["S"],
-    [INPUT_ACTIONS.SOUTH]: ["Q", { type: "gamepad", index: 0 }]
+    [INPUT_ACTIONS.SOUTH]: ["T", { type: "gamepad", index: 0 }]
   },
   player2: {
     [INPUT_ACTIONS.LEFT]: ["LEFT"],
     [INPUT_ACTIONS.RIGHT]: ["RIGHT"],
     [INPUT_ACTIONS.UP]: ["UP"],
     [INPUT_ACTIONS.DOWN]: ["DOWN"],
-    [INPUT_ACTIONS.SOUTH]: ["P", { type: "gamepad", index: 0 }]
+    [INPUT_ACTIONS.SOUTH]: ["L", { type: "gamepad", index: 0 }]
   }
 };
 
@@ -55,7 +55,7 @@ export class Versus extends Scene {
     this.cameras.main.setBounds(0, 0, 960, 540);
 
     // Crear manejadores
-    this.roundManager = new RoundManager(this, 5000, 3);
+    this.roundManager = new RoundManager(this, 30000, 3);
     this.modManager = new ModificadorManager(this);
 
     // HUD simple
@@ -103,8 +103,8 @@ export class Versus extends Scene {
     }, 'MiraRata');
 
     // Personajes
-    this.rana = new Personaje(this, 325, 480, 0x00ff00, this.reticle1, "Q", 'player1');
-    this.rata = new Personaje(this, 650, 480, 0xaaaaaa, this.reticle2, "P", 'player2');
+    this.rana = new Personaje(this, 325, 480, 0x00ff00, this.reticle1, "T", 'player1');
+    this.rata = new Personaje(this, 650, 480, 0xaaaaaa, this.reticle2, "L", 'player2');
 
     // Managers de armas
     this.weaponRana = new WeaponManager(this, this.rana, this.reticle1, 0x00ff00);
