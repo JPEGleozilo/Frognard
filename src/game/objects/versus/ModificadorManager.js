@@ -181,7 +181,7 @@ export default class ModificadorManager {
                 this.scene.disparoSpeed = this.scene.disparoSpeedBase * 1.3;
                 break;
             case "moscasPequeñas":
-                this.efectosMosca.escalar = 0.5;
+                this.efectosMosca.escalar = 0.8;
                 applyToAllActive(m => {
                     // guarda base si hace falta
                     if (m.baseScaleOriginal == null) m.baseScaleOriginal = m.scaleX ?? 1;

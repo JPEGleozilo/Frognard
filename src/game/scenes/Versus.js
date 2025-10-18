@@ -354,7 +354,7 @@ export class Versus extends Scene {
     const b = this.add.text(this.scale.width / 2, 80, text, { fontSize: "28px", color: "#ff0" }).setOrigin(0.5);
     this.tweens.add({
       targets: b,
-      alpha: { from: 1, to: 0 },
+      alpha: 0,
       duration: 1500,
       ease: "Power2",
       onComplete: () => b.destroy()

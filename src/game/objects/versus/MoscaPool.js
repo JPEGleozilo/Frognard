@@ -64,7 +64,7 @@ export default class MoscaPool {
     update(time, delta) {
         // Spawn automático cada cierto tiempo
         this.spawnTimer += delta;
-        if (this.spawnTimer > 1000) { // cada 1.5s
+        if (this.spawnTimer > 900) { // cada 1.5s
             this.spawnMosca();
             this.spawnTimer = 0;
         }
