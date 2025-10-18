@@ -14,6 +14,10 @@ export default class Mosca extends Phaser.GameObjects.Sprite {
 
         this.baseVelXOriginal = null;
         this.baseAmplitudOriginal = null;
+
+        // nuevo: tiempo desde spawn para evitar despawn inmediato
+        this._timeSinceSpawn = 0;
+        this._spawnGrace = 200; // ms, evita despawn en los primeros 200ms
     }
 
     spawn(x, y, direccion) {
@@ -32,17 +36,24 @@ export default class Mosca extends Phaser.GameObjects.Sprite {
         this.setActive(true);
 
         this.play('mosca_fly');
+
+        // reset tiempo desde spawn
+        this._timeSinceSpawn = 0;
     }
 
     update(time, delta) {
         if (!this.active) return;
 
+        this._timeSinceSpawn += delta;
         this.tiempo += delta * 0.005;
         this.x += this.velX * (delta / 1000);
         this.y += Math.sin(this.tiempo) * 0.8;
 
-        if (this.x < -20 || this.x > this.scene.sys.canvas.width + 20) {
-            this.despawn();
+        // solo despawnea si pasó el periodo de gracia
+        if (this._timeSinceSpawn > this._spawnGrace) {
+            if (this.x < -20 || this.x > this.scene.sys.canvas.width + 20) {
+                this.despawn();
+            }
         }
     }
 

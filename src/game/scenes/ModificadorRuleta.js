@@ -1,12 +1,17 @@
 import { Scene } from 'phaser';
 
 const MODIFICADORES_INFO = [
-  { key: 'pantalla_invertida', nombre: 'Pantalla Invertida', descripcion: 'La pantalla se muestra al revés.', icono: 'pantalla_invertida' },
-  { key: 'moscas_pequeñas', nombre: 'Moscas Pequeñas', descripcion: 'Las moscas son más pequeñas y difíciles de ver.', icono: 'moscas_pequeñas' },
-  { key: 'moscas_rapidas', nombre: 'Moscas Rápidas', descripcion: 'Las moscas se mueven más rápido.', icono: 'moscas_rapidas' },
-  { key: 'moscas_fantasmas', nombre: 'Moscas Fantasmas', descripcion: 'Las moscas se vuelven parcialmente transparentes.', icono: 'moscas_fantasmas' },
-  { key: 'reticulas_lentas', nombre: 'Retículas Lentas', descripcion: 'Las retículas de ambos jugadores se mueven más despacio.', icono: 'reticulas_lentas' },
-  { key: 'reticulas_rapidas', nombre: 'Retículas Rápidas', descripcion: 'Las retículas de ambos jugadores se mueven más rápido.', icono: 'reticulas_rapidas' },
+  { key: 'pantallaInvertida', nombre: 'Pantalla Invertida', descripcion: 'La pantalla se muestra al revés.', icono: 'pantalla_invertida' },
+  { key: 'moscasPequeñas', nombre: 'Moscas Pequeñas', descripcion: 'Las moscas son más pequeñas y difíciles de ver.', icono: 'moscas_pequeñas' },
+  { key: 'moscasGrandes', nombre: 'Moscas Grandes', descripcion: 'Las moscas son más grandes.', icono: 'moscas_grandes' },
+  { key: 'moscasRapidas', nombre: 'Moscas Rápidas', descripcion: 'Las moscas se mueven más rápido.', icono: 'moscas_rapidas' },
+  { key: 'moscasFantasmas', nombre: 'Moscas Fantasmas', descripcion: 'Las moscas se vuelven parcialmente transparentes.', icono: 'moscas_fantasmas' },
+  { key: 'reticulasLentas', nombre: 'Retículas Lentas', descripcion: 'Las retículas de ambos jugadores se mueven más despacio.', icono: 'reticulas_lentas' },
+  { key: 'reticulasRapidas', nombre: 'Retículas Rápidas', descripcion: 'Las retículas de ambos jugadores se mueven más rápido.', icono: 'reticulas_rapidas' },
+  { key: 'disparosLentos', nombre: 'Disparos Lentos', descripcion: 'Los disparos de ambos jugadores se ejecutarán más lento.', icono: 'disparos_lentos' },
+  { key: 'disparosRapidos', nombre: 'Disparos Rápidos', descripcion: 'Los disparos de ambos jugadores se ejecutarán más rápido.', icono: 'disparos_rapidos' },
+  { key: 'fiebreDeMoscasDoradas', nombre: 'Fiebre Dorada', descripcion: 'Las moscas doradas aparecerán más seguido!!', icono: 'fiebre_moscasdoradas' },
+  { key: 'fiebreDeMoscasImpostoras', nombre: 'Fiebre Impostora', descripcion: 'Las moscas impostoras aparecerán más seguido.', icono: 'fiebre_moscasimpostoras' },
 ];
 
 export class ModificadorRuleta extends Scene {
@@ -24,18 +29,28 @@ export class ModificadorRuleta extends Scene {
   const centerY = this.scale.height / 2;
 
   this.add.rectangle(centerX, centerY, this.scale.width, this.scale.height, 0x000000, 0.9);
-  this.add.text(centerX, 80, '🎯 Ruleta de Modificadores', {
+  this.add.text(centerX, 80, 'Ruleta de Modificadores', {
     fontSize: '28px',
     color: '#fff',
+    align: 'center',
     fontStyle: 'bold'
   }).setOrigin(0.5);
 
   // Normalizar modificadores
   this.itemsData = this.modificadores.map(m => {
-    let key = typeof m === 'string' ? m : m.key || m.nombre;
-    key = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-    const full = MODIFICADORES_INFO.find(x => x.key === key || x.nombre === m.nombre);
-    return full || { nombre: m.nombre || key, icono: 'default_icon' };
+    // usa la key tal cual (si es string) o la key/nombre del objeto
+    const originalKey = (typeof m === 'string') ? m : (m.key || m.nombre || '');
+    // buscar por key (espera camelCase) o por nombre visible
+    const full = MODIFICADORES_INFO.find(x =>
+      x.key === originalKey || x.nombre === (typeof m === 'object' ? m.nombre : undefined)
+    );
+
+    // fallback si no encuentra
+    return full || {
+      nombre: (typeof m === 'object' ? m.nombre : originalKey),
+      descripcion: (typeof m === 'object' ? m.descripcion : ''),
+      icono: (typeof m === 'object' && m.icono) ? m.icono : 'default_icon'
+    };
   });
 
   // Configuración del carrusel
@@ -80,6 +95,7 @@ export class ModificadorRuleta extends Scene {
   this.centerDesc = this.add.text(centerX, centerY + 180, '', {
     fontSize: '18px',
     color: '#ccc',
+    align: 'center',
     wordWrap: { width: 500 }
   }).setOrigin(0.5);
 
@@ -148,7 +164,7 @@ rollAnimation() {
   finishRuleta(elegido) {
     this.tweens.add({
       targets: this.highlight,
-      scale: 1.1,
+      scale: 1.2,
       yoyo: true,
       duration: 400,
     });

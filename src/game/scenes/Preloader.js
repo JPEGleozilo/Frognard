@@ -68,14 +68,15 @@ export class Preloader extends Scene
         this.load.spritesheet("lengua", "lengua.png", { frameWidth: 540, frameHeight: 20 });
         console.log("lengua cargado");
 
-        this.load.image("controles_invertidos", "controles_invertidos.png");
-        console.log("controles_invertidos cargado");
 
         this.load.image("pantalla_invertida", "pantalla_invertida.png");
         console.log("pantalla_invertida cargado");
 
         this.load.image("moscas_pequeñas", "moscas_pequeñas.png");
         console.log("moscas_pequenas cargado");
+
+        this.load.image("moscas_grandes", "moscas_grandes.png");
+        console.log("moscas_grandes cargado");
 
         this.load.image("moscas_rapidas", "moscas_rapidas.png");
         console.log("moscas_rapidas cargado");
@@ -90,6 +91,18 @@ export class Preloader extends Scene
 
         this.load.image("reticulas_lentas", "reticulas_lentas.png");
         console.log("reticulas_lentas cargado");
+
+        this.load.image("disparos_rapidos", "disparos_rapidos.png");
+        console.log("disparos_rapidos cargado");
+
+        this.load.image("disparos_lentos", "disparos_lentos.png");
+        console.log("disparos_lentos cargado");
+
+        this.load.image("fiebre_moscasdoradas", "fiebre_moscasdoradas.png");
+        console.log("fiebre de moscas doradas cargado");
+
+        this.load.image("fiebre_moscasimpostoras", "fiebre_moscasimpostoras.png");
+        console.log("fiebre de moscas impostoras cargado");
 
         this.load.image("fondo_versus", "fondo3.png");
         console.log("fondo versus cargado");

@@ -1,15 +1,14 @@
 export default class Disparo {
-    constructor(scene, jugador, mira, color) {
+    constructor(scene, jugador, mira, color, speed = 12) {
         this.scene = scene;
         this.jugador = jugador;
         this.mira = mira;
         this.color = color;
+        this.speed = speed; // px por segundo (usar en update)
         this.active = false;
-
-        this.maxLength = 0;
-        this.speed = 12;
-        this.extending = false;
         this.length = 0;
+        this.maxLength = 0;
+        this.extending = false;
 
         this.line = this.scene.add.line(0, 0, 0, 0, 0, 0, color).setOrigin(0, 0);
         this.line.setAlpha(0);
@@ -43,17 +42,18 @@ export default class Disparo {
         }
     }
 
-    // ✅ añadimos moscaImpostorPool como parámetro adicional
-    update(moscaPool, moscaDoradaPool, moscaImpostorPool) {
+    update(moscaPool, moscaDoradaPool, moscaImpostorPool, time, delta) {
         if (!this.active || !this.line) return;
+        const dt = (delta !== undefined) ? delta / 5000 : (this.scene.game.loop.delta / 15);
 
         if (this.extending) {
-            this.length += this.speed;
+            this.length += this.speed * dt;
             if (this.length >= this.maxLength) {
+                this.length = this.maxLength;
                 this.extending = false;
             }
         } else {
-            this.length -= this.speed;
+            this.length -= this.speed * dt;
             if (this.length <= 0) {
                 this.destroy();
                 return;
@@ -84,7 +84,7 @@ export default class Disparo {
             this.targetMosca.y = endY;
         }
 
-        // --- ⚡️ DETECCIÓN DE COLISIONES ---
+        // --- DETECCIÓN DE COLISIONES ---
         if (this.extending && !this.targetMosca) {
 
             // Moscas normales
@@ -105,9 +105,9 @@ export default class Disparo {
 
             // 🪰 Moscas impostoras (nuevo)
             if (moscaImpostorPool && moscaImpostorPool.pool) {
-    moscaImpostorPool.pool.forEach(m => {
-        if (m.active && Phaser.Math.Distance.Between(m.x, m.y, endX, endY) < 15) {
-            this.capturarMosca(m);
+                moscaImpostorPool.pool.forEach(m => {
+                    if (m.active && Phaser.Math.Distance.Between(m.x, m.y, endX, endY) < 15) {
+                        this.capturarMosca(m);
         }
     });
 }
@@ -115,7 +115,7 @@ export default class Disparo {
         }
     }
 
-    // ✅ centralizamos la lógica de captura en un solo método
+    //  centralizamos la lógica de captura en un solo método
     capturarMosca(mosca) {
         this.targetMosca = mosca;
         mosca.active = false;

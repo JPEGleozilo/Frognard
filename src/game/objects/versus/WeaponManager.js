@@ -14,9 +14,11 @@ export default class WeaponManager {
             console.warn("No hay retícula asignada al WeaponManager.");
             return;
         }
-        // Solo permite UN disparo activo
+
         if (!this.disparo || !this.disparo.active) {
-            this.disparo = new Disparo(this.scene, this.jugador, this.mira, this.color);
+            // toma la velocidad configurada por el modificador (o el base por defecto)
+            const speed = this.scene.disparoSpeed ?? this.scene.disparoSpeedBase ?? 12;
+            this.disparo = new Disparo(this.scene, this.jugador, this.mira, this.color, speed);
             this.disparo.disparar();
             // Si el personaje tiene animación de disparo, actívala aquí
             if (this.jugador.playerId === 'player1') {

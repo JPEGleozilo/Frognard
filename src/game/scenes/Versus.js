@@ -55,7 +55,7 @@ export class Versus extends Scene {
     this.cameras.main.setBounds(0, 0, 960, 540);
 
     // Crear manejadores
-    this.roundManager = new RoundManager(this, 30000, 3);
+    this.roundManager = new RoundManager(this, 5000, 3);
     this.modManager = new ModificadorManager(this);
 
     // HUD simple
@@ -157,13 +157,13 @@ export class Versus extends Scene {
     this.anims.create({
       key: 'rana_disparo_anim',
       frames: this.anims.generateFrameNumbers('rana disparo', { start: 0, end: 8 }),
-      frameRate: 9,
+      frameRate: 7,
       repeat: 0
     });
     this.anims.create({
       key: 'rata_disparo_anim',
       frames: this.anims.generateFrameNumbers('rata disparo', { start: 0, end: 8 }),
-      frameRate: 9,
+      frameRate: 7,
       repeat: 0
     });
 
@@ -382,22 +382,32 @@ export class Versus extends Scene {
   }
 
   mostrarRuletaModificadores(proximaRonda) {
-  const posiblesMods = this.modManager.todosLosModificadores;
 
-  this.scene.launch('ModificadorRuleta', {
-    modificadores: posiblesMods,
-    onResultado: (elegido) => {
-      const internalName = keyToInternalName(elegido.key);
-      if (!this.modManager.modificadoresActivos.includes(internalName)) {
-        this.modManager.modificadoresActivos.push(internalName);
-      }
-      this.modManager.aplicarModificadoresActivos();
+    this.scene.pause('Versus');
+    // obtener todos y los ya usados
+    const todos = this.modManager.todosLosModificadores || [];
+    const usados = this.modManager.modificadoresActivos || [];
+
+    // filtrar: disponibles = todos - usados; si queda vacío, usar todos (fallback)
+    const disponibles = todos.filter(m => !usados.includes(m));
+    const opciones = disponibles.length ? disponibles : todos;
+
+    this.scene.launch('ModificadorRuleta', {
+        modificadores: opciones,
+        onResultado: (elegido) => {
+      // reanudar Versus y aplicar resultado
+      this.scene.resume('Versus');
+      this.modManager.addModificador(elegido);
       this.scene.stop('ModificadorRuleta');
       this.roundManager.startNextRound(proximaRonda);
+    },
+    onCancel: () => {
+      // si hay opción de cancelar, reanudar Versus también
+      this.scene.resume('Versus');
+      this.scene.stop('ModificadorRuleta');
     }
   });
 }
-
 shutdown() {
   this.gamepad1 = null;
   this.gamepad2 = null;

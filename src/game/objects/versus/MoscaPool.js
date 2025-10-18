@@ -29,21 +29,33 @@ export default class MoscaPool {
     direccion = -1;
   }
 
-  libre.spawn(x, y, direccion);
+  // spawn fuera de pantalla en la dirección correcta para evitar salir instantáneamente
+  const margin = 40;
+  const canvasW = this.scene.sys.canvas.width;
+  const spawnX = direccion > 0 ? -margin : canvasW + margin;
+  libre.spawn(spawnX, y, direccion);
 
-  // 🔥 Aplicar los efectos persistentes de los modificadores activos
+  // aplicar efectos persistentes del Modificador a moscas nuevas
   const efectos = this.scene.modManager?.efectosMosca;
   if (efectos) {
-    if (efectos.escalar !== 1) libre.setScale(efectos.escalar);
-    if (efectos.velMultiplicador !== 1) libre.velX *= efectos.velMultiplicador;
+    if (efectos.escalar !== 1) {
+        if (libre.baseScaleOriginal == null) libre.baseScaleOriginal = libre.scaleX ?? 1;
+        libre.setScale(efectos.escalar);
+    }
+    if (efectos.velMultiplicador !== 1) {
+        if (libre.baseVelXOriginal == null) libre.baseVelXOriginal = libre.velX;
+        libre.velX = libre.baseVelXOriginal * efectos.velMultiplicador;
+    }
     if (efectos.fantasmas) {
-      this.scene.tweens.add({
-        targets: libre,
-        alpha: { from: 0.1, to: 1 },
-        duration: 3500,
-        yoyo: true,
-        repeat: -1,
-      });
+        if (!libre._fantasmaTween) {
+            libre._fantasmaTween = this.scene.tweens.add({
+                targets: libre,
+                alpha: { from: 0.1, to: 1 },
+                duration: 3500,
+                yoyo: true,
+                repeat: -1,
+            });
+        }
     }
   }
 }
