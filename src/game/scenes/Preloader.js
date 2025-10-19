@@ -11,7 +11,7 @@ export class Preloader extends Scene
         const centerX = this.scale.width / 2;
         const centerY = this.scale.height / 2;
 
-          this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(1);
+          this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(0.5);
     
         this.cargaFinal = false;
     }
