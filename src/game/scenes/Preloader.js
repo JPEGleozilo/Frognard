@@ -37,6 +37,9 @@ export class Preloader extends Scene
         this.load.image('logo', 'frognardtitulo.png');
         console.log("logo cargado");
 
+        this.load.spritesheet('logoanimacion', 'logoanim.png', { frameWidth: 960, frameHeight: 540 });
+        console.log("logo animacion cargado");
+
         this.load.image("fondo", "fondo 1.png");
         console.log("fondo cargado");
         
@@ -114,7 +117,7 @@ export class Preloader extends Scene
 
         console.log("--VERSUS CARGADO--");
 
-        this.load.image("frognard", "frognard.png");
+        this.load.image("frognard", "frog64x64.png");
         console.log("frognard cargado");
 
         this.load.spritesheet("frognard caminar", "caminar y apuntar 128x64.png",

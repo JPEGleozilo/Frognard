@@ -8,21 +8,29 @@ export class MainMenu extends Scene
     }
 
     create ()
-    {
+    { 
+        
         this.add.image(480, 270, 'fondo').setDepth(-1)     
-        this.add.image(600/1.3 , 300/2, 'logo');
+        this.add.image(600/1.3 , 300/2, 'logo').setScale(0.5).setDepth(1);
 
         this.cursor = this.input.keyboard.createCursorKeys();
         this.enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
         this.state = "neutral";
 
+        this.anims.create({
+          key: 'logo_animacion',
+          frames: this.anims.generateFrameNumbers('logoanimacion', { start: 0, end:1 }),
+          frameRate: 4,
+          repeat: 0
+          });
+
         // Posiciones de los textos
-        const coopX = 960/3;
-        const vsX = (960/3)*2;
+        const vsX = 960/3;
+        const coopX = (960/3)*2;
         const textY = 400;
 
         // Agrega los iconos arriba de los textos y guarda las referencias
-        this.frognardIcon = this.add.image(coopX, textY - 40, 'frognard').setOrigin(0.5, 1).setScale(1.5).setDepth(1);
+        this.frognardIcon = this.add.image(coopX, textY - 40, 'frognard').setOrigin(0.5, 1).setScale(2).setDepth(1);
         this.ranaIcon = this.add.image(vsX - 30, textY - 40, 'rana').setOrigin(0.5, 1).setScale(2).setDepth(2);
         this.rataIcon = this.add.image(vsX + 30, textY - 40, 'rata').setOrigin(0.5, 1).setScale(2).setDepth(1);
 
@@ -43,6 +51,10 @@ export class MainMenu extends Scene
             strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
+
+        // fuera del update, como propiedad del scene:
+        this.logoPlayed = false;
+
     }
 
     update () {
@@ -54,16 +66,59 @@ export class MainMenu extends Scene
             this.ranaIcon.setAlpha(0.5);
             this.rataIcon.setAlpha(0.5);
         }
+
+        //reproducir animacion al accionar una opcion
+       // reproducir animación al accionar izquierda o derecha SOLO 1 VEZ
+if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
+
+    this.logoPlayed = true;   // <- marca que ya ocurrió
+
+    this.add.sprite(600/1.3 , 300/2, 'logoanimacion')
+        .setScale(0.5)
+        .play('logo_animacion')
+        .setDepth(10);
+
+    this.time.delayedCall(100, () => {
+        this.children.each(child => {
+            if (child.texture && child.texture.key === 'logo') {
+                child.destroy();
+            }
+        });
+    });
+
+    // destruir animación del logo después de reproducirse
+    this.time.delayedCall(400, () => {
+        this.children.each(child => {
+            if (child.texture && child.texture.key === 'logoanimacion') {
+                child.destroy();
+            }
+        }); 
+    });
+}
+
+
         // Cambia el estado basado en la entrada del cursor
-        if (this.cursor.right.isDown && this.state != "vs"){
-            this.state = "vs";
-        } else if (this.cursor.left.isDown && this.state != "coop"){
+        if (this.cursor.right.isDown && this.state != "coop"){
             this.state = "coop";
+             //hacer animacion de logo cuando se acciona una opcion
+     
+        
+        } else if (this.cursor.left.isDown && this.state != "vs"){
+            this.state = "vs";
+       
+
+        
+        
         }
         //estado para los assets de la rata y la rana cuando no estan seleccionados 
         if (this.cursor.left.isUp && this.cursor.right.isUp && this.state === "neutral") {
-            this.state = "coop"; // Por defecto, selecciona "coop"
+            this.state = ""; //  cambia a un estado vacío para evitar volver a entrar aquí
         }
+        //hacer animacion de logo cuando se acciona una opcion
+        //this.add.sprite(600/1.3 , 300/2, 'logoanimacion').setScale(0.5).play('logo_animacion').setDepth(20);
+        //destruir logo estatico cuando se reproduce la animacion
+      
+
 
         // Usar una variable para guardar el tamaño actual
         if (!this.vsFontSize) this.vsFontSize = 38;
@@ -105,3 +160,4 @@ export class MainMenu extends Scene
         };
     }
 }
+
