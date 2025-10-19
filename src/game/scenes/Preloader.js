@@ -68,6 +68,11 @@ export class Preloader extends Scene
         this.load.spritesheet("lengua", "lengua.png", { frameWidth: 540, frameHeight: 20 });
         console.log("lengua cargado");
 
+        this.load.spritesheet("animacion_controles_vs", "animacion_controles_vs.png", { frameWidth: 96, frameHeight: 64 });
+        console.log("animacion controles versus cargado");
+
+        this.load.spritesheet('animacion_presionar_a', 'animacion_presionar_a.png', { frameWidth: 32, frameHeight: 48 });
+
 
         this.load.image("pantalla_invertida", "pantalla_invertida.png");
         console.log("pantalla_invertida cargado");
