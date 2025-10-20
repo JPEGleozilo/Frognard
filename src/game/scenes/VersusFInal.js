@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import GamePadController from '../utils/GamepadController.js';
 
 export class VersusFinal extends Scene {
     constructor() {
@@ -44,6 +45,11 @@ export class VersusFinal extends Scene {
             rata.x = 360;
         }
 
+
+        this.gamepadController = new GamePadController(this);
+        this.gamepads = this.gamepadController.getGamepads();
+        this.getInput = this.gamepadController.getInput();
+
         // Textos
         const resultText = this.add.text(280, 350, '', {
             fontSize: '32px',
@@ -66,9 +72,19 @@ export class VersusFinal extends Scene {
             fontFamily: 'Arial',
         }).setOrigin(0.5).setInteractive().setAlpha(0);
 
+        this.time.addEvent({
+            delay: 200,
+            callback: () => {
+                this.inputRecieve = true
+            },
+            loop: false
+        });
+
         btn.on('pointerdown', () => {
-            this.scene.stop('Versus');
+            if (this.inputRecieve === true) {
+            this.scene.stop("Versus");
             this.scene.start('MainMenu');
+            }
         });
 
         // Aparecen las luces moviéndose
@@ -153,5 +169,15 @@ export class VersusFinal extends Scene {
                 ease: 'Sine.easeIn'
             });
         });
+    }
+
+    update() {
+        this.gamepadController.update();
+        this.getInput = this.gamepadController.getInput();
+
+        if (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true) {
+            this.scene.stop("Versus")
+            this.scene.start('MainMenu');
+        }
     }
 }

@@ -8,25 +8,7 @@ import MoscaDoradaPool from '../objects/versus/MoscaDoradaPool.js';
 import MoscaImpostorPool from '../objects/versus/MoscaImpostorPool.js';
 import RoundManager from "../objects/versus/RoundManager.js";
 import ModificadorManager from "../objects/versus/ModificadorManager.js";
-import { INPUT_ACTIONS } from "../utils/InputSystem.js";
-
-
-const PLAYER_INPUTS = {
-  player1: {
-    [INPUT_ACTIONS.LEFT]: ["A"],
-    [INPUT_ACTIONS.RIGHT]: ["D"],
-    [INPUT_ACTIONS.UP]: ["W"],
-    [INPUT_ACTIONS.DOWN]: ["S"],
-    [INPUT_ACTIONS.SOUTH]: ["T", { type: "gamepad", index: 0 }]
-  },
-  player2: {
-    [INPUT_ACTIONS.LEFT]: ["LEFT"],
-    [INPUT_ACTIONS.RIGHT]: ["RIGHT"],
-    [INPUT_ACTIONS.UP]: ["UP"],
-    [INPUT_ACTIONS.DOWN]: ["DOWN"],
-    [INPUT_ACTIONS.SOUTH]: ["L", { type: "gamepad", index: 0 }]
-  }
-};
+import GamePadController from '../utils/GamepadController.js';
 
 function keyToInternalName(key) {
   switch (key) {
@@ -44,8 +26,6 @@ function keyToInternalName(key) {
 export class Versus extends Scene {
   constructor() {
     super('Versus');
-    this.prevPad1Pressed = false;
-    this.prevPad2Pressed = false;
   }
 
   create() {
@@ -110,6 +90,11 @@ export class Versus extends Scene {
     this.weaponRana = new WeaponManager(this, this.rana, this.reticle1, 0x00ff00);
     this.weaponRata = new WeaponManager(this, this.rata, this.reticle2, 0x808080);
 
+    this.disparoHold = {
+      p1: false,
+      p2: false
+    };
+
     // Pools de moscas
     this.moscaPool = new MoscaPool(this, 25);
     this.moscaDoradaPool = new MoscaDoradaPool(this, 5);
@@ -118,20 +103,11 @@ export class Versus extends Scene {
     // Controles de disparo
     this.input.keyboard.on("keydown_Q", () => this.weaponRana.shoot());
     this.input.keyboard.on("keydown_P", () => this.weaponRata.shoot());
-
+    
     // Guardar referencia a los gamepads
-    this.gamepad1 = null;
-    this.gamepad2 = null;
-
-    this.input.gamepad.on('connected', pad => {
-      if (!this.gamepad1) {
-        this.gamepad1 = pad;
-        console.log("Gamepad 1 conectado:", pad.id);
-      } else if (this.gamepad1) {
-        this.gamepad2 = pad;
-        console.log("Gamepad 2 conectado :", pad.id)
-      };
-    });
+    this.gamepadController = new GamePadController(this);
+    this.gamepads = this.gamepadController.getGamepads();
+    this.getInput = this.gamepadController.getInput();
 
     // ScoreManager
     this.scoreManager = new ScoreManager(this);
@@ -176,21 +152,7 @@ export class Versus extends Scene {
     this.gameplayEnabled = false;
 
     // Registrar teclas para ambos jugadores
-    this.keys = {
-      player1: {},
-      player2: {}
-    };
-
-    Object.entries(PLAYER_INPUTS.player1).forEach(([action, inputs]) => {
-      this.keys.player1[action] = inputs
-        .filter(i => typeof i === "string")
-        .map(k => this.input.keyboard.addKey(k));
-    });
-    Object.entries(PLAYER_INPUTS.player2).forEach(([action, inputs]) => {
-      this.keys.player2[action] = inputs
-        .filter(i => typeof i === "string")
-        .map(k => this.input.keyboard.addKey(k));
-    });
+    this.cursors = this.input.keyboard.addKeys("UP,DOWN,LEFT,RIGHT,W,A,S,D,Q,K");
 
     // --- EVENTOS DEL ROUND MANAGER ---
     this.events.on("roundStart", ({ round, maxRounds }) => {
@@ -276,12 +238,24 @@ export class Versus extends Scene {
   }
 
   update(time, delta) {
+
+    this.gamepadController.update();
+    this.getInput = this.gamepadController.getInput();
+
+    if (this.disparoHold.p1 === true && (this.getInput.joy1.accion === false && this.cursors.Q.isUp)) this.disparoHold.p1 = false;
+    if (this.disparoHold.p2 === true && (this.getInput.joy2.accion === false && this.cursors.K.isUp)) this.disparoHold.p2 = false;
+
+
     // --- Movimiento retícula jugador 1 ---
     let dx1 = 0, dy1 = 0;
-    if (this.keys.player1[INPUT_ACTIONS.LEFT].some(k => k.isDown)) dx1 -= 1;
-    if (this.keys.player1[INPUT_ACTIONS.RIGHT].some(k => k.isDown)) dx1 += 1;
-    if (this.keys.player1[INPUT_ACTIONS.UP].some(k => k.isDown)) dy1 -= 1;
-    if (this.keys.player1[INPUT_ACTIONS.DOWN].some(k => k.isDown)) dy1 += 1;
+    if (this.cursors.A.isDown) dx1 -= 1;
+    if (this.cursors.D.isDown) dx1 += 1;
+    if (this.cursors.W.isDown) dy1 -= 1;
+    if (this.cursors.S.isDown) dy1 += 1;
+    if (this.getInput.joy1.x < -0.2) dx1 -= 2;
+    if (this.getInput.joy1.x > 0.2) dx1 += 2;
+    if (this.getInput.joy1.y < -0.2) dy1 -= 2;
+    if (this.getInput.joy1.y > 0.2) dy1 += 2;
 
     const velocidad1 = (this.reticle1.speed || 10) * (this.velocidadReticula ?? 1) * (delta / 1000);
 
@@ -289,25 +263,16 @@ export class Versus extends Scene {
     this.reticle1.x = Phaser.Math.Clamp(this.reticle1.x + dx1 * velocidad1, this.reticle1.minX, this.reticle1.maxX);
     this.reticle1.y = Phaser.Math.Clamp(this.reticle1.y + dy1 * velocidad1, this.reticle1.minY, this.reticle1.maxY);
 
-    // Joystick izquierdo
-    if (this.gamepad1) {
-      const axisX = this.gamepad1.axes.length > 0 ? this.gamepad1.axes[0].getValue() : 0;
-      const axisY = this.gamepad1.axes.length > 1 ? this.gamepad1.axes[1].getValue() : 0;
-      const deadzone = 0.2;
-      if (Math.abs(axisX) > deadzone) {
-        this.reticle1.x = Phaser.Math.Clamp(this.reticle1.x + axisX * velocidad1 * 2, this.reticle1.minX, this.reticle1.maxX);
-      }
-      if (Math.abs(axisY) > deadzone) {
-        this.reticle1.y = Phaser.Math.Clamp(this.reticle1.y + axisY * velocidad1 * 2, this.reticle1.minY, this.reticle1.maxY);
-      }
-    }
-
     // --- Movimiento retícula jugador 2 ---
     let dx2 = 0, dy2 = 0;
-    if (this.keys.player2[INPUT_ACTIONS.LEFT].some(k => k.isDown)) dx2 -= 1;
-    if (this.keys.player2[INPUT_ACTIONS.RIGHT].some(k => k.isDown)) dx2 += 1;
-    if (this.keys.player2[INPUT_ACTIONS.UP].some(k => k.isDown)) dy2 -= 1;
-    if (this.keys.player2[INPUT_ACTIONS.DOWN].some(k => k.isDown)) dy2 += 1;
+    if (this.cursors.LEFT.isDown) dx2 -= 1;
+    if (this.cursors.RIGHT.isDown) dx2 += 1;
+    if (this.cursors.UP.isDown) dy2 -= 1;
+    if (this.cursors.DOWN.isDown) dy2 += 1;
+    if (this.getInput.joy2.x < -0.2) dx2 -= 2;
+    if (this.getInput.joy2.x > 0.2) dx2 += 2;
+    if (this.getInput.joy2.y < -0.2) dy2 -= 2;
+    if (this.getInput.joy2.y > 0.2) dy2 += 2;
 
     const velocidad2 = (this.reticle2.speed || 200) * (this.velocidadReticula ?? 1) * (delta / 1000);
 
@@ -315,37 +280,32 @@ export class Versus extends Scene {
     this.reticle2.x = Phaser.Math.Clamp(this.reticle2.x + dx2 * velocidad2, this.reticle2.minX, this.reticle2.maxX);
     this.reticle2.y = Phaser.Math.Clamp(this.reticle2.y + dy2 * velocidad2, this.reticle2.minY, this.reticle2.maxY);
 
-    // Joystick izquierdo
-    if (this.gamepad2) {
-      const axisX = this.gamepad2.axes.length > 0 ? this.gamepad2.axes[0].getValue() : 0;
-      const axisY = this.gamepad2.axes.length > 1 ? this.gamepad2.axes[1].getValue() : 0;
-      const deadzone = 0.2;
-      if (Math.abs(axisX) > deadzone) {
-        this.reticle2.x = Phaser.Math.Clamp(this.reticle2.x + axisX * velocidad2 * 2, this.reticle2.minX, this.reticle2.maxX);
-      }
-      if (Math.abs(axisY) > deadzone) {
-        this.reticle2.y = Phaser.Math.Clamp(this.reticle2.y + axisY * velocidad2 * 2, this.reticle2.minY, this.reticle2.maxY);
-      }
-    }
+    
 
     // --- Disparo jugador 1 ---
-    const shootKey1 = this.keys.player1[INPUT_ACTIONS.SOUTH][0];
-    const shootKey2 = this.keys.player2[INPUT_ACTIONS.SOUTH][0];
+    const shootKey1 = this.cursors.Q;
+    const shootKey2 = this.cursors.K;
 
     // Teclado
-    if (Phaser.Input.Keyboard.JustDown(shootKey1)) this.weaponRana.shoot();
-    if (Phaser.Input.Keyboard.JustDown(shootKey2)) this.weaponRata.shoot();
+    if (Phaser.Input.Keyboard.JustDown(shootKey1) && this.disparoHold.p1 === false) {
+      this.weaponRana.shoot();
+      this.disparoHold.p1 = true;
+    }
+    if (Phaser.Input.Keyboard.JustDown(shootKey2) && this.disparoHold.p2 === false) {
+      this.weaponRata.shoot();
+      this.disparoHold.p1 = true;
+    }
 
     // Gamepad
-    if (this.gamepad1 && this.gamepad1.buttons[0].pressed && !this.prevPad1Pressed) {
+    if (this.getInput.joy1.accion === true && this.disparoHold.p1 === false) {
       this.weaponRana.shoot();
+      this.disparoHold.p1 = true;
     }
-    this.prevPad1Pressed = this.gamepad1 ? this.gamepad1.buttons[0].pressed : false;
 
-    if (this.gamepad2 && this.gamepad2.buttons[0].pressed && !this.prevPad2Pressed) {
+    if (this.getInput.joy2.accion === true && this.disparoHold.p2 === false) {
       this.weaponRata.shoot();
+      this.disparoHold.p2 = true;
     }
-    this.prevPad2Pressed = this.gamepad2 ? this.gamepad2.buttons[0].pressed : false;
 
     this.reticle1.update(time, delta);
     this.reticle2.update(time, delta);
@@ -420,10 +380,12 @@ export class Versus extends Scene {
   });
 }
 shutdown() {
-  this.gamepad1 = null;
-  this.gamepad2 = null;
-  this.prevPad1Pressed = false;
-  this.prevPad2Pressed = false;
+  if (this.gamepads && this.gamepads.joystick1) {
+        this.gamepads.joystick1.removeAllListeners();
+  }
+  if (this.gamepads && this.gamepads.joystick2) {
+        this.gamepads.joystick2.removeAllListeners();
+  }
 }
 }
 

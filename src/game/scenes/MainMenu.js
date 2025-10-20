@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import GamePadController from '../utils/GamepadController';
 
 export class MainMenu extends Scene
 {
@@ -52,10 +53,21 @@ export class MainMenu extends Scene
             strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
+        this.inputRecieve = false
+        this.time.addEvent({
+            delay: 100,
+            callback: () => {
+                this.inputRecieve = true
+            },
+            loop: false
+        });
+
+        this.gamepadController = new GamePadController(this);
+        this.gamepads = this.gamepadController.getGamepads();
+        this.getInput = this.gamepadController.getInput()
 
         // fuera del update, como propiedad del scene:
         this.logoPlayed = false;
-
     }
 
     update () {
@@ -67,6 +79,28 @@ export class MainMenu extends Scene
             this.ranaIcon.setAlpha(0.5);
             this.rataIcon.setAlpha(0.5);
         }
+        this.gamepadController.update();
+        this.getInput = this.gamepadController.getInput();
+
+        if(this.inputRecieve === true) {
+            // Cambia el estado basado en la entrada del cursor
+            if ((this.cursor.left.isDown || (this.getInput.joy1.x  < -0.2 || this.getInput.joy2.x < -0.2)) && this.state != "vs"){
+                this.state = "vs";
+            } else if ((this.cursor.right.isDown || (this.getInput.joy1.x  > 0.2 || this.getInput.joy2.x > 0.2)) && this.state != "coop"){
+                this.state = "coop";
+            }
+            //estado para los assets de la rata y la rana cuando no estan seleccionados 
+            if (this.cursor.left.isUp && this.cursor.right.isUp && this.state === "neutral") {
+                this.state = ""; // Por defecto, selecciona "coop"
+            }
+            
+            if (this.enter.isDown || (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true)) {
+                if (this.state === "coop") {
+                    this.scene.start("Coop");
+                } else if (this.state === "vs") {
+                    this.scene.start("Versus")
+                };
+            };
 
         //reproducir animacion al accionar una opcion
        // reproducir animación al accionar izquierda o derecha SOLO 1 VEZ
@@ -112,9 +146,7 @@ if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
         
         }
         //estado para los assets de la rata y la rana cuando no estan seleccionados 
-        if (this.cursor.left.isUp && this.cursor.right.isUp && this.state === "neutral") {
-            this.state = ""; //  cambia a un estado vacío para evitar volver a entrar aquí
-        }
+
         //hacer animacion de logo cuando se acciona una opcion
         //this.add.sprite(600/1.3 , 300/2, 'logoanimacion').setScale(0.5).play('logo_animacion').setDepth(20);
         //destruir logo estatico cuando se reproduce la animacion
@@ -179,4 +211,12 @@ if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
         };
     }
 }
-
+shutdown() {
+        if (this.gamepads && this.gamepads.joystick1) {
+            this.gamepads.joystick1.removeAllListeners();
+        }
+        if (this.gamepads && this.gamepads.joystick2) {
+            this.gamepads.joystick2.removeAllListeners();
+        }
+    }
+}
