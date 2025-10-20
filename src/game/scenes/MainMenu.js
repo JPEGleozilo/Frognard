@@ -13,7 +13,7 @@ export class MainMenu extends Scene
     
        this.add.image(480, 270, 'fondo2').setDepth(-1)        
 
-        this.add.image(600/1.3 , 300/2, 'logo').setScale(0.5).setDepth(1);
+        this.add.image(600/1.3 , 300/2, 'logo').setScale(0.56).setDepth(1);
 
         this.cursor = this.input.keyboard.createCursorKeys();
         this.enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
@@ -32,9 +32,9 @@ export class MainMenu extends Scene
         const textY = 400;
 
         // Agrega los iconos arriba de los textos y guarda las referencias
-        this.frognardIcon = this.add.image(coopX, textY - 40, 'frognard').setOrigin(0.5, 1).setScale(2).setDepth(1);
-        this.ranaIcon = this.add.image(vsX - 30, textY - 40, 'rana').setOrigin(0.5, 1).setScale(2).setDepth(2);
-        this.rataIcon = this.add.image(vsX + 30, textY - 40, 'rata').setOrigin(0.5, 1).setScale(2).setDepth(1);
+        this.frognardIcon = this.add.image(coopX, textY - 60, 'frognard').setOrigin(0.5, 0.7).setScale(2).setDepth(1);
+        this.ranaIcon = this.add.image(vsX - 55, textY - 60, 'rana').setOrigin(0.5, 0.75).setScale(2).setDepth(2);
+        this.rataIcon = this.add.image(vsX + 45, textY - 60, 'rata').setOrigin(0.5, 0.75).setScale(2).setDepth(1);
 
         this.coopText = this.add.text(coopX, textY, 'COOPERATIVO', {
             fontFamily: '"VT323", monospace',
@@ -67,7 +67,7 @@ export class MainMenu extends Scene
         this.getInput = this.gamepadController.getInput()
 
         // fuera del update, como propiedad del scene:
-        this.logoPlayed = false;
+       // this.logoPlayed = false;
     }
 
     update () {
@@ -104,32 +104,32 @@ export class MainMenu extends Scene
 
         //reproducir animacion al accionar una opcion
        // reproducir animación al accionar izquierda o derecha SOLO 1 VEZ
-if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
+//if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
 
-    this.logoPlayed = true;   // <- marca que ya ocurrió
+   // this.logoPlayed = true;   // <- marca que ya ocurrió
 
-    this.add.sprite(600/1.3 , 300/2, 'logoanimacion')
-        .setScale(0.5)
-        .play('logo_animacion')
-        .setDepth(10);
+    //this.add.sprite(600/1.3 , 300/2, 'logoanimacion')
+      //  .setScale(0.5)
+        //.play('logo_animacion')
+       // .setDepth(10);
 
-    this.time.delayedCall(0, () => {
-        this.children.each(child => {
-            if (child.texture && child.texture.key === 'logo') {
-                child.destroy();
-            }
-        });
-    });
+//    this.time.delayedCall(0, () => {
+  //      this.children.each(child => {
+    //        if (child.texture && child.texture.key === 'logo') {
+      //          child.destroy();
+        //    }
+     //   });
+   // });
 
     // destruir animación del logo después de reproducirse
-    this.time.delayedCall(200, () => {
-        this.children.each(child => {
-            if (child.texture && child.texture.key === 'logoanimacion') {
-                child.destroy();
-            }
-        }); 
-    });
-}
+   // this.time.delayedCall(200, () => {
+     //   this.children.each(child => {
+       //     if (child.texture && child.texture.key === 'logoanimacion') {
+         //       child.destroy();
+           // }
+      //  }); 
+  //  });
+//}
 
 
         // Cambia el estado basado en la entrada del cursor
