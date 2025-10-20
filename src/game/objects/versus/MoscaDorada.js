@@ -14,6 +14,8 @@ export default class MoscaDorada extends Phaser.GameObjects.Sprite {
 
         this.baseVelXOriginal = null;
         this.baseAmplitudOriginal = null;
+        this._timeSinceSpawn = 0;
+        this._spawnGrace = 200; // ms
     }
 
     spawn(x, y, direccion) {
@@ -31,17 +33,22 @@ export default class MoscaDorada extends Phaser.GameObjects.Sprite {
         this.setActive(true);
 
         this.play('mosca_fly_golden');
+
+        this._timeSinceSpawn = 0;
     }
 
     update(time, delta) {
         if (!this.active) return;
 
+        this._timeSinceSpawn += delta;
         this.tiempo += delta * 0.005;
         this.x += this.velX * (delta / 1000);
         this.y += Math.sin(this.tiempo) * 0.8;
 
-        if (this.x < -20 || this.x > this.scene.sys.canvas.width + 20) {
-            this.despawn();
+        if (this._timeSinceSpawn > this._spawnGrace) {
+            if (this.x < -20 || this.x > this.scene.sys.canvas.width + 20) {
+                this.despawn();
+            }
         }
     }
 

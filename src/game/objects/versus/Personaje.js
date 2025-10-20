@@ -44,10 +44,10 @@ export default class Personaje extends Phaser.GameObjects.Rectangle {
         
     }
 
-    update(time, delta, moscaPool, moscaDoradaPool) {
+    update(time, delta, moscaPool, moscaDoradaPool, moscaImpostorPool) {
         // Solo actualiza el disparo si existe
         if (this.disparo) {
-            this.disparo.update(moscaPool, moscaDoradaPool);
+            this.disparo.update(moscaPool, moscaDoradaPool, moscaImpostorPool);
         }
 
         // --- Sincroniza el sprite con el rectángulo ---
@@ -74,13 +74,22 @@ export default class Personaje extends Phaser.GameObjects.Rectangle {
         }
     }
     captureMosca(mosca) {
-        if (!this.capturedMosca) {
-            this.capturedMosca = mosca;
-            // Detecta si es dorada
-            const puntos = mosca.texture.key === 'mosca dorada spritesheet' ? 5 : 1;
-            // Avisar al ScoreManager con el puntaje
-            this.scene.scoreManager.onMoscaCaptured(this.playerId, puntos);
+    if (!this.capturedMosca) {
+        this.capturedMosca = mosca;
+
+        let puntos = 0;
+
+        if (mosca.texture.key === 'mosca dorada spritesheet') {
+            puntos = 5;
+        } else if (mosca.texture.key === 'mosca_impostor') {
+            puntos = -3;
+        } else {
+            puntos = 1;
         }
+
+        this.scene.scoreManager.onMoscaCaptured(this.playerId, puntos);
     }
+}
+
 }
 

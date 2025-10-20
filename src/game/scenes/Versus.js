@@ -1,10 +1,11 @@
 import { Scene } from 'phaser';
 import Reticle from "../objects/versus/Reticula.js";
 import Personaje from "../objects/versus/Personaje.js";
-import MoscaPool from "../objects/versus/MoscaPool.js";
 import WeaponManager from "../objects/versus/WeaponManager.js";
 import ScoreManager from '../objects/versus/ScoreManager.js';
+import MoscaPool from "../objects/versus/MoscaPool.js";
 import MoscaDoradaPool from '../objects/versus/MoscaDoradaPool.js';
+import MoscaImpostorPool from '../objects/versus/MoscaImpostorPool.js';
 import RoundManager from "../objects/versus/RoundManager.js";
 import ModificadorManager from "../objects/versus/ModificadorManager.js";
 import GamePadController from '../utils/GamepadController.js';
@@ -25,18 +26,13 @@ function keyToInternalName(key) {
 export class Versus extends Scene {
   constructor() {
     super('Versus');
-    this.prevPad1Pressed = false;
-    this.prevPad2Pressed = false;
   }
 
   create() {
-    this.add.image(480, 270, 'fondo');
+    this.add.image(480, 270, 'fondo_versus');
 
     //crear camara
     this.cameras.main.setBounds(0, 0, 960, 540);
-
-    //agregar un suelo 
-    const suelo = this.add.rectangle(480, 540, 960, 80, 0x8a8a8a);
 
     // Crear manejadores
     this.roundManager = new RoundManager(this, 30000, 3);
@@ -87,8 +83,8 @@ export class Versus extends Scene {
     }, 'MiraRata');
 
     // Personajes
-    this.rana = new Personaje(this, 325, 480, 0x00ff00, this.reticle1, "Q", 'player1');
-    this.rata = new Personaje(this, 650, 480, 0xaaaaaa, this.reticle2, "P", 'player2');
+    this.rana = new Personaje(this, 325, 480, 0x00ff00, this.reticle1, "T", 'player1');
+    this.rata = new Personaje(this, 650, 480, 0xaaaaaa, this.reticle2, "L", 'player2');
 
     // Managers de armas
     this.weaponRana = new WeaponManager(this, this.rana, this.reticle1, 0x00ff00);
@@ -102,6 +98,7 @@ export class Versus extends Scene {
     // Pools de moscas
     this.moscaPool = new MoscaPool(this, 25);
     this.moscaDoradaPool = new MoscaDoradaPool(this, 5);
+    this.moscaImpostorPool = new MoscaImpostorPool(this, 10);
 
     // Controles de disparo
     this.input.keyboard.on("keydown_Q", () => this.weaponRana.shoot());
@@ -136,16 +133,21 @@ export class Versus extends Scene {
     this.anims.create({
       key: 'rana_disparo_anim',
       frames: this.anims.generateFrameNumbers('rana disparo', { start: 0, end: 8 }),
-      frameRate: 9,
+      frameRate: 7,
       repeat: 0
     });
     this.anims.create({
       key: 'rata_disparo_anim',
       frames: this.anims.generateFrameNumbers('rata disparo', { start: 0, end: 8 }),
-      frameRate: 9,
+      frameRate: 7,
       repeat: 0
     });
-
+    this.anims.create({
+      key: 'animacion_controles_vs',
+      frames: this.anims.generateFrameNumbers('animacion_controles_vs', { start: 0, end: 5 }),
+      frameRate: 4,
+      repeat: -1
+    });
     // Bloquear inputs hasta que empiece la ronda
     this.gameplayEnabled = false;
 
@@ -158,6 +160,44 @@ export class Versus extends Scene {
       this.gameplayEnabled = true;
       this.modManager.aplicarModificadoresActivos();
       if (this.moscaPool?.resume) this.moscaPool.resume();
+
+     // === PANEL DE INFORMACIÓN DE MOSCAS ===
+    const panelX = this.cameras.main.width / 2;
+    const panelY = 485;
+
+    // === animacion controles versus a los lados==
+    const animacionIzquierda = this.add.sprite(120, panelY + 20, 'animacion_controles_vs').setScale(1).setDepth(201);
+    animacionIzquierda.play('animacion_controles_vs');
+    const animacionDerecha = this.add.sprite(840, panelY + 20, 'animacion_controles_vs').setScale(1).setDepth(201);
+    animacionDerecha.play('animacion_controles_vs');
+
+    const fondoPanel = this.add.rectangle(panelX, panelY, 130, 100, 0x000000, 0.4)
+        .setOrigin(0.5)
+        .setStrokeStyle(2, 0xffffff)
+        .setDepth(200);
+
+    const estiloTexto = {
+        fontFamily: 'pixelFont',
+        fontSize: '20px',
+        color: '#ffffff',
+        align: 'center'
+    };
+
+    // Iconos + texto
+    const baseY = panelY ;
+    const espacio = 30;
+
+    // Mosca normal
+    const moscaNormal = this.add.sprite(panelX - 25, baseY - espacio, 'mosca spritesheet').setScale(1).setDepth(201);
+    this.add.text(moscaNormal.x + 20, baseY - espacio, '=  + 1', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+
+    // Mosca dorada
+    const moscaDorada = this.add.sprite(panelX - 25, baseY, 'mosca dorada spritesheet').setScale(1).setDepth(201);
+    this.add.text(moscaDorada.x + 20, baseY, '=  + 5', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+
+    // Mosca impostora
+    const moscaImpostor = this.add.sprite(panelX - 25, baseY + espacio, 'mosca_impostor').setScale(1).setDepth(201);
+    this.add.text(moscaImpostor.x + 20, baseY + espacio, '=  - 3', estiloTexto).setOrigin(0, 0.5).setDepth(201);
 
       // Actualiza las luces de ronda (de izquierda a derecha)
       for (let i = 0; i < this.rondaLights.length; i++) {
@@ -179,7 +219,7 @@ export class Versus extends Scene {
       this.gameplayEnabled = false;
       if (this.moscaPool?.pause) this.moscaPool.pause();
 
-      this.showRoundBanner(`Ronda ${round} finalizada`);
+      this.showRoundBanner(``);
 
       if (round < this.roundManager.maxRounds) {
         this.mostrarRuletaModificadores(round + 1);
@@ -208,10 +248,14 @@ export class Versus extends Scene {
 
     // --- Movimiento retícula jugador 1 ---
     let dx1 = 0, dy1 = 0;
-    if (this.cursors.A.isDown || this.getInput.joy1.x < -0.2) dx1 -= 1;
-    if (this.cursors.D.isDown || this.getInput.joy1.x > 0.2) dx1 += 1;
-    if (this.cursors.W.isDown || this.getInput.joy1.y < -0.2) dy1 -= 1;
-    if (this.cursors.S.isDown || this.getInput.joy1.y > 0.2) dy1 += 1;
+    if (this.cursors.A.isDown) dx1 -= 1;
+    if (this.cursors.D.isDown) dx1 += 1;
+    if (this.cursors.W.isDown) dy1 -= 1;
+    if (this.cursors.S.isDown) dy1 += 1;
+    if (this.getInput.joy1.x < -0.2) dx1 -= 2;
+    if (this.getInput.joy1.x > 0.2) dx1 += 2;
+    if (this.getInput.joy1.y < -0.2) dy1 -= 2;
+    if (this.getInput.joy1.y > 0.2) dy1 += 2;
 
     const velocidad1 = (this.reticle1.speed || 10) * (this.velocidadReticula ?? 1) * (delta / 1000);
 
@@ -221,10 +265,14 @@ export class Versus extends Scene {
 
     // --- Movimiento retícula jugador 2 ---
     let dx2 = 0, dy2 = 0;
-    if (this.cursors.LEFT.isDown || this.getInput.joy2.x < -0.2) dx2 -= 1;
-    if (this.cursors.RIGHT.isDown || this.getInput.joy2.x > 0.2) dx2 += 1;
-    if (this.cursors.UP.isDown || this.getInput.joy2.y < -0.2) dy2 -= 1;
-    if (this.cursors.DOWN.isDown || this.getInput.joy2.y > 0.2) dy2 += 1;
+    if (this.cursors.LEFT.isDown) dx2 -= 1;
+    if (this.cursors.RIGHT.isDown) dx2 += 1;
+    if (this.cursors.UP.isDown) dy2 -= 1;
+    if (this.cursors.DOWN.isDown) dy2 += 1;
+    if (this.getInput.joy2.x < -0.2) dx2 -= 2;
+    if (this.getInput.joy2.x > 0.2) dx2 += 2;
+    if (this.getInput.joy2.y < -0.2) dy2 -= 2;
+    if (this.getInput.joy2.y > 0.2) dy2 += 2;
 
     const velocidad2 = (this.reticle2.speed || 200) * (this.velocidadReticula ?? 1) * (delta / 1000);
 
@@ -263,20 +311,21 @@ export class Versus extends Scene {
     this.reticle2.update(time, delta);
     this.roundManager.update(time, delta);
 
-    this.rana.update(time, delta, this.moscaPool, this.moscaDoradaPool);
-    this.rata.update(time, delta, this.moscaPool, this.moscaDoradaPool);
+    this.rana.update(time, delta, this.moscaPool, this.moscaDoradaPool, this.moscaImpostorPool);
+    this.rata.update(time, delta, this.moscaPool, this.moscaDoradaPool, this.moscaImpostorPool);
     this.moscaPool.update(time, delta);
     this.moscaDoradaPool.update(time, delta);
+    this.moscaImpostorPool.update(time, delta);
 
-    this.weaponRana.update(this.moscaPool, this.moscaDoradaPool);
-    this.weaponRata.update(this.moscaPool, this.moscaDoradaPool);
+    this.weaponRana.update(this.moscaPool, this.moscaDoradaPool, this.moscaImpostorPool);
+    this.weaponRata.update(this.moscaPool, this.moscaDoradaPool, this.moscaImpostorPool);
   }
 
   showRoundBanner(text) {
     const b = this.add.text(this.scale.width / 2, 80, text, { fontSize: "28px", color: "#ff0" }).setOrigin(0.5);
     this.tweens.add({
       targets: b,
-      alpha: { from: 1, to: 0 },
+      alpha: 0,
       duration: 1500,
       ease: "Power2",
       onComplete: () => b.destroy()
@@ -304,22 +353,32 @@ export class Versus extends Scene {
   }
 
   mostrarRuletaModificadores(proximaRonda) {
-  const posiblesMods = this.modManager.todosLosModificadores;
 
-  this.scene.launch('ModificadorRuleta', {
-    modificadores: posiblesMods,
-    onResultado: (elegido) => {
-      const internalName = keyToInternalName(elegido.key);
-      if (!this.modManager.modificadoresActivos.includes(internalName)) {
-        this.modManager.modificadoresActivos.push(internalName);
-      }
-      this.modManager.aplicarModificadoresActivos();
+    this.scene.pause('Versus');
+    // obtener todos y los ya usados
+    const todos = this.modManager.todosLosModificadores || [];
+    const usados = this.modManager.modificadoresActivos || [];
+
+    // filtrar: disponibles = todos - usados; si queda vacío, usar todos (fallback)
+    const disponibles = todos.filter(m => !usados.includes(m));
+    const opciones = disponibles.length ? disponibles : todos;
+
+    this.scene.launch('ModificadorRuleta', {
+        modificadores: opciones,
+        onResultado: (elegido) => {
+      // reanudar Versus y aplicar resultado
+      this.scene.resume('Versus');
+      this.modManager.addModificador(elegido);
       this.scene.stop('ModificadorRuleta');
       this.roundManager.startNextRound(proximaRonda);
+    },
+    onCancel: () => {
+      // si hay opción de cancelar, reanudar Versus también
+      this.scene.resume('Versus');
+      this.scene.stop('ModificadorRuleta');
     }
   });
 }
-
 shutdown() {
   if (this.gamepads && this.gamepads.joystick1) {
         this.gamepads.joystick1.removeAllListeners();

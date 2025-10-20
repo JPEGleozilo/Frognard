@@ -1,18 +1,18 @@
-import MoscaDorada from "./MoscaDorada.js";
+import MoscaImpostor from "./MoscaImpostor.js";
 
 export default class MoscaDoradaPool {
     constructor(scene, cantidad = 20) {
         this.scene = scene;
         this.pool = [];
         for (let i = 0; i < cantidad; i++) {
-            const mosca = new MoscaDorada(scene, -100, -100);
+            const mosca = new MoscaImpostor(scene, -100, -100);
             this.pool.push(mosca);
         }
         this.spawnTimer = 0;
-        this.baseSpawnInterval = 3000; // intervalo base en ms (ajusta si tu juego usa otro)
+        this.baseSpawnInterval = 2000; // intervalo base en ms (ajusta si tu juego usa otro)
     }
 
-    spawnMoscaDorada() {
+    spawnMoscaImpostor() {
         const libre = this.pool.find(m => !m.active);
         if (!libre) return;
 
@@ -59,10 +59,10 @@ export default class MoscaDoradaPool {
     update(time, delta) {
         this.spawnTimer += delta;
         const efectos = this.scene.modManager?.efectosMosca;
-        const mult = efectos?.spawnMultDorada ?? 1;
+        const mult = efectos?.spawnMultImpostora ?? 1;
         const interval = Math.max(50, this.baseSpawnInterval * mult); // evita interval 0
         if (this.spawnTimer >= interval) {
-            this.spawnMoscaDorada();
+            this.spawnMoscaImpostor();
             this.spawnTimer = 0;
         }
 

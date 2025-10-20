@@ -1,6 +1,6 @@
-export default class Mosca extends Phaser.GameObjects.Sprite {
+export default class MoscaImpostor extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
-        super(scene, x, y, 'mosca spritesheet');
+        super(scene, x, y, 'mosca_impostor');
         this.scene = scene;
         this.scene.add.existing(this);
 
@@ -14,10 +14,8 @@ export default class Mosca extends Phaser.GameObjects.Sprite {
 
         this.baseVelXOriginal = null;
         this.baseAmplitudOriginal = null;
-
-        // nuevo: tiempo desde spawn para evitar despawn inmediato
         this._timeSinceSpawn = 0;
-        this._spawnGrace = 200; // ms, evita despawn en los primeros 200ms
+        this._spawnGrace = 200; // ms
     }
 
     spawn(x, y, direccion) {
@@ -28,16 +26,12 @@ export default class Mosca extends Phaser.GameObjects.Sprite {
         this.amplitud = Phaser.Math.Between(5, 20);
         this.tiempo = 0;
 
-        // guardar valores base la primera vez
         if (this.baseVelXOriginal == null) this.baseVelXOriginal = this.velX;
         if (this.baseAmplitudOriginal == null) this.baseAmplitudOriginal = this.amplitud;
 
         this.setVisible(true);
         this.setActive(true);
 
-        this.play('mosca_fly');
-
-        // reset tiempo desde spawn
         this._timeSinceSpawn = 0;
     }
 
@@ -49,7 +43,6 @@ export default class Mosca extends Phaser.GameObjects.Sprite {
         this.x += this.velX * (delta / 1000);
         this.y += Math.sin(this.tiempo) * 0.8;
 
-        // solo despawnea si pasó el periodo de gracia
         if (this._timeSinceSpawn > this._spawnGrace) {
             if (this.x < -20 || this.x > this.scene.sys.canvas.width + 20) {
                 this.despawn();
@@ -61,11 +54,9 @@ export default class Mosca extends Phaser.GameObjects.Sprite {
         this.setVisible(false);
         this.setActive(false);
 
-        // restaurar velocidad base cuando vuelva al pool
         if (this.baseVelXOriginal != null) this.velX = this.baseVelXOriginal;
         if (this.baseAmplitudOriginal != null) this.amplitud = this.baseAmplitudOriginal;
 
-        // eliminar tween fantasma si existe
         if (this._fantasmaTween) {
             this._fantasmaTween.stop();
             this._fantasmaTween = null;

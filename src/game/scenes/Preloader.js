@@ -11,7 +11,7 @@ export class Preloader extends Scene
         const centerX = this.scale.width / 2;
         const centerY = this.scale.height / 2;
 
-          this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(1);
+          this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(0.5);
     
         this.cargaFinal = false;
     }
@@ -36,6 +36,9 @@ export class Preloader extends Scene
 
         this.load.image('logo', 'frognardtitulo.png');
         console.log("logo cargado");
+
+        this.load.spritesheet('logoanimacion', 'logoanim.png', { frameWidth: 960, frameHeight: 540 });
+        console.log("logo animacion cargado");
 
         this.load.image("fondo", "fondo 1.png");
         console.log("fondo cargado");
@@ -68,8 +71,11 @@ export class Preloader extends Scene
         this.load.spritesheet("lengua", "lengua.png", { frameWidth: 540, frameHeight: 20 });
         console.log("lengua cargado");
 
-        this.load.image("controles_invertidos", "controles_invertidos.png");
-        console.log("controles_invertidos cargado");
+        this.load.spritesheet("animacion_controles_vs", "animacion_controles_vs.png", { frameWidth: 96, frameHeight: 64 });
+        console.log("animacion controles versus cargado");
+
+        this.load.spritesheet('animacion_presionar_a', 'animacion_presionar_a.png', { frameWidth: 32, frameHeight: 48 });
+
 
         this.load.image("pantalla_invertida", "pantalla_invertida.png");
         console.log("pantalla_invertida cargado");
@@ -77,11 +83,16 @@ export class Preloader extends Scene
         this.load.image("moscas_pequeñas", "moscas_pequeñas.png");
         console.log("moscas_pequenas cargado");
 
+        this.load.image("moscas_grandes", "moscas_grandes.png");
+        console.log("moscas_grandes cargado");
+
         this.load.image("moscas_rapidas", "moscas_rapidas.png");
         console.log("moscas_rapidas cargado");
 
         this.load.image("moscas_fantasmas", "moscas_fantasmas.png");
         console.log("moscas_fantasmas cargado");
+
+        this.load.image("mosca_impostor", "mosca_impostor.png");
 
         this.load.image("reticulas_rapidas", "reticulas_rapidas.png");
         console.log("reticulas_rapidas cargado");
@@ -89,9 +100,24 @@ export class Preloader extends Scene
         this.load.image("reticulas_lentas", "reticulas_lentas.png");
         console.log("reticulas_lentas cargado");
 
+        this.load.image("disparos_rapidos", "disparos_rapidos.png");
+        console.log("disparos_rapidos cargado");
+
+        this.load.image("disparos_lentos", "disparos_lentos.png");
+        console.log("disparos_lentos cargado");
+
+        this.load.image("fiebre_moscasdoradas", "fiebre_moscasdoradas.png");
+        console.log("fiebre de moscas doradas cargado");
+
+        this.load.image("fiebre_moscasimpostoras", "fiebre_moscasimpostoras.png");
+        console.log("fiebre de moscas impostoras cargado");
+
+        this.load.image("fondo_versus", "fondo3.png");
+        console.log("fondo versus cargado");
+
         console.log("--VERSUS CARGADO--");
 
-        this.load.image("frognard", "frognard.png");
+        this.load.image("frognard", "frog64x64.png");
         console.log("frognard cargado");
 
         this.load.spritesheet("frognard caminar", "caminar y apuntar 128x64.png",
