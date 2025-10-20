@@ -1,11 +1,10 @@
 export default class Lengua extends Phaser.Physics.Arcade.Sprite {
     constructor(scene){
-    super(scene,500, 45, "frognard")
+    super(scene,500, 45, "lengua punta")
 
     //Existencia
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.setScale(0.25);
     this.setOrigin(0.5);
     this.setCollideWorldBounds(false);
     this.setCollidesWith([1, 2, 3]);
@@ -30,7 +29,7 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
             this.log = false;
         
             this.setX(this.x + this.width/2);
-            this.setY(this.y + this.height/4);
+            this.setY(this.y + 20);
 
             this.setVisible(true);
 
@@ -47,7 +46,7 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
         if(this.vuelta === true){
         this.frogX = frogX
         this.frogY = frogY
-        this.anguloVuelta = Phaser.Math.Angle.Between(this.body.x, this.body.y, this.frogX, this.frogY);
+        this.anguloVuelta = Phaser.Math.Angle.Between(this.body.x, this.body.y, this.frogX, this.frogY + 20);
         this.setVelocityX(this.velocidad * Math.cos(this.anguloVuelta));
         this.setVelocityY(this.velocidad * Math.sin(this.anguloVuelta));
         };
@@ -78,6 +77,35 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
             this.setVelocity(0);
             this.lenguaOut = false;
             this.body.setCollidesWith([0]);
+            if (this._gfx) {
+                this._gfx.clear();
+            }
         }
+    }
+
+    lenguaLargo(frogX, frogY) {
+        if(this.lenguaOut) {
+               // crear graphics la primera vez y reutilizarlo
+        if (!this._gfx) {
+            this._gfx = this.scene.add.graphics();
+            this._gfx.setDepth(this.depth - 1);
+        }
+        this._gfx.clear();
+    // coordenadas: punto de la lengua (usar body center) y target frog
+        const x1 = this.body.x + (this.body.width ? this.body.width / 2 : 0);
+        const y1 = this.body.y + (this.body.height ? this.body.height / 2 : 0);
+        const x2 = frogX + 16;
+        const y2 = frogY + 20;
+    // color correcto en hex (ej: 0xd34d7e) y grosor 4
+        this._gfx.lineStyle(4, 0xd34d7e, 1);
+        const line = new Phaser.Geom.Line(x1, y1, x2, y2);
+        this._gfx.strokeLineShape(line);
+    } else {
+        if (this._gfx) this._gfx.clear();
+    }
+    };
+
+    getLenguaOut() {
+        return this.lenguaOut
     }
 }

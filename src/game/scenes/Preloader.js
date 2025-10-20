@@ -121,8 +121,18 @@ export class Preloader extends Scene
         { frameWidth: 28, frameHeight: 64});
         console.log("puerta cargado");
 
+        this.load.image("lengua punta", "lengua punta.png");
+
         this.load.image("caja", "caja.png");
         console.log("caja cargado");
+
+        this.load.spritesheet("luz alarma", "LuzAlarma32x32.png", { frameWidth: 32, frameHeight: 32});
+        console.log("luz alarma cargado");
+
+        this.load.image("luz roja", "luz roja.png")
+        console.log("luz roja cargado");
+
+        this.load.spritesheet("Game over", "GameOver96x96(6fps).png", {frameWidth: 96, frameHeight: 96});
 
         this.load.setPath('/tilemaps');
 

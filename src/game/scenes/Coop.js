@@ -4,7 +4,10 @@ import Lengua from "../objects/coop/Lengua.js";
 import BotonH from '../objects/coop/BotonH.js';
 import BotonV from '../objects/coop/BotonV.js';
 import Palanca from '../objects/coop/Palanca.js';
-import Accionable from "../objects/coop/Accionable.js";
+import { Accionable, Sirena } from "../objects/coop/Accionable.js";
+import StateMachine from '../objects/coop/State/StateMachine.js';
+import {Inicio, Alarma, GameOver} from "../objects/coop/State/Estados.js";
+
 
 export class Coop extends Scene
 {
@@ -31,7 +34,7 @@ export class Coop extends Scene
             }
         })
 
-        this.frognard = new Frognard(this, this.spawnX, this.spawnY).setDepth(2);
+        this.frognard = new Frognard(this, this.spawnX, this.spawnY - 2).setDepth(2);
         this.lengua = new Lengua(this);
 
         this.botonesH = this.physics.add.group();
@@ -39,6 +42,7 @@ export class Coop extends Scene
         this.palancas = this.physics.add.group();
         
         this.accionable = this.physics.add.group();
+        this.sirenas = this.physics.add.group();
 
         this.capaInterruptores = mapa1.getObjectLayer("interruptores");
         this.capaInterruptores.objects.forEach(objeto => {
@@ -52,19 +56,24 @@ export class Coop extends Scene
                 new Palanca (this, objeto.x, objeto.y, objeto.name);
                 console.log(objeto.name, " palanca");
             }
-        })
+        });
 
         this.capaAccionables = mapa1.getObjectLayer("accionables");
         this.capaAccionables.objects.forEach(objeto => {
             new Accionable (this, objeto.x, objeto.y, objeto.name, objeto.type);
             console.log(objeto.name, " puerta");
-        })
+        });
+
+        this.capaSirenas = mapa1.getObjectLayer("sirenas");
+        this.capaSirenas.objects.forEach(objeto => {
+            new Sirena (this, objeto.x, objeto.y)
+        });
 
 
         piso.setCollisionByProperty({collider: true});
         piso.setCollisionCategory([2]);
 
-        final.setCollisionByProperty({collider: true});
+        final.setCollisionByProperty({final: true});
 
         this.physics.add.collider(this.frognard, piso);
         this.physics.add.collider(this.lengua, piso, () => {
@@ -75,18 +84,41 @@ export class Coop extends Scene
             this.lengua.desactivar();
         })
 
+        this.physics.add.collider(this.frognard, final, () => {
+            console.log("terminaste gordo hijo de remil puta")
+        })
+
         this.physics.world.on("worldbounds", (body) => {
             if (body.gameObject === this.lengua) {
                 this.lengua.triggerVuelta();
             };
         })
+
+        this.alarmaSM = new StateMachine ("inicio", {
+            inicio: new Inicio(this, 0.3
+            ),
+            alarma: new Alarma(this),
+            gameOver: new GameOver(this, this.frognard.x, this.frognard.y)
+        }, [this, 2]);
     }
 
     update ()
     {
+        this.alarmaSM.step();
+        if (this.alarmaSM.estadoActual === "inicio" && this.alarmaSM.estados["inicio"].execute() === true) {
+            console.log("transicion");
+            this.alarmaSM.transicion(alarma);
+        };
+        if (this.alarmaSM.estadoActual === "alarma" && this.alarmaSM.estados["alarma"].execute() === true) {
+            console.log("transicion");
+            this.alarmaSM.transicion(gameOver);
+        }
+
         this.frognard.update();
         this.inputLengua = this.frognard.getInputLengua();
         this.lengua.volviendo(this.frognard.body.x, this.frognard.body.y);
+        this.lengua.lenguaLargo(this.frognard.body.x, this.frognard.body.y);
+        this.lengua.getLenguaOut()
 
         if (this.inputLengua === true) {
             this.angulo = this.frognard.getCurrentAngle();

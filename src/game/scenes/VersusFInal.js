@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import GamePadController from '../utils/GamepadController.js';
 
 export class VersusFinal extends Scene {
     constructor() {
@@ -37,6 +38,10 @@ export class VersusFinal extends Scene {
             }).setOrigin(0.5);
         }
 
+        this.gamepadController = new GamePadController(this);
+        this.gamepads = this.gamepadController.getGamepads();
+        this.getInput = this.gamepadController.getInput();
+
         // Mostrar cantidad de moscas recolectadas
         this.add.text(480, 420, `Moscas recolectadas:\nRana: ${this.frogFlies}\nRata: ${this.ratFlies}`, {
             fontSize: '24px',
@@ -54,9 +59,29 @@ export class VersusFinal extends Scene {
             fontFamily: 'Arial',
         }).setOrigin(0.5).setInteractive();
 
+        this.time.addEvent({
+            delay: 200,
+            callback: () => {
+                this.inputRecieve = true
+            },
+            loop: false
+        });
+
         btn.on('pointerdown', () => {
+            if (this.inputRecieve === true) {
             this.scene.stop("Versus")
             this.scene.start('MainMenu');
+            }
         });
+    }
+    
+    update() {
+        this.gamepadController.update();
+        this.getInput = this.gamepadController.getInput();
+
+        if (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true) {
+            this.scene.stop("Versus")
+            this.scene.start('MainMenu');
+        }
     }
 }
