@@ -42,6 +42,9 @@ export class Preloader extends Scene
 
         this.load.image("fondo", "fondo 1.png");
         console.log("fondo cargado");
+
+        this.load.image("fondo2", "fondo2.png");
+        console.log("fondo2 cargado");
         
         this.load.image('MiraRana', 'MiraRana.png');
         console.log("mira rana cargado");

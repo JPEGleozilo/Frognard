@@ -9,8 +9,9 @@ export class MainMenu extends Scene
 
     create ()
     { 
-        
-        this.add.image(480, 270, 'fondo').setDepth(-1)     
+    
+       this.add.image(480, 270, 'fondo2').setDepth(-1)        
+
         this.add.image(600/1.3 , 300/2, 'logo').setScale(0.5).setDepth(1);
 
         this.cursor = this.input.keyboard.createCursorKeys();
@@ -20,7 +21,7 @@ export class MainMenu extends Scene
         this.anims.create({
           key: 'logo_animacion',
           frames: this.anims.generateFrameNumbers('logoanimacion', { start: 0, end:1 }),
-          frameRate: 4,
+          frameRate: 10,
           repeat: 0
           });
 
@@ -78,7 +79,7 @@ if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
         .play('logo_animacion')
         .setDepth(10);
 
-    this.time.delayedCall(100, () => {
+    this.time.delayedCall(0, () => {
         this.children.each(child => {
             if (child.texture && child.texture.key === 'logo') {
                 child.destroy();
@@ -87,7 +88,7 @@ if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
     });
 
     // destruir animación del logo después de reproducirse
-    this.time.delayedCall(400, () => {
+    this.time.delayedCall(200, () => {
         this.children.each(child => {
             if (child.texture && child.texture.key === 'logoanimacion') {
                 child.destroy();
@@ -100,7 +101,7 @@ if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
         // Cambia el estado basado en la entrada del cursor
         if (this.cursor.right.isDown && this.state != "coop"){
             this.state = "coop";
-             //hacer animacion de logo cuando se acciona una opcion
+             
      
         
         } else if (this.cursor.left.isDown && this.state != "vs"){
@@ -118,6 +119,8 @@ if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
         //this.add.sprite(600/1.3 , 300/2, 'logoanimacion').setScale(0.5).play('logo_animacion').setDepth(20);
         //destruir logo estatico cuando se reproduce la animacion
       
+        
+
 
 
         // Usar una variable para guardar el tamaño actual
@@ -151,6 +154,22 @@ if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
             this.vsText.setAlpha(1);
         }
 
+        //cambiar tamaño de assets al seleccionar una opcion
+        if (this.state === "coop") {
+            this.frognardIcon.setScale(3);
+        } else {
+            this.frognardIcon.setScale(2);
+        }
+        if (this.state === "vs") {
+            this.ranaIcon.setScale(3);
+            this.rataIcon.setScale(3);
+        } else {
+            this.ranaIcon.setScale(2);
+            this.rataIcon.setScale(2);
+        }
+
+       
+        // Iniciar la escena seleccionada al presionar Enter
         if (this.enter.isDown) {
             if (this.state === "coop") {
                 this.scene.start("Coop")
