@@ -9,7 +9,7 @@ export default class MoscaDoradaPool {
             this.pool.push(mosca);
         }
         this.spawnTimer = 0;
-        this.baseSpawnInterval = 3000; // intervalo base en ms (ajusta si tu juego usa otro)
+        this.baseSpawnInterval = 2600; // intervalo base en ms (ajusta si tu juego usa otro)
     }
 
     spawnMoscaDorada() {

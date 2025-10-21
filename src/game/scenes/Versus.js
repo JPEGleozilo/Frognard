@@ -10,19 +10,6 @@ import RoundManager from "../objects/versus/RoundManager.js";
 import ModificadorManager from "../objects/versus/ModificadorManager.js";
 import GamePadController from '../utils/GamepadController.js';
 
-function keyToInternalName(key) {
-  switch (key) {
-    case "pantalla_invertida": return "pantallaInvertida";
-    case "moscas_pequeñas": return "moscasPequeñas";
-    case "moscas_rapidas": return "moscasRapidas";
-    case "moscas_fantasmas": return "moscasFantasmas";
-    case "reticulas_lentas": return "reticulasLentas";
-    case "reticulas_rapidas": return "reticulasRapidas";
-    default: return key;
-  }
-}
-
-
 export class Versus extends Scene {
   constructor() {
     super('Versus');
@@ -113,9 +100,12 @@ export class Versus extends Scene {
     this.scoreManager = new ScoreManager(this);
 
     this.time.delayedCall(100, () => {
-  this.scoreManager.updateUI('player1');
-  this.scoreManager.updateUI('player2');
-  });
+      this.scoreManager.updateUI('player1');
+      this.scoreManager.updateUI('player2');
+    });
+
+    // registrar popup de puntaje (animación flotante)
+    this.events.on('scorePopup', this.spawnFloatingScore, this);
 
     // Animaciones
     this.anims.create({
@@ -177,8 +167,8 @@ export class Versus extends Scene {
         .setDepth(200);
 
     const estiloTexto = {
-        fontFamily: 'pixelFont',
-        fontSize: '20px',
+        fontFamily: 'vhs-gothic',
+        fontSize: '18px',
         color: '#ffffff',
         align: 'center'
     };
@@ -188,16 +178,16 @@ export class Versus extends Scene {
     const espacio = 30;
 
     // Mosca normal
-    const moscaNormal = this.add.sprite(panelX - 25, baseY - espacio, 'mosca spritesheet').setScale(1).setDepth(201);
-    this.add.text(moscaNormal.x + 20, baseY - espacio, '=  + 1', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+    const moscaNormal = this.add.sprite(panelX - 35, baseY - espacio, 'mosca spritesheet').setScale(1).setDepth(201);
+    this.add.text(moscaNormal.x + 20, baseY - espacio, '= +1', estiloTexto).setOrigin(0, 0.5).setDepth(201);
 
     // Mosca dorada
-    const moscaDorada = this.add.sprite(panelX - 25, baseY, 'mosca dorada spritesheet').setScale(1).setDepth(201);
-    this.add.text(moscaDorada.x + 20, baseY, '=  + 5', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+    const moscaDorada = this.add.sprite(panelX - 35, baseY, 'mosca dorada spritesheet').setScale(1).setDepth(201);
+    this.add.text(moscaDorada.x + 20, baseY, '= +5', estiloTexto).setOrigin(0, 0.5).setDepth(201);
 
     // Mosca impostora
-    const moscaImpostor = this.add.sprite(panelX - 25, baseY + espacio, 'mosca_impostor').setScale(1).setDepth(201);
-    this.add.text(moscaImpostor.x + 20, baseY + espacio, '=  - 3', estiloTexto).setOrigin(0, 0.5).setDepth(201);
+    const moscaImpostor = this.add.sprite(panelX - 35, baseY + espacio, 'mosca_impostor').setScale(1).setDepth(201);
+    this.add.text(moscaImpostor.x + 20, baseY + espacio, '= -3', estiloTexto).setOrigin(0, 0.5).setDepth(201);
 
       // Actualiza las luces de ronda (de izquierda a derecha)
       for (let i = 0; i < this.rondaLights.length; i++) {
@@ -387,6 +377,48 @@ shutdown() {
         this.gamepads.joystick2.removeAllListeners();
   }
 }
-}
+
+ spawnFloatingScore({ x, y, value, player }) {
+    // fallback coords sobre el personaje si no vienen
+    if (x == null || y == null) {
+      const p = (player === 'player1') ? this.rana : this.rata;
+      if (p) { x = p.x; y = p.y - 40; } else { x = this.scale.width / 2; y = this.scale.height / 2; }
+    }
+    y = y - 10;
+
+    // Si es puntuación negativa mostrar en rojo
+    let color;
+    if (value < 0) {
+      color = '#ff4444'; 
+    } else {
+      const colorMap = {
+        player1: '#00ff66', 
+        player2: '#66ccff' 
+      };
+      color = colorMap[player] || '#ffffff';
+    }
+
+    const text = value > 0 ? `+${value}` : `${value}`;
+    const txt = this.add.text(x, y, text, {
+      fontFamily: 'vhs-gothic',
+      fontSize: '24px',
+      color: color,
+      stroke: '#000000',
+      strokeThickness: 4
+    }).setOrigin(0.5).setDepth(1000);
+    txt.setAlpha(0.95);
+    txt.setScale(0.9);
+
+    this.tweens.add({
+      targets: txt,
+      y: y - 60,
+      alpha: 0,
+      scale: 1.4,
+      duration: 900,
+      ease: 'Cubic.easeOut',
+      onComplete: () => txt.destroy()
+    });
+ }
+ }
 
 
