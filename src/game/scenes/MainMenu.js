@@ -10,8 +10,8 @@ export class MainMenu extends Scene
 
     create ()
     { 
-    
-       this.add.image(480, 270, 'fondo2').setDepth(-1)        
+   this.add.sprite(480, 270, 'fondo2').setScale(0.5).setDepth(-2);
+           
 
         this.add.image(600/1.3 , 300/2, 'logo').setScale(0.56).setDepth(1);
 
