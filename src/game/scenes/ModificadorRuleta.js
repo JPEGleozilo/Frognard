@@ -41,6 +41,7 @@ export class ModificadorRuleta extends Scene {
 
     this.add.rectangle(centerX, centerY + 50, this.scale.width, this.scale.height, 0x000000, 0.9);
     this.add.text(centerX, 40, 'Ruleta de Modificadores', {
+      fontFamily: "vhs-gothic",
       fontSize: '28px',
       color: '#fff',
       align: 'center',
@@ -94,12 +95,14 @@ export class ModificadorRuleta extends Scene {
       .setAlpha(0.9);
 
     this.centerText = this.add.text(centerX, centerY + 130, '', {
+      fontFamily: "vhs-gothic",
       fontSize: '26px',
       color: '#ffd700',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
     this.centerDesc = this.add.text(centerX, centerY + 165, '', {
+      fontFamily: "vhs-gothic",
       fontSize: '18px',
       color: '#ccc',
       align: 'center',
@@ -107,9 +110,9 @@ export class ModificadorRuleta extends Scene {
     }).setOrigin(0.5);
 
     // textos de confirmación por jugador
-    this.readyTextP1 = this.add.text(centerX - 180, centerY + 220, 'P1: Esperando ', { fontSize: '18px', color: '#fff' }).setOrigin(0.5);
-    this.readyTextP2 = this.add.text(centerX + 180, centerY + 220, 'P2: Esperando ', { fontSize: '18px', color: '#fff' }).setOrigin(0.5);
-    this.instructionText = this.add.text(centerX, centerY + 300, '', { fontSize: '18px', color: '#fff' }).setOrigin(0.5);
+    this.readyTextP1 = this.add.text(centerX - 180, centerY + 220, 'P1: Esperando ', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5);
+    this.readyTextP2 = this.add.text(centerX + 180, centerY + 220, 'P2: Esperando ', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5);
+    this.instructionText = this.add.text(centerX, centerY + 300, '', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5);
 
     // sprite de animación para "presionar A" (oculto hasta finish)
     this.pressAnim = this.add.sprite(centerX, centerY + 260, 'animacion_presionar_a')
