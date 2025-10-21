@@ -26,9 +26,11 @@ export class Preloader extends Scene
         });
 
         this.load.setPath('/assets/fonts');
-
-         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'PIXELYA', 'PIXELYA Trial.ttf'));
+            this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'vhs-gothic', 'vhs-gothic.ttf'));
+            this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'PIXELYA', 'PIXELYA Trial.ttf'));
         console.log("fuente cargada");
+        
+
 
         this.cargaAnim.play('carga_anim');
         //  Load the assets for the game - Replace with your own assets
@@ -97,10 +99,10 @@ export class Preloader extends Scene
 
         this.load.image("mosca_impostor", "mosca_impostor.png");
 
-        this.load.image("reticulas_rapidas", "reticulas_rapidas.png");
+        this.load.image("miras_rapidas", "reticulas_rapidas.png");
         console.log("reticulas_rapidas cargado");
 
-        this.load.image("reticulas_lentas", "reticulas_lentas.png");
+        this.load.image("miras_lentas", "reticulas_lentas.png");
         console.log("reticulas_lentas cargado");
 
         this.load.image("disparos_rapidos", "disparos_rapidos.png");
@@ -117,6 +119,9 @@ export class Preloader extends Scene
 
         this.load.image("fondo_versus", "fondo3.png");
         console.log("fondo versus cargado");
+
+        this.load.spritesheet("escenario", "escenario.png", { frameWidth: 300, frameHeight: 360 });
+        console.log("escenario versus cargado");
 
         console.log("--VERSUS CARGADO--");
 

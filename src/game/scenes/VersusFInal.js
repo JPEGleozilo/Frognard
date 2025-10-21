@@ -18,7 +18,16 @@ export class VersusFinal extends Scene {
         this.cameras.main.setBackgroundColor('#222222');
 
         // Escenario
-        const stage = this.add.rectangle(280, 380, 300, 120, 0x444444).setOrigin(0.5);
+        const stage = this.add.sprite(280, 450, 'escenario', 0).setScale(1).setOrigin(0.5);
+
+        // Animación del escenario (si es necesario)
+        this.anims.create({
+            key: 'escenario_anim',
+            frames: this.anims.generateFrameNumbers('escenario', { start: 0, end: 8 }),
+            frameRate: 18,
+            repeat: -1
+        });
+        stage.play('escenario_anim');
 
         //  Luces tipo reflectores (círculos)
         const leftLight = this.add.circle(100, 100, 100, 0xffffcc, 0.4).setBlendMode('ADD').setAlpha(0);
@@ -51,16 +60,16 @@ export class VersusFinal extends Scene {
         this.getInput = this.gamepadController.getInput();
 
         // Textos
-        const resultText = this.add.text(280, 350, '', {
-            fontSize: '32px',
-            color: '#e9e9e9ff',
-            fontFamily: 'Arial',
+        const resultText = this.add.text(280, 360, '', {
+            fontSize: '28px',
+            color: '#e8eb44ff',
+            fontFamily: 'vhs-gothic',
         }).setOrigin(0.5).setAlpha(0);
 
-        const statsText = this.add.text(680, 100, '', {
+        const statsText = this.add.text(640, 180, '', {
             fontSize: '38px',
             color: '#e9e9e9ff',
-            fontFamily: 'Arial',
+            fontFamily: 'vhs-gothic',
             align: 'center',
         }).setOrigin(0.5).setAlpha(0);
 
@@ -69,7 +78,7 @@ export class VersusFinal extends Scene {
             color: '#00aa00',
             backgroundColor: '#cccccc',
             padding: { x: 10, y: 5 },
-            fontFamily: 'Arial',
+            fontFamily: 'vhs-gothic',
         }).setOrigin(0.5).setInteractive().setAlpha(0);
 
         this.time.addEvent({
@@ -88,7 +97,7 @@ export class VersusFinal extends Scene {
         });
 
         // Aparecen las luces moviéndose
-        this.time.delayedCall(400, () => {
+        this.time.delayedCall(1400, () => {
             this.tweens.add({
                 targets: leftLight,
                 alpha: { from: 0, to: 0.6 },
@@ -109,7 +118,7 @@ export class VersusFinal extends Scene {
         });
 
         // Las luces convergen y muestran la silueta
-        this.time.delayedCall(2000, () => {
+        this.time.delayedCall(3000, () => {
             this.tweens.add({
                 targets: [leftLight, rightLight],
                 x: 280,
@@ -132,7 +141,7 @@ export class VersusFinal extends Scene {
         });
 
         // Revela al ganador
-        this.time.delayedCall(3500, () => {
+        this.time.delayedCall(4500, () => {
             if (this.winner === 'empate') {
                 rana.clearTint();
                 rata.clearTint();
@@ -157,9 +166,9 @@ export class VersusFinal extends Scene {
         });
 
         // Estadísticas finales
-        this.time.delayedCall(5000, () => {
+        this.time.delayedCall(6000, () => {
             statsText.setText(
-                `Moscas recolectadas:\n\n    Rana: ${this.frogFlies}\n   Rata: ${this.ratFlies}`
+                `Moscas recolectadas:\n\n Rana: ${this.frogFlies}\n Rata: ${this.ratFlies}`
             );
 
             this.tweens.add({
