@@ -89,10 +89,13 @@ export class VersusFinal extends Scene {
             loop: false
         });
 
+        // Bloquea la salida hasta que terminen las animaciones finales
+        this.allowExit = false;
+
         btn.on('pointerdown', () => {
-            if (this.inputRecieve === true) {
-            this.scene.stop("Versus");
-            this.scene.start('MainMenu');
+            if (this.inputRecieve === true && this.allowExit) {
+                if (this.scene.isActive('Versus')) this.scene.stop('Versus');
+                this.scene.start('MainMenu');
             }
         });
 
@@ -175,7 +178,11 @@ export class VersusFinal extends Scene {
                 targets: [statsText, btn],
                 alpha: { from: 0, to: 1 },
                 duration: 800,
-                ease: 'Sine.easeIn'
+                ease: 'Sine.easeIn',
+                onComplete: () => {
+                    // Permitir salir sólo cuando las animaciones hayan terminado
+                    this.allowExit = true;
+                }
             });
         });
     }
@@ -184,8 +191,9 @@ export class VersusFinal extends Scene {
         this.gamepadController.update();
         this.getInput = this.gamepadController.getInput();
 
-        if (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true) {
-            this.scene.stop("Versus")
+        // aceptar input de gamepad/tecla para volver solo si allowed
+        if (this.allowExit && (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true)) {
+            if (this.scene.isActive('Versus')) this.scene.stop('Versus');
             this.scene.start('MainMenu');
         }
     }
