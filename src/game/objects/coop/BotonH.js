@@ -5,10 +5,13 @@ export default class BotonH extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, 'boton horizontal', 0); // Frame 0 por defecto
         this.distintivo = distintivo;
         this.apretado = false;
+        this.activado = false
 
         // Existencia
         scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.body.setSize(this.width, this.height - 8);
+        this.body.setOffset(0, 8);
 
         this.setOrigin(1, 1);
         this.setScale(1); // Usa 1 para no distorsionar el sprite
@@ -17,15 +20,20 @@ export default class BotonH extends Phaser.Physics.Arcade.Sprite {
         this.scene.botonesH.add(this);
         this.body.setImmovable(true);
         this.body.setAllowGravity(false);
-
-        this.scene.physics.add.collider(this, scene.frognard, () => {
-            this.setApretado(true);
-        });
     }
 
     setApretado(valor) {
         this.apretado = valor;
         this.setFrame(valor ? 1 : 0); // Frame 1 si apretado, 0 si no
+        if (valor === true) {
+            this.scene.accionable.children.iterate(obj => {
+            obj.toggle(this.distintivo, valor);
+            });
+        } else {
+            this.scene.accionable.children.iterate(obj => {
+            obj.toggle(this.distintivo, valor);
+            });
+        }
     }
 
     update() {

@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 export default class BotonV extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, distintivo, delay) {
+    constructor(scene, x, y, distintivo, delay, flip) {
         super(scene, x, y, 'boton vertical', 0); // Frame 0 por defecto
         this.distintivo = distintivo;
         this.apretado = false;
@@ -10,6 +10,7 @@ export default class BotonV extends Phaser.Physics.Arcade.Sprite {
         // Existencia
         scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.setFlipX(flip);
 
         this.setOrigin(1, 0.6);
         this.setScale(1); // Usa 1 para no distorsionar el sprite
@@ -27,7 +28,7 @@ export default class BotonV extends Phaser.Physics.Arcade.Sprite {
             this.setApretado(true);
             console.log(this.distintivo, " apretado");
             this.scene.accionable.children.iterate(obj => {
-                obj.toggle(this.distintivo);
+                obj.toggle(this.distintivo, true);
             });
             this.scene.time.delayedCall(this.delay, () => {
                 if (this.apretado === false) return;
@@ -35,7 +36,7 @@ export default class BotonV extends Phaser.Physics.Arcade.Sprite {
                 this.apretado = false;
                 this.setApretado(false);
                 this.scene.accionable.children.iterate(obj => {
-                    obj.toggle(this.distintivo);
+                    obj.toggle(this.distintivo, false);
                 });
             })
         });

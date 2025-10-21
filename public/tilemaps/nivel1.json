@@ -101,6 +101,11 @@
                          "name":"duration",
                          "type":"int",
                          "value":4000
+                        }, 
+                        {
+                         "name":"flipped",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "type":"Vertical",
