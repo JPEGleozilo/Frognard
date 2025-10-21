@@ -49,7 +49,6 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
 
         this.gamepadController.update();
         this.getInput = this.gamepadController.getInput();
-    
 
         // === Saltar (teclado o botón A de cualquier mando) ===
         const saltoTeclado = this.scene.cursors.L.isDown;
@@ -196,6 +195,7 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         };
         if ((saltoTeclado || this.getInput.joy2.accion === true) && this.body.onFloor()) {
             this.setVelocityY(this.salto);
+            this.animacionActual = "Salto inicio";
         } else if ((saltoTeclado || this.getInput.joy2.accion === true) && !this.body.onFloor()) {
             this.setGravityY(this.gravedadBaja);
         } else {
@@ -203,16 +203,22 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         }
 
         if (!this.body.onFloor()) {
-            this.animacionActual = "Salto";
             if (this.body.velocity.y < 0) {
-                this.setFrame(1);
+                this.animacionActual = "Salto subida";
             } else if (this.body.velocity.y > 0) {
-                this.setFrame(2);
-            } else {
-                this.setFrame(0);
-            };
+                this.animacionActual = "Salto bajada";
+            }
         }
         this.animController.playAnim(this.animacionActual, this.flipActual, this.scene.angulo)
+        
+        if (this.getInput.joy1.restart === true || this.getInput.joy2.restart === true) {
+            this.setTint(0xFF0000)
+            if (this.getInput.joy1.restart === true && this.getInput.joy2.restart === true) {
+                this.scene.reinicio();
+            }
+        } else if (this.getInput.joy1.restart === false && this.getInput.joy2.restart === false) {
+            this.clearTint();
+        }
     }
 
     getCurrentAngle() {

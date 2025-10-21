@@ -161,6 +161,10 @@ export class Preloader extends Scene
         this.load.image("luz roja", "luz roja.png")
         console.log("luz roja cargado");
 
+        this.load.spritesheet("tutorial coop", "Animacion_controles2.png", { frameWidth: 128, frameHeight: 128});
+        
+        this.load.spritesheet("tutorial restart", "animacion restart 96x48.png", { frameWidth: 96, frameHeight: 48});
+
         this.load.spritesheet("Game over", "GameOver96x96(6fps).png", {frameWidth: 96, frameHeight: 96});
 
         this.load.setPath('/tilemaps');

@@ -117,12 +117,25 @@ export default class AnimController {
         });
 
         this.frognard.anims.create({
-            key: "Salto",
-            frames: this.frognard.anims.generateFrameNumbers('frognard salto', { start: 0, end: 3 }),
+            key: "Salto inicio",
+            frames: this.frognard.anims.generateFrameNumbers('frognard salto', { start: 0, end: 1 }),
             frameRate: 0,
             repeat: 0
         });
 
+        this.frognard.anims.create({
+            key: "Salto subida",
+            frames: this.frognard.anims.generateFrameNumbers('frognard salto', { start: 1, end: 2 }),
+            frameRate: 6,
+            repeat: -1
+        })
+
+        this.frognard.anims.create({
+            key: "Salto bajada",
+            frames: this.frognard.anims.generateFrameNumbers('frognard salto', { start: 3, end: 4 }),
+            frameRate: 6,
+            repeat: -1
+        })
     }
     
     playAnim (key, flip, anguloEscena, force = false) {

@@ -24,6 +24,7 @@ export class CoopNivel4 extends Scene
         var mapa4 = this.make.tilemap({key: "mapaNivel4"});
         var patrones = mapa4.addTilesetImage("tileset", "patrones");
         var piso = mapa4.createLayer("bloques", patrones, 0, 0).setDepth(2);
+        var paredes = mapa4.createLayer("paredes", patrones,0 ,0).setDepth(2);
         mapa4.createLayer("superficie", patrones, 0 , 0).setDepth(1);
         var final = mapa4.createLayer("final", patrones, 0, 0).setDepth(3);
 
@@ -84,8 +85,15 @@ export class CoopNivel4 extends Scene
 
         final.setCollisionByProperty({final: true});
 
+        paredes.setCollisionByProperty({immovable: true});
+        paredes.setCollisionCategory([2]);
+
         this.physics.add.collider(this.frognard, piso);
+        this.physics.add.collider(this.frognard, paredes);
         this.physics.add.collider(this.lengua, piso, () => {
+            this.lengua.triggerVuelta();
+        }, null, this.lengua);
+        this.physics.add.collider(this.lengua, paredes, () => {
             this.lengua.triggerVuelta();
         }, null, this.lengua);
         this.physics.add.collider(this.frognard, this.botonesH);
@@ -95,6 +103,11 @@ export class CoopNivel4 extends Scene
         })
 
         this.physics.add.collider(this.cajas, piso);
+        this.physics.add.collider(this.cajas, paredes, () => {
+            this.cajas.children.iterate(obj => {
+            obj.body.setImmovable(true);
+        });
+        });
         this.physics.add.collider(this.cajas, this.accionable);
         this.physics.add.collider(this.cajas, this.botonesH);
         this.physics.add.collider(this.cajas, this.frognard);
@@ -149,5 +162,9 @@ export class CoopNivel4 extends Scene
         this.accionable.children.iterate(obj => {
             obj.frenada();
         });
+    }
+    
+    reinicio() {
+        this.scene.restart();
     }
 }

@@ -9,6 +9,7 @@
  <tile id="1">
   <properties>
    <property name="collider" type="bool" value="true"/>
+   <property name="immovable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="3">

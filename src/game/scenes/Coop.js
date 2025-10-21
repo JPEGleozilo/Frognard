@@ -24,6 +24,7 @@ export class Coop extends Scene
         var mapa1 = this.make.tilemap({key: "mapaNivel1"});
         var patrones = mapa1.addTilesetImage("tileset", "patrones");
         var piso = mapa1.createLayer("bloques", patrones, 0, 0).setDepth(2);
+        var paredes = mapa1.createLayer("paredes", patrones,0 ,0).setDepth(2);
         mapa1.createLayer("superficie", patrones, 0 , 0).setDepth(1);
         var final = mapa1.createLayer("final", patrones, 0, 0).setDepth(3);
 
@@ -67,6 +68,17 @@ export class Coop extends Scene
             }
         });
 
+        this.tutorial = this.add.sprite(768, 448, "tutorial coop").setDepth(10).setScale(2);
+
+        this.anims.create({
+            key: "tutorialCoop",
+            frames: this.frognard.anims.generateFrameNumbers('tutorial coop', { start: 0, end: 20 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.tutorial.anims.play ("tutorialCoop", true);
+
         this.capaAccionables = mapa1.getObjectLayer("accionables");
         this.capaAccionables.objects.forEach(objeto => {
             new Accionable (this, objeto.x, objeto.y, objeto.name, objeto.type);
@@ -84,7 +96,14 @@ export class Coop extends Scene
 
         final.setCollisionByProperty({final: true});
 
+        paredes.setCollisionByProperty({immovable: true});
+        paredes.setCollisionCategory([2]);
+
         this.physics.add.collider(this.frognard, piso);
+        this.physics.add.collider(this.frognard, paredes);
+        this.physics.add.collider(this.lengua, paredes, () => {
+            this.lengua.triggerVuelta();
+        }, null, this.lengua);
         this.physics.add.collider(this.lengua, piso, () => {
             this.lengua.triggerVuelta();
         }, null, this.lengua);
@@ -137,5 +156,9 @@ export class Coop extends Scene
         this.accionable.children.iterate(obj => {
             obj.frenada();
         });
+    }
+
+    reinicio() {
+        this.scene.restart();
     }
 }

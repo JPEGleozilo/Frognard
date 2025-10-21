@@ -24,6 +24,7 @@ export class CoopNivel2 extends Scene
         var mapa2 = this.make.tilemap({key: "mapaNivel2"});
         var patrones = mapa2.addTilesetImage("tileset", "patrones");
         var piso = mapa2.createLayer("bloques", patrones, 0, 0).setDepth(2);
+        var paredes = mapa2.createLayer("paredes", patrones,0 ,0).setDepth(2);
         mapa2.createLayer("superficie", patrones, 0 , 0).setDepth(1);
         var final = mapa2.createLayer("final", patrones, 0, 0).setDepth(3);
 
@@ -67,6 +68,17 @@ export class CoopNivel2 extends Scene
             }
         });
 
+        this.restartTuto = this.add.sprite(832, 300, "tutorial restart").setDepth(10).setScale(2);
+
+        this.anims.create({
+            key: "tutorialRestart",
+            frames: this.frognard.anims.generateFrameNumbers('tutorial restart', { start: 0, end: 5 }),
+            frameRate: 6,
+            repeat: -1
+        })
+
+        this.restartTuto.anims.play ("tutorialRestart", true);
+
         this.capaAccionables = mapa2.getObjectLayer("accionables");
         this.capaAccionables.objects.forEach(objeto => {
             new Accionable (this, objeto.x, objeto.y, objeto.name, objeto.type);
@@ -84,7 +96,14 @@ export class CoopNivel2 extends Scene
 
         final.setCollisionByProperty({final: true});
 
+        paredes.setCollisionByProperty({immovable: true});
+        paredes.setCollisionCategory([2]);
+
         this.physics.add.collider(this.frognard, piso);
+        this.physics.add.collider(this.frognard, paredes);
+        this.physics.add.collider(this.lengua, paredes, () => {
+            this.lengua.triggerVuelta();
+        }, null, this.lengua);
         this.physics.add.collider(this.lengua, piso, () => {
             this.lengua.triggerVuelta();
         }, null, this.lengua);
@@ -95,6 +114,11 @@ export class CoopNivel2 extends Scene
         })
 
         this.physics.add.collider(this.cajas, piso);
+        this.physics.add.collider(this.cajas, paredes, () => {
+            this.cajas.children.iterate(obj => {
+            obj.body.setImmovable(true);
+        });
+        });
         this.physics.add.collider(this.cajas, this.accionable);
         this.physics.add.collider(this.cajas, this.botonesH);
         this.physics.add.collider(this.cajas, this.frognard);
@@ -149,5 +173,9 @@ export class CoopNivel2 extends Scene
         this.accionable.children.iterate(obj => {
             obj.frenada();
         });
+    }
+    
+    reinicio() {
+        this.scene.restart();
     }
 }
