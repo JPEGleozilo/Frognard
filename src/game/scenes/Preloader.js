@@ -172,6 +172,8 @@ export class Preloader extends Scene
 
         this.load.tilemapTiledJSON("mapaNivel1", "nivel1.json");
         this.load.tilemapTiledJSON("mapaNivel2", "nivel2.json");
+        this.load.tilemapTiledJSON("mapaNivel3", "nivel3.json");
+        this.load.tilemapTiledJSON("mapaNivel4", "nivel4.json");
 
         this.cargaFinal = true;
     }

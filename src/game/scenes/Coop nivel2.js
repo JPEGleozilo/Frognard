@@ -10,26 +10,26 @@ import StateMachine from '../objects/coop/State/StateMachine.js';
 import {Inicio, Alarma, GameOver} from "../objects/coop/State/Estados.js";
 
 
-export class Coop extends Scene
+export class CoopNivel2 extends Scene
 {
     constructor ()
     {
-        super('Coop');
+        super('Coop nivel2');
     }
 
     create ()
     {
         this.add.image(480, 270, 'fondo').setDepth(-1)        
 
-        var mapa1 = this.make.tilemap({key: "mapaNivel1"});
-        var patrones = mapa1.addTilesetImage("tileset", "patrones");
-        var piso = mapa1.createLayer("bloques", patrones, 0, 0).setDepth(2);
-        mapa1.createLayer("superficie", patrones, 0 , 0).setDepth(1);
-        var final = mapa1.createLayer("final", patrones, 0, 0).setDepth(3);
+        var mapa2 = this.make.tilemap({key: "mapaNivel2"});
+        var patrones = mapa2.addTilesetImage("tileset", "patrones");
+        var piso = mapa2.createLayer("bloques", patrones, 0, 0).setDepth(2);
+        mapa2.createLayer("superficie", patrones, 0 , 0).setDepth(1);
+        var final = mapa2.createLayer("final", patrones, 0, 0).setDepth(3);
 
         this.cajas = this.physics.add.group();
 
-        this.capaSpawns = mapa1.getObjectLayer("spawn");
+        this.capaSpawns = mapa2.getObjectLayer("spawn");
         this.capaSpawns.objects.forEach(objeto => {
             if (objeto.name === "Frognard") {
                 this.spawnX = objeto.x;
@@ -53,7 +53,7 @@ export class Coop extends Scene
         this.accionable = this.physics.add.group();
         this.sirenas = this.physics.add.group();
 
-        this.capaInterruptores = mapa1.getObjectLayer("interruptores");
+        this.capaInterruptores = mapa2.getObjectLayer("interruptores");
         this.capaInterruptores.objects.forEach(objeto => {
             if (objeto.type === "Horizontal") {
                 new BotonH (this, objeto.x, objeto.y, objeto.name);
@@ -67,13 +67,13 @@ export class Coop extends Scene
             }
         });
 
-        this.capaAccionables = mapa1.getObjectLayer("accionables");
+        this.capaAccionables = mapa2.getObjectLayer("accionables");
         this.capaAccionables.objects.forEach(objeto => {
             new Accionable (this, objeto.x, objeto.y, objeto.name, objeto.type);
             console.log(objeto.name, " puerta");
         });
 
-        this.capaSirenas = mapa1.getObjectLayer("sirenas");
+        this.capaSirenas = mapa2.getObjectLayer("sirenas");
         this.capaSirenas.objects.forEach(objeto => {
             new Sirena (this, objeto.x, objeto.y)
         });
@@ -88,13 +88,19 @@ export class Coop extends Scene
         this.physics.add.collider(this.lengua, piso, () => {
             this.lengua.triggerVuelta();
         }, null, this.lengua);
+        this.physics.add.collider(this.frognard, this.botonesH);
         this.physics.add.collider(this.frognard, this.accionable);
         this.physics.add.overlap(this.frognard, this.lengua, () => {
             this.lengua.desactivar();
         })
 
+        this.physics.add.collider(this.cajas, piso);
+        this.physics.add.collider(this.cajas, this.accionable);
+        this.physics.add.collider(this.cajas, this.botonesH);
+        this.physics.add.collider(this.cajas, this.frognard);
+
         this.physics.add.collider(this.frognard, final, () => {
-            this.scene.start ("Coop nivel2")
+            this.scene.start ("Coop nivel3")
         })
 
         this.physics.world.on("worldbounds", (body) => {
@@ -134,6 +140,12 @@ export class Coop extends Scene
             this.lengua.disparar(this.frognard.body.x, this.frognard.body.y, this.angulo);
         };
 
+        this.cajas.children.iterate(obj => {
+            obj.update();
+        });
+        this.botonesH.children.iterate(obj => {
+            obj.update();
+        });
         this.accionable.children.iterate(obj => {
             obj.frenada();
         });

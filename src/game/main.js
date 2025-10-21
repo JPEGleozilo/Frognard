@@ -1,5 +1,8 @@
 import { Boot } from './scenes/Boot';
 import { Coop } from './scenes/Coop';
+import { CoopNivel2 } from './scenes/Coop nivel2';
+import { CoopNivel3 } from './scenes/Coop nivel3';
+import { CoopNivel4 } from './scenes/Coop nivel4';
 import { Versus } from './scenes/Versus';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
@@ -26,7 +29,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 1000 },
-            debug: false
+            debug: true
         }
     },
     input: {
@@ -39,6 +42,9 @@ const config = {
         Boot,
         Preloader,
         Coop,
+        CoopNivel2,
+        CoopNivel3,
+        CoopNivel4,
         MainMenu,
         Versus,
         GameOver,
