@@ -96,8 +96,7 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
         const y1 = this.body.y + (this.body.height ? this.body.height / 2 : 0);
         const x2 = frogX + 16;
         const y2 = frogY + 20;
-    // color correcto en hex (ej: 0xd34d7e) y grosor 4
-        this._gfx.lineStyle(4, 0xd34d7e, 1);
+        this._gfx.lineStyle(4, 0x733f7e, 1);
         const line = new Phaser.Geom.Line(x1, y1, x2, y2);
         this._gfx.strokeLineShape(line);
     } else {
