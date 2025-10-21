@@ -4,65 +4,41 @@ export default class ScoreManager {
         this.scores = {
             player1: 0,
             player2: 0
-            
         };
-        
-        // Textos en pantalla
-        //texto verde 
-        this.scoreTextP1 = scene.add.text(200, 450, '', {
-            fontSize: '38px',          
-            fill: 'rgba(16, 145, 15, 1)',
-            fontFamily: "PIXELYA",
-            fontStyle: 'bold',
-        });
-    
-
-        //texto azul
-        this.scoreTextP2 = scene.add.text(700, 450, '', {
-            fontSize: '38px',
-            fill: 'rgba(91, 100, 129, 1)',
-            fontFamily: "PIXELYA",
-            fontStyle: 'bold',
-            
-        });
-        this.updateUI('player1');
-        this.updateUI('player2');
     }
 
-    // Observer: recibe notificación de captura
-    onMoscaCaptured(playerId, puntos = 1) {
+
+    // ahora acepta (playerId, puntos = 1, x, y)
+    onMoscaCaptured(playerId, puntos = 1, x = null, y = null) {
+        if (!this.scores[playerId]) this.scores[playerId] = 0;
         this.scores[playerId] += puntos;
-        if (this.scores[playerId] < 0) {
-        this.scores[playerId] = 0;
-    }
-        this.updateUI(playerId);
+
+        // actualizar UI 
+        if (this.updateUI) this.updateUI(playerId);
+
+        // emitir popup para que la escena muestre la animacion
+        if (this.scene && this.scene.events) {
+            // si no vienen coords, intentar obtener la posición del personaje
+            if (x == null || y == null) {
+                const p = (playerId === 'player1') ? this.scene.rana : this.scene.rata;
+                if (p) { x = p.x; y = p.y; }
+            }
+            this.scene.events.emit('scorePopup', { x, y, value: puntos, player: playerId });
+        }
     }
 
     // Refrescar textos
-updateUI(playerId) {
-    const scoreStrP1 = String(this.scores.player1).padStart(3, '000');
-    const scoreStrP2 = String(this.scores.player2).padStart(3, '000');
-    if (playerId === 'player1') {
-        this.scoreTextP1.setText(scoreStrP1);
-    } else if (playerId === 'player2') {
-        this.scoreTextP2.setText(scoreStrP2);
-    }
-}
-
-    //actualizar puntajes al inico
-    updateScores(player1Score, player2Score) {
-        this.scores.player1 = player1Score;
-        this.scores.player2 = player2Score;
-        this.updateUI('player1');
-        this.updateUI('player2');
+    updateUI(playerId) {
+        if (!this.scene) return;
+        if (playerId === 'player1' && this.scene.scoreTextP1) {
+            this.scene.scoreTextP1.setText(String(this.scores.player1));
+        } else if (playerId === 'player2' && this.scene.scoreTextP2) {
+            this.scene.scoreTextP2.setText(String(this.scores.player2));
+        }
     }
 
-    
     getScores() {
-        return {
-            player1: this.scores.player1,
-            player2: this.scores.player2
-        };
+        return { ...this.scores };
     }
 }
 

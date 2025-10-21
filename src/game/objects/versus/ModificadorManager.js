@@ -8,8 +8,8 @@ export default class ModificadorManager {
             "moscasGrandes",
             "moscasRapidas",
             "moscasFantasmas",
-            "reticulasLentas",
-            "reticulasRapidas",
+            "mirasLentas",
+            "mirasRapidas",
             "disparosLentos",
             "disparosRapidos",
             "fiebreDeMoscasDoradas",
@@ -198,7 +198,7 @@ export default class ModificadorManager {
                 break;
             // mantiene los demás cases en camelCase
             case "moscasRapidas":
-                this.efectosMosca.velMultiplicador = 1.5;
+                this.efectosMosca.velMultiplicador = 1.7;
                 applyToAllActive(m => {
                     if (m.baseVelXOriginal == null) m.baseVelXOriginal = m.velX;
                     m.velX = m.baseVelXOriginal * this.efectosMosca.velMultiplicador;
@@ -220,11 +220,11 @@ export default class ModificadorManager {
                 });
                 break;
 
-            case "reticulasLentas":
+            case "mirasLentas":
                 this.scene.velocidadReticula = (this.scene.velocidadReticula ?? 1) * 0.6;
                 break;
 
-            case "reticulasRapidas":
+            case "mirasRapidas":
                 this.scene.velocidadReticula = (this.scene.velocidadReticula ?? 1) * 1.4;
                 break;
 

@@ -21,3 +21,10 @@ body {
   font-style: normal;
 }
 
+@font-face {
+  font-family: "vhs-gothic";
+  src: url("./assets/fonts/vhs-gothic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
