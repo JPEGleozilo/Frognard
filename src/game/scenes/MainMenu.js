@@ -10,9 +10,10 @@ export class MainMenu extends Scene
 
     create ()
     { 
-        
-        this.add.image(480, 270, 'fondo').setDepth(-1)     
-        this.add.image(600/1.3 , 300/2, 'logo').setScale(0.5).setDepth(1);
+   this.add.sprite(480, 270, 'fondo2').setScale(0.5).setDepth(-2);
+           
+
+        this.add.image(600/1.3 , 300/2, 'logo').setScale(0.56).setDepth(1);
 
         this.cursor = this.input.keyboard.createCursorKeys();
         this.enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
@@ -21,7 +22,7 @@ export class MainMenu extends Scene
         this.anims.create({
           key: 'logo_animacion',
           frames: this.anims.generateFrameNumbers('logoanimacion', { start: 0, end:1 }),
-          frameRate: 4,
+          frameRate: 10,
           repeat: 0
           });
 
@@ -31,9 +32,9 @@ export class MainMenu extends Scene
         const textY = 400;
 
         // Agrega los iconos arriba de los textos y guarda las referencias
-        this.frognardIcon = this.add.image(coopX, textY - 40, 'frognard').setOrigin(0.5, 1).setScale(2).setDepth(1);
-        this.ranaIcon = this.add.image(vsX - 30, textY - 40, 'rana').setOrigin(0.5, 1).setScale(2).setDepth(2);
-        this.rataIcon = this.add.image(vsX + 30, textY - 40, 'rata').setOrigin(0.5, 1).setScale(2).setDepth(1);
+        this.frognardIcon = this.add.image(coopX, textY - 60, 'frognard').setOrigin(0.5, 0.7).setScale(2).setDepth(1);
+        this.ranaIcon = this.add.image(vsX - 55, textY - 60, 'rana').setOrigin(0.5, 0.75).setScale(2).setDepth(2);
+        this.rataIcon = this.add.image(vsX + 45, textY - 60, 'rata').setOrigin(0.5, 0.75).setScale(2).setDepth(1);
 
         this.coopText = this.add.text(coopX, textY, 'COOPERATIVO', {
             fontFamily: '"VT323", monospace',
@@ -66,7 +67,7 @@ export class MainMenu extends Scene
         this.getInput = this.gamepadController.getInput()
 
         // fuera del update, como propiedad del scene:
-        this.logoPlayed = false;
+       // this.logoPlayed = false;
     }
 
     update () {
@@ -103,39 +104,55 @@ export class MainMenu extends Scene
 
         //reproducir animacion al accionar una opcion
        // reproducir animación al accionar izquierda o derecha SOLO 1 VEZ
-if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
+//if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
 
-    this.logoPlayed = true;   // <- marca que ya ocurrió
+   // this.logoPlayed = true;   // <- marca que ya ocurrió
 
-    this.add.sprite(600/1.3 , 300/2, 'logoanimacion')
-        .setScale(0.5)
-        .play('logo_animacion')
-        .setDepth(10);
+    //this.add.sprite(600/1.3 , 300/2, 'logoanimacion')
+      //  .setScale(0.5)
+        //.play('logo_animacion')
+       // .setDepth(10);
 
-    this.time.delayedCall(100, () => {
-        this.children.each(child => {
-            if (child.texture && child.texture.key === 'logo') {
-                child.destroy();
-            }
-        });
-    });
+//    this.time.delayedCall(0, () => {
+  //      this.children.each(child => {
+    //        if (child.texture && child.texture.key === 'logo') {
+      //          child.destroy();
+        //    }
+     //   });
+   // });
 
     // destruir animación del logo después de reproducirse
-    this.time.delayedCall(400, () => {
-        this.children.each(child => {
-            if (child.texture && child.texture.key === 'logoanimacion') {
-                child.destroy();
-            }
-        }); 
-    });
-}
+   // this.time.delayedCall(200, () => {
+     //   this.children.each(child => {
+       //     if (child.texture && child.texture.key === 'logoanimacion') {
+         //       child.destroy();
+           // }
+      //  }); 
+  //  });
+//}
 
+
+        // Cambia el estado basado en la entrada del cursor
+        if (this.cursor.right.isDown && this.state != "coop"){
+            this.state = "coop";
+             
+     
+        
+        } else if (this.cursor.left.isDown && this.state != "vs"){
+            this.state = "vs";
+       
+
+        
+        
+        }
         //estado para los assets de la rata y la rana cuando no estan seleccionados 
 
         //hacer animacion de logo cuando se acciona una opcion
         //this.add.sprite(600/1.3 , 300/2, 'logoanimacion').setScale(0.5).play('logo_animacion').setDepth(20);
         //destruir logo estatico cuando se reproduce la animacion
       
+        
+
 
 
         // Usar una variable para guardar el tamaño actual
@@ -168,6 +185,30 @@ if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
             this.coopText.setAlpha(0.5);
             this.vsText.setAlpha(1);
         }
+
+        //cambiar tamaño de assets al seleccionar una opcion
+        if (this.state === "coop") {
+            this.frognardIcon.setScale(3);
+        } else {
+            this.frognardIcon.setScale(2);
+        }
+        if (this.state === "vs") {
+            this.ranaIcon.setScale(3);
+            this.rataIcon.setScale(3);
+        } else {
+            this.ranaIcon.setScale(2);
+            this.rataIcon.setScale(2);
+        }
+
+       
+        // Iniciar la escena seleccionada al presionar Enter
+        if (this.enter.isDown) {
+            if (this.state === "coop") {
+                this.scene.start("Coop")
+            } else if (this.state === "vs") {
+                this.scene.start("Versus")
+            };
+        };
     }
 }
 shutdown() {
