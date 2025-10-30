@@ -27,6 +27,7 @@ export class CoopNivel3 extends Scene
         var paredes = mapa3.createLayer("paredes", patrones,0 ,0).setDepth(2);
         mapa3.createLayer("superficie", patrones, 0 , 0).setDepth(1);
         var final = mapa3.createLayer("final", patrones, 0, 0).setDepth(3);
+        var rejillas = mapa3.createLayer("rejillas", patrones,0 ,0).setDepth(2);
 
         this.cajas = this.physics.add.group();
 
@@ -60,7 +61,7 @@ export class CoopNivel3 extends Scene
                 new BotonH (this, objeto.x, objeto.y, objeto.name);
                 console.log(objeto.name, " horizontal");
             } else if (objeto.type === "Vertical") {
-                new BotonV (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value, objeto.properties[1].value);
+                new BotonV (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value, objeto.properties[1].value, objeto.properties[2].value);
                 console.log(objeto.name, " vertical");
             } else if (objeto.type === "Palanca") {
                 new Palanca (this, objeto.x, objeto.y, objeto.name);
@@ -107,6 +108,12 @@ export class CoopNivel3 extends Scene
         this.physics.add.collider(this.cajas, this.accionable);
         this.physics.add.collider(this.cajas, this.botonesH);
         this.physics.add.collider(this.cajas, this.frognard);
+        this.physics.add.collider(this.cajas, this.lengua, () => {
+            this.lengua.triggerVuelta();
+        }, null, this.lengua);
+        
+        this.physics.add.collider(this.frognard, rejillas);
+        this.physics.add.collider(this.cajas, rejillas);
 
         this.physics.add.collider(this.frognard, final, () => {
             this.scene.start ("Coop nivel4")

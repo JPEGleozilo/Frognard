@@ -1,6 +1,6 @@
 export default class Lengua extends Phaser.Physics.Arcade.Sprite {
     constructor(scene){
-    super(scene,500, 45, "lengua punta")
+    super(scene,0, 0, "lengua punta")
 
     //Existencia
     scene.add.existing(this);
@@ -20,11 +20,15 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
 
     disparar(x, y, angulo) {
         if (this.lenguaOut === false){
-            this.x = x;
-            this.y = y;
-            this.setX(this.x);
-            this.setY(this.y + 20);
+            this.y = y + 20;
             this.angulo = angulo;
+            if (this.angulo.x === 0) {
+                this.x = x;
+            } else {
+                this.x = x;
+            };
+            this.setX(this.x);
+            this.setY(this.y);
             this.lenguaOut = true;
             this.setCollideWorldBounds(true);
             this.setCollidesWith([1, 2, 3]);

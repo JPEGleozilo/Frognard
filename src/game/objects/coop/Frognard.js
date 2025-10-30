@@ -21,7 +21,7 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         // === Físicas ===
         this.setOrigin(0.5, 0.75);
         this.setCollideWorldBounds(true);
-        this.setCollidesWith([0, 1, 2, 3, 4]);
+        this.setCollidesWith([0, 1, 2, 3, 4, 5]);
         this.body.setSize(this.width * 0.25, this.height - 4);
         this.body.setOffset(this.width * 0.35, 0);
 

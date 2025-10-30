@@ -10,28 +10,28 @@ import StateMachine from '../objects/coop/State/StateMachine.js';
 import {Inicio, Alarma, GameOver} from "../objects/coop/State/Estados.js";
 
 
-export class Coop extends Scene
+export class CoopNivel6 extends Scene
 {
     constructor ()
     {
-        super('Coop');
+        super('Coop nivel6');
     }
 
     create ()
     {
         this.add.image(480, 270, 'fondo').setDepth(-1)        
 
-        var mapa1 = this.make.tilemap({key: "mapaNivel1"});
-        var patrones = mapa1.addTilesetImage("tileset", "patrones");
-        var piso = mapa1.createLayer("bloques", patrones, 0, 0).setDepth(2);
-        var paredes = mapa1.createLayer("paredes", patrones,0 ,0).setDepth(2);
-        mapa1.createLayer("superficie", patrones, 0 , 0).setDepth(1);
-        var final = mapa1.createLayer("final", patrones, 0, 0).setDepth(3);
-        var rejillas = mapa1.createLayer("rejillas", patrones,0 ,0).setDepth(2);
+        var mapa6 = this.make.tilemap({key: "mapaNivel6"});
+        var patrones = mapa6.addTilesetImage("tileset", "patrones");
+        var piso = mapa6.createLayer("bloques", patrones, 0, 0).setDepth(2);
+        var paredes = mapa6.createLayer("paredes", patrones,0 ,0).setDepth(2);
+        mapa6.createLayer("superficie", patrones, 0 , 0).setDepth(1);
+        var final = mapa6.createLayer("final", patrones, 0, 0).setDepth(3);
+        var rejillas = mapa6.createLayer("rejillas", patrones,0 ,0).setDepth(2);
 
         this.cajas = this.physics.add.group();
 
-        this.capaSpawns = mapa1.getObjectLayer("spawn");
+        this.capaSpawns = mapa6.getObjectLayer("spawn");
         this.capaSpawns.objects.forEach(objeto => {
             if (objeto.name === "Frognard") {
                 this.spawnX = objeto.x;
@@ -55,7 +55,7 @@ export class Coop extends Scene
         this.accionable = this.physics.add.group();
         this.sirenas = this.physics.add.group();
 
-        this.capaInterruptores = mapa1.getObjectLayer("interruptores");
+        this.capaInterruptores = mapa6.getObjectLayer("interruptores");
         this.capaInterruptores.objects.forEach(objeto => {
             if (objeto.type === "Horizontal") {
                 new BotonH (this, objeto.x, objeto.y, objeto.name);
@@ -64,27 +64,21 @@ export class Coop extends Scene
                 new BotonV (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value, objeto.properties[1].value, objeto.properties[2].value);
                 console.log(objeto.name, " vertical");
             } else if (objeto.type === "Palanca") {
-                new Palanca (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value);
+                new Palanca (this, objeto.x, objeto.y, objeto.name);
                 console.log(objeto.name, " palanca");
             }
         });
 
-        this.tutorial = this.add.sprite(768, 448, "tutorial coop").setDepth(10).setScale(2);
-
-        this.anims.create({
-            key: "tutorialCoop",
-            frames: this.frognard.anims.generateFrameNumbers('tutorial coop', { start: 0, end: 20 }),
-            frameRate: 8,
-            repeat: -1
-        })
-
-        this.tutorial.anims.play ("tutorialCoop", true);
-
-        this.capaAccionables = mapa1.getObjectLayer("accionables");
+        this.capaAccionables = mapa6.getObjectLayer("accionables");
         this.capaAccionables.objects.forEach(objeto => {
             new Accionable (this, objeto.x, objeto.y, objeto.name, objeto.type);
             console.log(objeto.name, " puerta");
         });
+
+        // this.capaSirenas = mapa6.getObjectLayer("sirenas");
+        // this.capaSirenas.objects.forEach(objeto => {
+        //     new Sirena (this, objeto.x, objeto.y)
+        // });
 
 
         piso.setCollisionByProperty({collider: true});
@@ -99,25 +93,33 @@ export class Coop extends Scene
         paredes.setCollisionCategory([2]);
 
         this.physics.add.collider(this.frognard, piso);
-        this.physics.add.collider(this.lengua, this.accionable, () => {
-            this.lengua.triggerVuelta();
-        })
         this.physics.add.collider(this.frognard, paredes);
-        this.physics.add.collider(this.lengua, paredes, () => {
-            this.lengua.triggerVuelta();
-        }, null, this.lengua);
         this.physics.add.collider(this.lengua, piso, () => {
             this.lengua.triggerVuelta();
         }, null, this.lengua);
+        this.physics.add.collider(this.lengua, paredes, () => {
+            this.lengua.triggerVuelta();
+        }, null, this.lengua);
+        this.physics.add.collider(this.frognard, this.botonesH);
         this.physics.add.collider(this.frognard, this.accionable);
         this.physics.add.overlap(this.frognard, this.lengua, () => {
             this.lengua.desactivar();
         })
+
+        this.physics.add.collider(this.cajas, piso);
+        this.physics.add.collider(this.cajas, paredes);
+        this.physics.add.collider(this.cajas, this.accionable);
+        this.physics.add.collider(this.cajas, this.botonesH);
+        this.physics.add.collider(this.cajas, this.frognard);
+        this.physics.add.collider(this.cajas, this.lengua, () => {
+            this.lengua.triggerVuelta();
+        }, null, this.lengua);
+        
         this.physics.add.collider(this.frognard, rejillas);
         this.physics.add.collider(this.cajas, rejillas);
 
         this.physics.add.collider(this.frognard, final, () => {
-            this.scene.start ("Coop nivel2")
+            this.scene.start ("MainMenu")
         })
 
         this.physics.world.on("worldbounds", (body) => {
@@ -154,14 +156,17 @@ export class Coop extends Scene
 
         if (this.inputLengua === true) {
             this.angulo = this.frognard.getCurrentAngle();
-            this.lengua.disparar(this.frognard.body.x + 16, this.frognard.body.y, this.angulo);
+            this.lengua.disparar(this.frognard.body.x, this.frognard.body.y, this.angulo);
         };
 
+        this.botonesH.children.iterate(obj => {
+            obj.update();
+        });
         this.accionable.children.iterate(obj => {
             obj.frenada();
         });
     }
-
+    
     reinicio() {
         this.scene.restart();
     }

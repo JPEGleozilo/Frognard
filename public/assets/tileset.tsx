@@ -12,6 +12,11 @@
    <property name="immovable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="2">
+  <properties>
+   <property name="rejilla" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="3">
   <properties>
    <property name="collider" type="bool" value="true"/>
@@ -20,6 +25,7 @@
  <tile id="4">
   <properties>
    <property name="collider" type="bool" value="true"/>
+   <property name="rejilla" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="5">

@@ -1,16 +1,20 @@
 import Phaser from 'phaser';
 
 export default class BotonV extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, distintivo, delay, flip) {
+    constructor(scene, x, y, distintivo, delay, flip, rotate) {
         super(scene, x, y, 'boton vertical', 0); // Frame 0 por defecto
         this.distintivo = distintivo;
         this.apretado = false;
-        this.delay = delay
+        this.delay = delay;
+        this.rotate = rotate;
 
         // Existencia
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.setFlipX(flip);
+        if(this.rotate === true){
+            this.setAngle(-90);
+        };
 
         this.setOrigin(1, 0.6);
         this.setScale(1); // Usa 1 para no distorsionar el sprite

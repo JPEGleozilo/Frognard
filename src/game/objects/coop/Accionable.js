@@ -3,8 +3,6 @@ import Phaser from 'phaser';
 export class Accionable extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, distintivo, tipo) {
         super(scene, x, y);
-
-        this.y = y;
         this.distintivo = distintivo;
         this.tipo = tipo;
     
