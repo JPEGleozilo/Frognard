@@ -35,10 +35,6 @@ export class Accionable extends Phaser.Physics.Arcade.Sprite {
 
         this.body.setImmovable(true);
         this.body.setAllowGravity(false);
-
-//        this.on("animationcomplete", (anim, frame, gameObject) => {
-//            this.frame = frame.index
-//        });
     }
 
     toggle(interruptor, valor) {
@@ -90,14 +86,14 @@ export class Sirena extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, posX, posY) {
         super (scene, posX, posY, "luz alarma", 0);
 
-//        scene.physics.add.existing(this);
-//        this.body.setImmovable(true);
-//        this.body.setAllowGravity(false);
-//
-//        this.setFlipY(true);
-//        this.setOrigin(0);
-//        
-//        this.scene.sirenas.add(this);
+        scene.physics.add.existing(this);
+        this.body.immovable = true;
+        this.body.allowGravity = false;
+
+        this.setFlipY(true);
+        this.setOrigin(0);
+        
+        this.scene.sirenas.add(this);
     }
 
     setOn(valor) {

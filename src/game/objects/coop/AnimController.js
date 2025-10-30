@@ -140,7 +140,6 @@ export default class AnimController {
     
     playAnim (key, flip, anguloEscena, force = false) {
         if (!key) return;
-        if (this.scene.lengua.getLenguaOut() === true) return;
         const CUR = this.frognard.anims.currentAnim && this.frognard.anims.currentAnim.key;
         const CURFLIP = this.frognard.flipX
         if (!force && CUR === key && CURFLIP === flip) return; // ya se está reproduciendo -> no reiniciar

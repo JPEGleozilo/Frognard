@@ -100,6 +100,9 @@ export class Coop extends Scene
         paredes.setCollisionCategory([2]);
 
         this.physics.add.collider(this.frognard, piso);
+        this.physics.add.collider(this.lengua, this.accionable, () => {
+            this.lengua.triggerVuelta();
+        })
         this.physics.add.collider(this.frognard, paredes);
         this.physics.add.collider(this.lengua, paredes, () => {
             this.lengua.triggerVuelta();
@@ -150,7 +153,7 @@ export class Coop extends Scene
 
         if (this.inputLengua === true) {
             this.angulo = this.frognard.getCurrentAngle();
-            this.lengua.disparar(this.frognard.body.x, this.frognard.body.y, this.angulo);
+            this.lengua.disparar(this.frognard.body.x + 16, this.frognard.body.y, this.angulo);
         };
 
         this.accionable.children.iterate(obj => {

@@ -22,14 +22,13 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
         if (this.lenguaOut === false){
             this.x = x;
             this.y = y;
+            this.setX(this.x);
+            this.setY(this.y + 20);
             this.angulo = angulo;
             this.lenguaOut = true;
             this.setCollideWorldBounds(true);
             this.setCollidesWith([1, 2, 3]);
             this.log = false;
-        
-            this.setX(this.x + this.width/2);
-            this.setY(this.y + 20);
 
             this.setVisible(true);
 

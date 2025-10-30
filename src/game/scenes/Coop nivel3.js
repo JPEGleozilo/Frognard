@@ -103,11 +103,7 @@ export class CoopNivel3 extends Scene
         })
 
         this.physics.add.collider(this.cajas, piso);
-        this.physics.add.collider(this.cajas, paredes, () => {
-            this.cajas.children.iterate(obj => {
-            obj.body.setImmovable(true);
-        });
-        });
+        this.physics.add.collider(this.cajas, paredes);
         this.physics.add.collider(this.cajas, this.accionable);
         this.physics.add.collider(this.cajas, this.botonesH);
         this.physics.add.collider(this.cajas, this.frognard);
@@ -152,10 +148,7 @@ export class CoopNivel3 extends Scene
             this.angulo = this.frognard.getCurrentAngle();
             this.lengua.disparar(this.frognard.body.x, this.frognard.body.y, this.angulo);
         };
-
-        this.cajas.children.iterate(obj => {
-            obj.update();
-        });
+        
         this.botonesH.children.iterate(obj => {
             obj.update();
         });

@@ -28,6 +28,9 @@ export class CoopNivel2 extends Scene
         mapa2.createLayer("superficie", patrones, 0 , 0).setDepth(1);
         var final = mapa2.createLayer("final", patrones, 0, 0).setDepth(3);
 
+        this.physics.world.setFPS(60); // Asegúrate de que el motor de física esté sincronizado con el framerate
+        this.physics.world.setBoundsCollision(true, true, true, true);
+
         this.cajas = this.physics.add.group();
 
         this.capaSpawns = mapa2.getObjectLayer("spawn");
@@ -91,12 +94,14 @@ export class CoopNivel2 extends Scene
         });
 
 
+        this.physics.world.createDebugGraphic();
+
         piso.setCollisionByProperty({collider: true});
         piso.setCollisionCategory([2]);
 
         final.setCollisionByProperty({final: true});
 
-        paredes.setCollisionByProperty({immovable: true});
+        paredes.setCollisionByProperty({collider: true});
         paredes.setCollisionCategory([2]);
 
         this.physics.add.collider(this.frognard, piso);
@@ -114,10 +119,9 @@ export class CoopNivel2 extends Scene
         })
 
         this.physics.add.collider(this.cajas, piso);
-        this.physics.add.collider(this.cajas, paredes, () => {
-            this.cajas.children.iterate(obj => {
-            obj.body.setImmovable(true);
-        });
+        this.physics.add.collider(this.cajas, paredes, (caja, tile) => {
+            console.log("colision caja pared")
+            caja.body.setDragX(0)
         });
         this.physics.add.collider(this.cajas, this.accionable);
         this.physics.add.collider(this.cajas, this.botonesH);
@@ -163,10 +167,6 @@ export class CoopNivel2 extends Scene
             this.angulo = this.frognard.getCurrentAngle();
             this.lengua.disparar(this.frognard.body.x, this.frognard.body.y, this.angulo);
         };
-
-        this.cajas.children.iterate(obj => {
-            obj.update();
-        });
         this.botonesH.children.iterate(obj => {
             obj.update();
         });
