@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import GamePadController from '../utils/GamepadController';
 
 export class Preloader extends Scene
 {
@@ -196,14 +197,30 @@ export class Preloader extends Scene
         this.load.audio("seleccionar", "sf_seleccionar.ogg");
         this.load.audio("sumar_puntos", "sf_sumar_puntos.wav");
 
+        this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+        this.gamepadController = new GamePadController(this);
+        this.gamepadController.getGamepads();
+
         this.cargaFinal = true;
     }
 
     update() {
-        if (this.cargaFinal === true && this.cargaAnim.anims.currentFrame.index === 5){
-            this.time.delayedCall(2000, () => {
+        if (this.cargaFinal === true && this.cargaAnim.anims.currentFrame.index === 6) {
+            if (!this.menuTexto) {
+                this.menuTexto = this.add.text(480, 450, "Presiona enter para continuar", {
+                    fontFamily: "vhs-gothic",
+                    fontSize: '40px',
+                    color: '#7deeffff',
+                    stroke: "#000000",
+                    strokeThickness: 6
+                }).setOrigin(0.5)
+            }
+            this.gamepadController.update();
+            this.getInput = this.gamepadController.getInput();
+
+            if (this.enterKey.isDown || this.getInput.joy1.accion || this.getInput.joy2.accion) {
                 this.scene.start("MainMenu");
-            });
+            }
         }
     }
 }
