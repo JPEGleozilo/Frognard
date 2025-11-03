@@ -59,6 +59,11 @@ export class VersusFinal extends Scene {
         this.gamepads = this.gamepadController.getGamepads();
         this.getInput = this.gamepadController.getInput();
 
+        // teclas para aceptar/volver (T y L)
+        const KeyCodes = Phaser.Input.Keyboard.KeyCodes;
+        this.keyT = this.input.keyboard.addKey(KeyCodes.T);
+        this.keyL = this.input.keyboard.addKey(KeyCodes.L);
+
         // Textos
         const resultText = this.add.text(280, 360, '', {
             fontSize: '28px',
@@ -99,14 +104,29 @@ export class VersusFinal extends Scene {
             }
         });
 
+        // helper seguro para reproducir un sonido 
+        this._playOnce = (key, config = {}) => {
+            try {
+                let s = this.sound.get(key);
+                if (!s) s = this.sound.add(key);
+                s.play(config);
+                return s;
+            } catch (e) {
+                return null;
+            }
+        };
+
         // Aparecen las luces moviéndose
         this.time.delayedCall(1400, () => {
+            // redoble cuando empiezan a moverse las luces
+            this._playOnce('redoble_tambor', { volume: 0.8 });
+
             this.tweens.add({
                 targets: leftLight,
                 alpha: { from: 0, to: 0.6 },
                 x: { from: 50, to: 200 },
                 y: { from: 80, to: 220 },
-                duration: 1500,
+                duration: 2000,
                 ease: 'Sine.easeInOut'
             });
 
@@ -115,13 +135,13 @@ export class VersusFinal extends Scene {
                 alpha: { from: 0, to: 0.6 },
                 x: { from: 510, to: 360 },
                 y: { from: 80, to: 220 },
-                duration: 1500,
+                duration: 2000,
                 ease: 'Sine.easeInOut'
             });
         });
 
         // Las luces convergen y muestran la silueta
-        this.time.delayedCall(3000, () => {
+        this.time.delayedCall(3500, () => {
             this.tweens.add({
                 targets: [leftLight, rightLight],
                 x: 280,
@@ -144,7 +164,11 @@ export class VersusFinal extends Scene {
         });
 
         // Revela al ganador
-        this.time.delayedCall(4500, () => {
+        this.time.delayedCall(4200, () => {
+            // reproducir festejo y público aplaudiendo simultáneamente
+            this._playOnce('festejo', { volume: 0.8, loop: false });
+            this._playOnce('publico_aplaudiendo', { volume: 0.7, loop: false });
+
             if (this.winner === 'empate') {
                 rana.clearTint();
                 rata.clearTint();
@@ -191,10 +215,11 @@ export class VersusFinal extends Scene {
         this.gamepadController.update();
         this.getInput = this.gamepadController.getInput();
 
-        // aceptar input de gamepad/tecla para volver solo si allowed
-        if (this.allowExit && (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true)) {
+        // aceptar input de gamepad o teclas T/L para volver solo si allowed
+        const tecladoAccion = Phaser.Input.Keyboard.JustDown(this.keyT) || Phaser.Input.Keyboard.JustDown(this.keyL);
+        if (this.allowExit && (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true || tecladoAccion)) {
             if (this.scene.isActive('Versus')) this.scene.stop('Versus');
-            this.scene.start('MainMenu');
-        }
+            this.scene.start('MainMenu');   this.scene.start('MainMenu');
+        }        }
     }
-}
+

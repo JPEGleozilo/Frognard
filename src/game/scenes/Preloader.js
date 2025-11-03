@@ -30,8 +30,6 @@ export class Preloader extends Scene
             this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'PIXELYA', 'PIXELYA Trial.ttf'));
         console.log("fuente cargada");
         
-
-
         this.cargaAnim.play('carga_anim');
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('/assets');
@@ -178,6 +176,23 @@ export class Preloader extends Scene
         this.load.tilemapTiledJSON("mapaNivel2", "nivel2.json");
         this.load.tilemapTiledJSON("mapaNivel3", "nivel3.json");
         this.load.tilemapTiledJSON("mapaNivel4", "nivel4.json");
+
+        this.load.setPath('/audio/music');
+
+        this.load.audio("musica_coop", "ms_coop.ogg");
+        this.load.audio("musica_versus", "ms_versus.ogg");
+        this.load.audio("musica_pantalla_seleccion", "ms_pantalla_seleccion.ogg");
+
+        this.load.setPath('/audio/sfx');
+        this.load.audio("abrir_puerta", "sf_abrir_puerta.wav");
+        this.load.audio("cambiar_opcion", "sf_cambiar_opcion.wav");
+        this.load.audio("festejo", "sf_festejo.ogg");
+        this.load.audio("publico_aplaudiendo", "sf_publico_aplaudiendo.ogg");
+        this.load.audio("redoble_tambor", "sf_redoble_tambor.ogg");
+        this.load.audio("ronda_terminada", "sf_ronda_terminada.wav");
+        this.load.audio("salto", "sf_salto.wav");
+        this.load.audio("seleccionar", "sf_seleccionar.ogg");
+        this.load.audio("sumar_puntos", "sf_sumar_puntos.wav");
 
         this.cargaFinal = true;
     }

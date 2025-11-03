@@ -74,6 +74,14 @@ export class Accionable extends Phaser.Physics.Arcade.Sprite {
                     this.abriendo = false;
                     this.setVisible(false);
                     this.body.enable = false;
+                    // reproducir sonido al abrir la puerta (si está precargado)
+                    try {
+                        const s = this.scene.sound.get('abrir_puerta');
+                        if (s) s.play();
+                        else this.scene.sound.play('abrir_puerta');
+                    } catch (e) {
+                        // silencioso si no existe el audio
+                    }
                     console.log("Puerta abierta");
                 } else if (this.cerrando) {
                     this.abierto = false;

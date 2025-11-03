@@ -19,6 +19,21 @@ export class CoopNivel4 extends Scene
 
     create ()
     {
+
+              // reproducir musica de fondo del modo Coop sin reiniciarla entre niveles
+       try {
+         const key = 'musica_coop';
+         let coopMusic = this.sound.get(key);
+         if (coopMusic) {
+           if (!coopMusic.isPlaying) coopMusic.play({ loop: true, volume: 0.6 });
+         } else {
+           coopMusic = this.sound.add(key, { loop: true, volume: 0.6 });
+           coopMusic.play();
+         }
+       } catch (e) {
+         console.warn('musica_coop no disponible:', e);
+       }
+
         this.add.image(480, 270, 'fondo').setDepth(-1)        
 
         var mapa4 = this.make.tilemap({key: "mapaNivel4"});
@@ -113,6 +128,9 @@ export class CoopNivel4 extends Scene
         this.physics.add.collider(this.cajas, this.frognard);
 
         this.physics.add.collider(this.frognard, final, () => {
+            const coopMusic = this.sound.get('musica_coop');
+            if (coopMusic.isPlaying) coopMusic.stop();
+                coopMusic.destroy();
             this.scene.start ("MainMenu")
         })
 
