@@ -119,6 +119,9 @@ export class CoopNivel6 extends Scene
         this.physics.add.collider(this.cajas, rejillas);
 
         this.physics.add.collider(this.frognard, final, () => {
+            const coopMusic = this.sound.get('musica_coop');
+            if (coopMusic.isPlaying) coopMusic.stop();
+                coopMusic.destroy();
             this.scene.start ("MainMenu")
         })
 
