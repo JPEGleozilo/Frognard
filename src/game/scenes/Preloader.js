@@ -214,7 +214,6 @@ export class Preloader extends Scene
                     strokeThickness: 6
                 }).setOrigin(0.5)
             }
-            this.menuTexto.setStyle({fontFamily: "vhs-gothic"});
             this.gamepadController.update();
             this.getInput = this.gamepadController.getInput();
 
