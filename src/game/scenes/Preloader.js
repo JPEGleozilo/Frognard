@@ -27,7 +27,6 @@ export class Preloader extends Scene
         });
 
         this.load.setPath('/assets/fonts');
-            this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'vhs-gothic', 'vhs-gothic.ttf'));
             this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'PIXELYA', 'PIXELYA Trial.ttf'));
         console.log("fuente cargada");
         
@@ -215,6 +214,7 @@ export class Preloader extends Scene
                     strokeThickness: 6
                 }).setOrigin(0.5)
             }
+            this.menuTexto.setStyle({fontFamily: "vhs-gothic"});
             this.gamepadController.update();
             this.getInput = this.gamepadController.getInput();
 
