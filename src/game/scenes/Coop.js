@@ -19,6 +19,20 @@ export class Coop extends Scene
 
     create ()
     {
+       // reproducir musica de fondo del modo Coop sin reiniciarla entre niveles
+       try {
+         const key = 'musica_coop';
+         let coopMusic = this.sound.get(key);
+         if (coopMusic) {
+           if (!coopMusic.isPlaying) coopMusic.play({ loop: true, volume: 0.6 });
+         } else {
+           coopMusic = this.sound.add(key, { loop: true, volume: 0.6 });
+           coopMusic.play();
+         }
+       } catch (e) {
+         console.warn('musica_coop no disponible:', e);
+       }
+
         this.add.image(480, 270, 'fondo').setDepth(-1)        
 
         var mapa1 = this.make.tilemap({key: "mapaNivel1"});
@@ -27,6 +41,7 @@ export class Coop extends Scene
         var paredes = mapa1.createLayer("paredes", patrones,0 ,0).setDepth(2);
         mapa1.createLayer("superficie", patrones, 0 , 0).setDepth(1);
         var final = mapa1.createLayer("final", patrones, 0, 0).setDepth(3);
+        var rejillas = mapa1.createLayer("rejillas", patrones,0 ,0).setDepth(2);
 
         this.cajas = this.physics.add.group();
 
@@ -60,10 +75,10 @@ export class Coop extends Scene
                 new BotonH (this, objeto.x, objeto.y, objeto.name);
                 console.log(objeto.name, " horizontal");
             } else if (objeto.type === "Vertical") {
-                new BotonV (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value, objeto.properties[1].value);
+                new BotonV (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value, objeto.properties[1].value, objeto.properties[2].value);
                 console.log(objeto.name, " vertical");
             } else if (objeto.type === "Palanca") {
-                new Palanca (this, objeto.x, objeto.y, objeto.name);
+                new Palanca (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value);
                 console.log(objeto.name, " palanca");
             }
         });
@@ -85,14 +100,12 @@ export class Coop extends Scene
             console.log(objeto.name, " puerta");
         });
 
-        this.capaSirenas = mapa1.getObjectLayer("sirenas");
-        this.capaSirenas.objects.forEach(objeto => {
-            new Sirena (this, objeto.x, objeto.y)
-        });
-
 
         piso.setCollisionByProperty({collider: true});
         piso.setCollisionCategory([2]);
+
+        rejillas.setCollisionByProperty({rejilla: true});
+        rejillas.setCollisionCategory([5]);
 
         final.setCollisionByProperty({final: true});
 
@@ -100,6 +113,9 @@ export class Coop extends Scene
         paredes.setCollisionCategory([2]);
 
         this.physics.add.collider(this.frognard, piso);
+        this.physics.add.collider(this.lengua, this.accionable, () => {
+            this.lengua.triggerVuelta();
+        })
         this.physics.add.collider(this.frognard, paredes);
         this.physics.add.collider(this.lengua, paredes, () => {
             this.lengua.triggerVuelta();
@@ -111,6 +127,8 @@ export class Coop extends Scene
         this.physics.add.overlap(this.frognard, this.lengua, () => {
             this.lengua.desactivar();
         })
+        this.physics.add.collider(this.frognard, rejillas);
+        this.physics.add.collider(this.cajas, rejillas);
 
         this.physics.add.collider(this.frognard, final, () => {
             this.scene.start ("Coop nivel2")
@@ -150,7 +168,7 @@ export class Coop extends Scene
 
         if (this.inputLengua === true) {
             this.angulo = this.frognard.getCurrentAngle();
-            this.lengua.disparar(this.frognard.body.x, this.frognard.body.y, this.angulo);
+            this.lengua.disparar(this.frognard.body.x + 16, this.frognard.body.y, this.angulo);
         };
 
         this.accionable.children.iterate(obj => {

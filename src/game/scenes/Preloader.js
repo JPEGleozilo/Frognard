@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import GamePadController from '../utils/GamepadController';
 
 export class Preloader extends Scene
 {
@@ -26,12 +27,9 @@ export class Preloader extends Scene
         });
 
         this.load.setPath('/assets/fonts');
-            this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'vhs-gothic', 'vhs-gothic.ttf'));
             this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'PIXELYA', 'PIXELYA Trial.ttf'));
         console.log("fuente cargada");
         
-
-
         this.cargaAnim.play('carga_anim');
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('/assets');
@@ -178,15 +176,50 @@ export class Preloader extends Scene
         this.load.tilemapTiledJSON("mapaNivel2", "nivel2.json");
         this.load.tilemapTiledJSON("mapaNivel3", "nivel3.json");
         this.load.tilemapTiledJSON("mapaNivel4", "nivel4.json");
+        this.load.tilemapTiledJSON("mapaNivel5", "nivel5.json");
+        this.load.tilemapTiledJSON("mapaNivel6", "nivel6.json");
+
+        this.load.setPath('/audio/music');
+
+        this.load.audio("musica_coop", "ms_coop.ogg");
+        this.load.audio("musica_versus", "ms_versus.ogg");
+        this.load.audio("musica_pantalla_seleccion", "ms_pantalla_seleccion.ogg");
+
+        this.load.setPath('/audio/sfx');
+        this.load.audio("abrir_puerta", "sf_abrir_puerta.wav");
+        this.load.audio("cambiar_opcion", "sf_cambiar_opcion.wav");
+        this.load.audio("festejo", "sf_festejo.ogg");
+        this.load.audio("publico_aplaudiendo", "sf_publico_aplaudiendo.ogg");
+        this.load.audio("redoble_tambor", "sf_redoble_tambor.ogg");
+        this.load.audio("ronda_terminada", "sf_ronda_terminada.wav");
+        this.load.audio("salto", "sf_salto.wav");
+        this.load.audio("seleccionar", "sf_seleccionar.ogg");
+        this.load.audio("sumar_puntos", "sf_sumar_puntos.wav");
+
+        this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+        this.gamepadController = new GamePadController(this);
+        this.gamepadController.getGamepads();
 
         this.cargaFinal = true;
     }
 
     update() {
-        if (this.cargaFinal === true && this.cargaAnim.anims.currentFrame.index === 5){
-            this.time.delayedCall(2000, () => {
+        if (this.cargaFinal === true && this.cargaAnim.anims.currentFrame.index === 6) {
+            if (!this.menuTexto) {
+                this.menuTexto = this.add.text(480, 450, "Presiona enter para continuar", {
+                    fontFamily: "vhs-gothic",
+                    fontSize: '40px',
+                    color: '#7deeffff',
+                    stroke: "#000000",
+                    strokeThickness: 6
+                }).setOrigin(0.5)
+            }
+            this.gamepadController.update();
+            this.getInput = this.gamepadController.getInput();
+
+            if (this.enterKey.isDown || this.getInput.joy1.accion || this.getInput.joy2.accion) {
                 this.scene.start("MainMenu");
-            });
+            }
         }
     }
 }

@@ -10,15 +10,13 @@ export default class Caja extends Phaser.Physics.Arcade.Sprite {
 
         this.scene.cajas.add(this);
 
+        this.body.setAllowGravity(true);
+
         //Físicas
         this.setCollideWorldBounds(true);
-        this.setCollidesWith([0, 1, 2, 3, 4]);
+        this.setCollidesWith([0, 1, 2, 3, 4, 5]);
         this.setOrigin(0.5, 1);
-        this.body.setSize(this.width, this.height - 4);
-        this.setMass(0.1);
-    }
-
-    update(){
-        this.setVelocityX(0);
+        this.setMass(1);
+        this.body.setDragX(1000);
     }
 }

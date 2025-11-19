@@ -14,6 +14,7 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         this.animController.createAnims();
         this.animacionActual = null;
         this.flipActual = false;
+        this._canPlayJumpSound = true;
         this.ultimoFlip = false;
 
         this.scene.angulo = null;
@@ -21,8 +22,8 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         // === Físicas ===
         this.setOrigin(0.5, 0.75);
         this.setCollideWorldBounds(true);
-        this.setCollidesWith([0, 1, 2, 3, 4]);
-        this.body.setSize(this.width * 0.25, this.height);
+        this.setCollidesWith([0, 1, 2, 3, 4, 5]);
+        this.body.setSize(this.width * 0.25, this.height - 4);
         this.body.setOffset(this.width * 0.35, 0);
 
         // === Propiedades ===
@@ -193,13 +194,30 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
                 };
             };
         };
+
+
         if ((saltoTeclado || this.getInput.joy2.accion === true) && this.body.onFloor()) {
             this.setVelocityY(this.salto);
             this.animacionActual = "Salto inicio";
+
+            if (this._canPlayJumpSound) {
+                try {
+                    if (this.scene && this.scene.sound) {
+                        const inst = this.scene.sound.get('salto');
+                        if (inst) inst.play();
+                        else this.scene.sound.play('salto');
+                    }
+                } catch (e) {}
+                this._canPlayJumpSound = false;
+            }
         } else if ((saltoTeclado || this.getInput.joy2.accion === true) && !this.body.onFloor()) {
             this.setGravityY(this.gravedadBaja);
         } else {
             this.setGravityY(0);
+        }
+
+        if (this.body.onFloor() && !(saltoTeclado || this.getInput.joy2.accion === true)) {
+            this._canPlayJumpSound = true;
         }
 
         if (!this.body.onFloor()) {
@@ -209,8 +227,7 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
                 this.animacionActual = "Salto bajada";
             }
         }
-        this.animController.playAnim(this.animacionActual, this.flipActual, this.scene.angulo)
-        
+        this.animController.playAnim(this.animacionActual, this.flipActual, this.scene.angulo);
         if (this.getInput.joy1.restart === true || this.getInput.joy2.restart === true) {
             this.setTint(0xFF0000)
             if (this.getInput.joy1.restart === true && this.getInput.joy2.restart === true) {

@@ -209,6 +209,18 @@ export class Versus extends Scene {
       this.gameplayEnabled = false;
       if (this.moscaPool?.pause) this.moscaPool.pause();
 
+      // reproducir sonido al terminar la ronda
+      try {
+        const key = 'ronda_terminada';
+        if (this.cache && this.cache.audio && this.cache.audio.exists && this.cache.audio.exists(key)) {
+          this.sound.play(key, { volume: 0.5 });
+        } else {
+          this.sound.play(key);
+        }
+      } catch (e) {
+        // silencioso si el audio no está disponible
+      }
+
       this.showRoundBanner(``);
 
       if (round < this.roundManager.maxRounds) {
@@ -225,6 +237,12 @@ export class Versus extends Scene {
 
     // Iniciar todas las rondas
     this.roundManager.startAll();
+
+    const musicKey = 'musica_versus';
+    if (this.cache && this.cache.audio && this.cache.audio.exists && this.cache.audio.exists(musicKey)) {
+        this.versusMusic = this.sound.add(musicKey, { loop: true, volume: 0.6 });
+        this.versusMusic.play();
+    } 
   }
 
   update(time, delta) {
@@ -376,6 +394,13 @@ shutdown() {
   if (this.gamepads && this.gamepads.joystick2) {
         this.gamepads.joystick2.removeAllListeners();
   }
+  if (this.versusMusic) {
+        try {
+            if (this.versusMusic.isPlaying) this.versusMusic.stop();
+            this.versusMusic.destroy();
+        } catch (e) { /* ignore */ }
+        this.versusMusic = null;
+    }
 }
 
  spawnFloatingScore({ x, y, value, player }) {
@@ -396,6 +421,17 @@ shutdown() {
         player2: '#66ccff' 
       };
       color = colorMap[player] || '#ffffff';
+    }
+
+    // reproducir sonido de sumar puntos solo para valores positivos (mosca normal / dorada)
+    if (value > 0) {
+      try {
+        if (this.cache && this.cache.audio && this.cache.audio.exists && this.cache.audio.exists('sumar_puntos')) {
+          this.sound.play('sumar_puntos', { volume: 0.4 });
+        } else {
+          this.sound.play('sumar_puntos');
+        }
+      } catch (e) { /* silencioso si no existe o falla */ }
     }
 
     const text = value > 0 ? `+${value}` : `${value}`;

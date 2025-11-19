@@ -345,8 +345,8 @@ export class ModificadorRuleta extends Scene {
     // bloquear confirmaciones por al menos 4 segundos
     this.canConfirm = false;
     // guardar tiempo de habilitación para mostrar cuenta regresiva
-    this._confirmEnableTime = this.time.now + 3000;
-    this.time.delayedCall(4000, () => {
+    this._confirmEnableTime = this.time.now + 2000;
+    this.time.delayedCall(2000, () => {
       this.canConfirm = true;
       // si ambos ya habían presionado antes del timeout, finalizar ahora
       if (this.p1Ready && this.p2Ready) {

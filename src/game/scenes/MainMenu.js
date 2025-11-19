@@ -10,9 +10,28 @@ export class MainMenu extends Scene
 
     create ()
     { 
-   this.add.sprite(480, 270, 'fondo2').setScale(0.5).setDepth(-2); 
-   this.instructionText = this.add.text(1, 1 + 300, '', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5).setDepth(-100000000000);
+       this.add.sprite(480, 270, 'fondo2').setScale(0.5).setDepth(-2); 
+       this.instructionText = this.add.text(1, 1 + 300, '', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5).setDepth(-100000000000);
 
+      // reproducir música de fondo del menú (evitar duplicados si ya existe)
+      this.menuMusicKey = 'musica_pantalla_seleccion';
+      try {
+        let menuMusic = this.sound.get(this.menuMusicKey);
+        if (!menuMusic) {
+          // crear instancia si no existe en el SoundManager
+          menuMusic = this.sound.add(this.menuMusicKey, { loop: true, volume: 0.9 });
+        }
+        // iniciar si no está sonando
+        if (!menuMusic.isPlaying) menuMusic.play();
+        // guardar referencia local por si se necesita
+        this.menuMusic = menuMusic;
+      } catch (e) {
+        console.warn(`Audio '${this.menuMusicKey}' no cargado o no disponible.`, e);
+      }
+      // bloqueo para evitar multi-activación al confirmar
+      this.selectionLocked = false;
+      // sonido de confirmar (asegúrate de precargar 'seleccionar' en Preloader)
+      this.confirmSoundKey = 'seleccionar';
         this.add.image(600/1.3 , 300/2, 'logo').setScale(0.56).setDepth(1);
 
         this.cursor = this.input.keyboard.createCursorKeys();
@@ -65,9 +84,22 @@ export class MainMenu extends Scene
         this.gamepadController = new GamePadController(this);
         this.gamepads = this.gamepadController.getGamepads();
         this.getInput = this.gamepadController.getInput()
+    }
 
-        // fuera del update, como propiedad del scene:
-       // this.logoPlayed = false;
+    // helper para detener y destruir la musica del menu de forma segura
+    stopMenuMusic() {
+        try {
+            if (this.menuMusic) {
+                if (this.menuMusic.isPlaying) this.menuMusic.stop();
+                this.menuMusic.destroy();
+                this.menuMusic = null;
+            } else if (this.menuMusicKey) {
+                const m = this.sound.get(this.menuMusicKey);
+                if (m) { if (m.isPlaying) m.stop(); m.destroy(); }
+            }
+        } catch (e) {
+            // silencioso
+        }
     }
 
     update () {
@@ -93,68 +125,25 @@ export class MainMenu extends Scene
             if (this.cursor.left.isUp && this.cursor.right.isUp && this.state === "neutral") {
                 this.state = ""; // Por defecto, selecciona "coop"
             }
-            
             if (this.enter.isDown || (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true)) {
+                try { if (this.confirmSoundKey) this.sound.play(this.confirmSoundKey); } catch(e) {}
+                this.stopMenuMusic();
                 if (this.state === "coop") {
                     this.scene.start("Coop");
                 } else if (this.state === "vs") {
-                    this.scene.start("Versus")
-                };
-            };
-
-        //reproducir animacion al accionar una opcion
-       // reproducir animación al accionar izquierda o derecha SOLO 1 VEZ
-//if (!this.logoPlayed && (this.cursor.left.isDown != this.cursor.right.isDown)) {
-
-   // this.logoPlayed = true;   // <- marca que ya ocurrió
-
-    //this.add.sprite(600/1.3 , 300/2, 'logoanimacion')
-      //  .setScale(0.5)
-        //.play('logo_animacion')
-       // .setDepth(10);
-
-//    this.time.delayedCall(0, () => {
-  //      this.children.each(child => {
-    //        if (child.texture && child.texture.key === 'logo') {
-      //          child.destroy();
-        //    }
-     //   });
-   // });
-
-    // destruir animación del logo después de reproducirse
-   // this.time.delayedCall(200, () => {
-     //   this.children.each(child => {
-       //     if (child.texture && child.texture.key === 'logoanimacion') {
-         //       child.destroy();
-           // }
-      //  }); 
-  //  });
-//}
-
+                    this.scene.start("Versus");
+                }
+            }
+        }
 
         // Cambia el estado basado en la entrada del cursor
         if (this.cursor.right.isDown && this.state != "coop"){
             this.state = "coop";
-             
-     
-        
+            
         } else if (this.cursor.left.isDown && this.state != "vs"){
             this.state = "vs";
-       
 
-        
-        
         }
-        //estado para los assets de la rata y la rana cuando no estan seleccionados 
-
-        //hacer animacion de logo cuando se acciona una opcion
-        //this.add.sprite(600/1.3 , 300/2, 'logoanimacion').setScale(0.5).play('logo_animacion').setDepth(20);
-        //destruir logo estatico cuando se reproduce la animacion
-      
-        
-
-
-
         // Usar una variable para guardar el tamaño actual
         if (!this.vsFontSize) this.vsFontSize = 38;
         if (!this.coopFontSize) this.coopFontSize = 38;
@@ -186,6 +175,18 @@ export class MainMenu extends Scene
             this.vsText.setAlpha(1);
         }
 
+        // reproducir efecto al cambiar la selección entre modos
+        if (this.prevMenuState !== this.state) {
+            const soundKey = 'cambiar_opcion';
+            if (this.cache && this.cache.audio && this.cache.audio.exists && this.cache.audio.exists(soundKey)) {
+                this.sound.play(soundKey, { volume: 0.4 });
+            } else {
+                // intento seguro si ya fue creado en el sound manager
+                try { this.sound.play(soundKey); } catch (e) { /* silencioso */ }
+            }
+            this.prevMenuState = this.state;
+        }
+
         //cambiar tamaño de assets al seleccionar una opcion
         if (this.state === "coop") {
             this.frognardIcon.setScale(3);
@@ -203,14 +204,17 @@ export class MainMenu extends Scene
        
         // Iniciar la escena seleccionada al presionar Enter
         if (this.enter.isDown) {
+            try { if (this.confirmSoundKey) this.sound.play(this.confirmSoundKey); } catch(e) {}
+            this.stopMenuMusic();
             if (this.state === "coop") {
-                this.scene.start("Coop")
+                this.scene.start("Coop");
             } else if (this.state === "vs") {
-                this.scene.start("Versus")
-            };
-        };
+                this.scene.start("Versus");
+            }
+        }
     }
-}
+
+
 shutdown() {
         if (this.gamepads && this.gamepads.joystick1) {
             this.gamepads.joystick1.removeAllListeners();
@@ -218,5 +222,6 @@ shutdown() {
         if (this.gamepads && this.gamepads.joystick2) {
             this.gamepads.joystick2.removeAllListeners();
         }
-    }
-}
+     }
+      
+ }

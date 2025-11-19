@@ -3,8 +3,6 @@ import Phaser from 'phaser';
 export class Accionable extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, distintivo, tipo) {
         super(scene, x, y);
-
-        this.y = y;
         this.distintivo = distintivo;
         this.tipo = tipo;
     
@@ -35,10 +33,6 @@ export class Accionable extends Phaser.Physics.Arcade.Sprite {
 
         this.body.setImmovable(true);
         this.body.setAllowGravity(false);
-
-//        this.on("animationcomplete", (anim, frame, gameObject) => {
-//            this.frame = frame.index
-//        });
     }
 
     toggle(interruptor, valor) {
@@ -74,6 +68,14 @@ export class Accionable extends Phaser.Physics.Arcade.Sprite {
                     this.abriendo = false;
                     this.setVisible(false);
                     this.body.enable = false;
+                    // reproducir sonido al abrir la puerta (si está precargado)
+                    try {
+                        const s = this.scene.sound.get('abrir_puerta');
+                        if (s) s.play();
+                        else this.scene.sound.play('abrir_puerta');
+                    } catch (e) {
+                        // silencioso si no existe el audio
+                    }
                     console.log("Puerta abierta");
                 } else if (this.cerrando) {
                     this.abierto = false;
@@ -90,14 +92,14 @@ export class Sirena extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, posX, posY) {
         super (scene, posX, posY, "luz alarma", 0);
 
-//        scene.physics.add.existing(this);
-//        this.body.setImmovable(true);
-//        this.body.setAllowGravity(false);
-//
-//        this.setFlipY(true);
-//        this.setOrigin(0);
-//        
-//        this.scene.sirenas.add(this);
+        scene.physics.add.existing(this);
+        this.body.immovable = true;
+        this.body.allowGravity = false;
+
+        this.setFlipY(true);
+        this.setOrigin(0);
+        
+        this.scene.sirenas.add(this);
     }
 
     setOn(valor) {

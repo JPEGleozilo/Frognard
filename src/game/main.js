@@ -3,8 +3,9 @@ import { Coop } from './scenes/Coop';
 import { CoopNivel2 } from './scenes/Coop nivel2';
 import { CoopNivel3 } from './scenes/Coop nivel3';
 import { CoopNivel4 } from './scenes/Coop nivel4';
+import { CoopNivel5 } from './scenes/Coop nivel5';
+import { CoopNivel6 } from './scenes/Coop nivel6';
 import { Versus } from './scenes/Versus';
-import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
 import { ModificadorRuleta } from './scenes/ModificadorRuleta';
@@ -45,9 +46,10 @@ const config = {
         CoopNivel2,
         CoopNivel3,
         CoopNivel4,
+        CoopNivel5,
+        CoopNivel6,
         MainMenu,
         Versus,
-        GameOver,
         ModificadorRuleta,
         VersusFinal
     ]

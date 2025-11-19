@@ -14,6 +14,7 @@ export class Boot extends Scene
     
         this.load.spritesheet("carga", "assets/cargaanim.png", { frameWidth: 1920, frameHeight: 1080 });
         this.load.image('background', 'assets/bg.png');
+        this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'vhs-gothic', 'vhs-gothic.ttf'));
     }
 
     create ()
