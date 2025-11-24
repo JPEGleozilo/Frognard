@@ -30,13 +30,11 @@ export default class BotonV extends Phaser.Physics.Arcade.Sprite {
             if (PUERTAMOVIENDOSE) return;
             if (this.apretado === true) return;
             this.setApretado(true);
-            console.log(this.distintivo, " apretado");
             this.scene.accionable.children.iterate(obj => {
                 obj.toggle(this.distintivo, true);
             });
             this.scene.time.delayedCall(this.delay, () => {
                 if (this.apretado === false) return;
-                console.log ("delay ", this.delay);
                 this.apretado = false;
                 this.setApretado(false);
                 this.scene.accionable.children.iterate(obj => {

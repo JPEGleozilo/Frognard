@@ -39,7 +39,7 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityX(this.velocidad * this.angulo.x);
             this.setVelocityY(this.velocidad * this.angulo.y);
         } else {
-            console.log("no papi");
+            return
         };
 
 
@@ -53,14 +53,6 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
         this.setVelocityX(this.velocidad * Math.cos(this.anguloVuelta));
         this.setVelocityY(this.velocidad * Math.sin(this.anguloVuelta));
         };
-
-        if (this.log === false) {
-            console.log ("frogX: ", this.frogX);
-            console.log ("frogY: ", this.frogY);
-            console.log("body.x: ", this.body.x);
-            console.log("body.y: ", this.body.y);
-            this.log = true;
-        }
     }
 
     triggerVuelta() {
@@ -71,7 +63,6 @@ export default class Lengua extends Phaser.Physics.Arcade.Sprite {
 
     desactivar() {
         if (this.vuelta === true) {
-            console.log("desactivado");
             this.vuelta = false;
             this.setCollideWorldBounds(false);
             this.setVisible(false);

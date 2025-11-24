@@ -11,6 +11,7 @@ import { Preloader } from './scenes/Preloader';
 import { ModificadorRuleta } from './scenes/ModificadorRuleta';
 import {VersusFinal } from './scenes/VersusFInal';
 import { AUTO, Game, Physics } from 'phaser';
+import FirebasePlugin from '../plugins/FirebasePlugin.js';
 
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -38,6 +39,14 @@ const config = {
         keyboard: true,
         mouse: true,
         touch: true
+    },
+    plugins: {
+        global: [{
+        key: "FirebasePlugin",
+        plugin: FirebasePlugin,
+        start: true,
+        mapping: "firebase",
+        }]
     },
     scene: [
         Boot,

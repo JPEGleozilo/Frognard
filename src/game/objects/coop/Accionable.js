@@ -45,11 +45,9 @@ export class Accionable extends Phaser.Physics.Arcade.Sprite {
         if (this.interruptor === this.distintivo) {
             if (this.tipo === "puerta") {
                 if (this.abierto === false && valor !== this.abierto && (this.abriendo === false && this.cerrando === false)) {
-                    console.log("abriendo")
                     this.anims.play("puerta abrir", true);
                     this.abriendo = true;
                 } else if (this.abierto === true && valor !== this.abierto && (this.abriendo === false && this.cerrando === false)) {
-                    console.log("cerrando")
                     this.setVisible(true);
                     this.body.enable = true;
                     this.anims.playReverse("puerta abrir", true);
@@ -76,11 +74,9 @@ export class Accionable extends Phaser.Physics.Arcade.Sprite {
                     } catch (e) {
                         // silencioso si no existe el audio
                     }
-                    console.log("Puerta abierta");
                 } else if (this.cerrando) {
                     this.abierto = false;
                     this.cerrando = false;
-                    console.log("Puerta cerrada");
                 }
             }
 

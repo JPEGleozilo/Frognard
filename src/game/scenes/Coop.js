@@ -73,13 +73,10 @@ export class Coop extends Scene
         this.capaInterruptores.objects.forEach(objeto => {
             if (objeto.type === "Horizontal") {
                 new BotonH (this, objeto.x, objeto.y, objeto.name);
-                console.log(objeto.name, " horizontal");
             } else if (objeto.type === "Vertical") {
                 new BotonV (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value, objeto.properties[1].value, objeto.properties[2].value);
-                console.log(objeto.name, " vertical");
             } else if (objeto.type === "Palanca") {
                 new Palanca (this, objeto.x, objeto.y, objeto.name, objeto.properties[0].value);
-                console.log(objeto.name, " palanca");
             }
         });
 
@@ -97,7 +94,6 @@ export class Coop extends Scene
         this.capaAccionables = mapa1.getObjectLayer("accionables");
         this.capaAccionables.objects.forEach(objeto => {
             new Accionable (this, objeto.x, objeto.y, objeto.name, objeto.type);
-            console.log(objeto.name, " puerta");
         });
 
 
@@ -152,11 +148,9 @@ export class Coop extends Scene
     {
         this.alarmaSM.step();
         if (this.alarmaSM.estadoActual === "inicio" && this.alarmaSM.estados["inicio"].execute() === true) {
-            console.log("transicion");
             this.alarmaSM.transicion(alarma);
         };
         if (this.alarmaSM.estadoActual === "alarma" && this.alarmaSM.estados["alarma"].execute() === true) {
-            console.log("transicion");
             this.alarmaSM.transicion(gameOver);
         }
 
