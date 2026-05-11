@@ -186,7 +186,7 @@ export class Preloader extends Scene
             this.getInput = this.gamepadController.getInput();
 
             if (this.enterKey.isDown || this.getInput.joy1.accion || this.getInput.joy2.accion) {
-                this.scene.start("MainMenu");
+                this.scene.start("LanguageSelect");
             }
         }
     }

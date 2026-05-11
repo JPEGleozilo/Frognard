@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import GamePadController from '../utils/GamepadController.js';
+import { getPhrase } from '../../services/translations';
 
 export class VersusFinal extends Scene {
     constructor() {
@@ -78,7 +79,7 @@ export class VersusFinal extends Scene {
             align: 'center',
         }).setOrigin(0.5).setAlpha(0);
 
-        const btn = this.add.text(680, 450, 'Volver al menú', {
+        const btn = this.add.text(680, 450, getPhrase('Volver al menú'), {
             fontSize: '24px',
             color: '#00aa00',
             backgroundColor: '#cccccc',
@@ -172,15 +173,14 @@ export class VersusFinal extends Scene {
             if (this.winner === 'empate') {
                 rana.clearTint();
                 rata.clearTint();
-                resultText.setText('¡Empate!');
+                resultText.setText(getPhrase('Empate'));
             } else if (this.winner === 'rana') {
                 rana.clearTint();
-                resultText.setText('¡La Rana ganó!');
-                // Atenuar la luz contraria
+                resultText.setText(getPhrase('¡La Rana ganó!'));
                 this.tweens.add({ targets: rightLight, alpha: 0.3, duration: 1000 });
             } else {
                 rata.clearTint();
-                resultText.setText('¡La Rata ganó!');
+                resultText.setText(getPhrase('¡La Rata ganó!'));
                 this.tweens.add({ targets: leftLight, alpha: 0.3, duration: 1000 });
             }
 
@@ -195,8 +195,7 @@ export class VersusFinal extends Scene {
         // Estadísticas finales
         this.time.delayedCall(6000, () => {
             statsText.setText(
-                `Moscas recolectadas:\n\n Rana: ${this.frogFlies}\n Rata: ${this.ratFlies}`
-            );
+        `${getPhrase('Moscas recolectadas:')}\n\n ${getPhrase('Rana:')} ${this.frogFlies}\n ${getPhrase('Rata:')} ${this.ratFlies}`);
 
             this.tweens.add({
                 targets: [statsText, btn],

@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { getPhrase } from '../../services/translations';
 
 const MODIFICADORES_INFO = [
   { key: 'pantallaInvertida', nombre: 'Pantalla Invertida', descripcion: 'La pantalla se muestra al revés.', icono: 'pantalla_invertida' },
@@ -40,7 +41,7 @@ export class ModificadorRuleta extends Scene {
     const centerY = (this.scale.height / 2) - 50;
 
     this.add.rectangle(centerX, centerY + 50, this.scale.width, this.scale.height, 0x000000, 0.9);
-    this.add.text(centerX, 40, 'Ruleta de Modificadores', {
+    this.add.text(centerX, 40, getPhrase('Ruleta de Modificadores'), {
       fontFamily: "vhs-gothic",
       fontSize: '28px',
       color: '#fff',
@@ -110,8 +111,8 @@ export class ModificadorRuleta extends Scene {
     }).setOrigin(0.5);
 
     // textos de confirmación por jugador
-    this.readyTextP1 = this.add.text(centerX - 180, centerY + 220, 'P1: Esperando ', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5);
-    this.readyTextP2 = this.add.text(centerX + 180, centerY + 220, 'P2: Esperando ', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5);
+    this.readyTextP1 = this.add.text(centerX - 180, centerY + 220, getPhrase('P1 Esperando'), { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5);
+    this.readyTextP2 = this.add.text(centerX + 180, centerY + 220, getPhrase('P2 Esperando'), { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5);
     this.instructionText = this.add.text(centerX, centerY + 300, '', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5);
 
     // sprite de animación para "presionar A" (oculto hasta finish)
@@ -209,17 +210,16 @@ export class ModificadorRuleta extends Scene {
   onConfirm(player) {
     if (player === 1) {
       this.p1Ready = true;
-      this.readyTextP1.setText('P1: Listo');
+      this.readyTextP1.setText(getPhrase('P1 Listo'));
       this.readyTextP1.setColor('#00ff00');
     } else {
       this.p2Ready = true;
-      this.readyTextP2.setText('P2: Listo');
+      this.readyTextP2.setText(getPhrase('P2 Listo'));
       this.readyTextP2.setColor('#00ff00');
     }
 
-    // si aún no terminó el giro, informar
-    if (!this.finalChoice) {
-      this.instructionText.setText('Esperando que termine la ruleta...');
+   if (!this.finalChoice) {
+      this.instructionText.setText(getPhrase('Esperando que termine la ruleta'));
       return;
     }
 
@@ -231,7 +231,7 @@ export class ModificadorRuleta extends Scene {
     }
 
     // si se puede confirmar, intentar finalizar
-    this.instructionText.setText('Confirmado: esperando al otro jugador...');
+    this.instructionText.setText(getPhrase('Esperando al otro jugador'));
     this.checkBothReady();
   }
 
@@ -306,8 +306,8 @@ export class ModificadorRuleta extends Scene {
       // Actualizar texto central
       const index = this.icons.indexOf(closestIcon);
       const mod = this.itemsLoop[index];
-      this.centerText.setText(mod.nombre);
-      this.centerDesc.setText(mod.descripcion);
+      this.centerText.setText(getPhrase(mod.nombre));
+      this.centerDesc.setText(getPhrase(mod.descripcion));
 
       // Desacelerar suavemente
       step++;
