@@ -15,6 +15,7 @@ export class Preloader extends Scene
           this.cargaAnim = this.add.sprite(centerX, centerY, 'carga', 0).setScale(0.5);
     
         this.cargaFinal = false;
+        this.login = false;
     }
 
 
@@ -27,6 +28,7 @@ export class Preloader extends Scene
         });
 
         this.load.setPath('/assets/fonts');
+
         this.load.addFile(new Phaser.Loader.FileTypes.CSSFile(this.load, 'PIXELYA', 'PIXELYA Trial.ttf'));
         
         this.cargaAnim.play('carga_anim');
@@ -65,7 +67,6 @@ export class Preloader extends Scene
 
         this.load.spritesheet('animacion_presionar_a', 'animacion_presionar_a.png', { frameWidth: 32, frameHeight: 48 });
 
-
         this.load.image("pantalla_invertida", "pantalla_invertida.png");
 
         this.load.image("moscas_pequeñas", "moscas_pequeñas.png");
@@ -93,7 +94,6 @@ export class Preloader extends Scene
         this.load.image("fondo_versus", "fondo3.png");
 
         this.load.spritesheet("escenario", "escenario.png", { frameWidth: 300, frameHeight: 360 });
-
 
         this.load.image("frognard", "frog64x64.png");
 
@@ -168,7 +168,14 @@ export class Preloader extends Scene
     }
 
     update() {
-        if (this.cargaFinal === true && this.cargaAnim.anims.currentFrame.index === 6) {
+
+        this.firebase
+          .signInAnonymously()
+          .then(() => {
+           this.login = true; 
+          });
+
+        if (this.cargaFinal === true && this.cargaAnim.anims.currentFrame.index === 6 && this.login === true) {
             if (!this.menuTexto) {
                 this.menuTexto = this.add.text(480, 450, "Presiona enter para continuar", {
                     fontFamily: "vhs-gothic",
@@ -182,7 +189,7 @@ export class Preloader extends Scene
             this.getInput = this.gamepadController.getInput();
 
             if (this.enterKey.isDown || this.getInput.joy1.accion || this.getInput.joy2.accion) {
-                this.scene.start("MainMenu");
+                this.scene.start("LanguageSelect");
             }
         }
     }

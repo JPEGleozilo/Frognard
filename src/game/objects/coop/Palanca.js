@@ -26,7 +26,6 @@ export default class Palanca extends Phaser.Physics.Arcade.Sprite {
             };
             this.apretado = true;
             this.togglePalanca(true);
-            console.log(this.distintivo, " apretado");
             this.scene.accionable.children.iterate(obj => {
                 obj.toggle(this.distintivo);
             });

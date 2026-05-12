@@ -28,12 +28,10 @@ export default class GamePadController{
         scene.input.gamepad.on('connected', (pad) => {
             if (this.joystick1 === null) {
                 this.joystick1 = pad;
-                console.log("Joystick 1 conectado:", pad.id);
             } else if (this.joystick2 === null) {
                 this.joystick2 = pad;
-                console.log("Joystick 2 conectado:", pad.id);
             } else {
-                console.warn ("cantidad máxima de joysticks alcanzada");
+                return
             }
         });
 

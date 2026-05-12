@@ -30,7 +30,6 @@ export default class ModificadorManager {
 
     // (Si aún mantienes seleccionarSegunRonda, está bien; la ruleta la puede llamar y setear modificadoresActivos)
     seleccionarSegunRonda(rondaActual) {
-        console.log("Seleccionando modificador para ronda:", rondaActual);
 
         if (rondaActual === 2) {
             const nuevo = Phaser.Utils.Array.GetRandom(this.todosLosModificadores);
@@ -156,8 +155,6 @@ export default class ModificadorManager {
         if (typeof nombre === 'string') {
             nombre = this._toCamelCase(nombre.trim());
         }
-
-        console.log("Aplicando modificador:", nombre);
 
         // helper para aplicar a todas las moscas activas
         const applyToAllActive = (fn) => {

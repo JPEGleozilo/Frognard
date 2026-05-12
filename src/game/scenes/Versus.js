@@ -341,8 +341,6 @@ export class Versus extends Scene {
   }
 
   endGameSequence() {
-    console.log("🏁 Rondas finalizadas. Mostrar resultados o pantalla final.");
-
     // Obtén los scores
     const scores = this.scoreManager.getScores();
 

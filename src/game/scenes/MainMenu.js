@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import GamePadController from '../utils/GamepadController';
+import { getPhrase } from '../../services/translations';
 
 export class MainMenu extends Scene
 {
@@ -55,7 +56,7 @@ export class MainMenu extends Scene
         this.ranaIcon = this.add.image(vsX - 55, textY - 60, 'rana').setOrigin(0.5, 0.75).setScale(2).setDepth(2);
         this.rataIcon = this.add.image(vsX + 45, textY - 60, 'rata').setOrigin(0.5, 0.75).setScale(2).setDepth(1);
 
-        this.coopText = this.add.text(coopX, textY, 'COOPERATIVO', {
+        this.coopText = this.add.text(coopX, textY, getPhrase('COOPERATIVO'), {
             fontFamily: '"VT323", monospace',
             fontSize: 38,
             color: '#1fd70eff',
@@ -64,7 +65,7 @@ export class MainMenu extends Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        this.vsText = this.add.text(vsX, textY, 'VERSUS', {
+        this.vsText = this.add.text(vsX, textY, getPhrase('VERSUS'), {
             fontFamily: '"VT323", monospace',
             fontSize: 38,
             color: '#536066ff',
