@@ -35,7 +35,7 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
         this.flipActual = false;
 
         // === Controles de teclado ===
-        this.scene.cursors = this.scene.input.keyboard.addKeys("UP,DOWN,LEFT,RIGHT,A,D,L,T");
+        this.scene.cursors = this.scene.input.keyboard.addKeys("UP,DOWN,LEFT,RIGHT,A,D,L,T,R,O");
 
         // === Gamepads ===
         this.gamepadController = new GamePadController(this.scene);
@@ -228,12 +228,12 @@ export default class Frognard extends Phaser.Physics.Arcade.Sprite {
             }
         }
         this.animController.playAnim(this.animacionActual, this.flipActual, this.scene.angulo);
-        if (this.getInput.joy1.restart === true || this.getInput.joy2.restart === true) {
+        if (this.getInput.joy1.restart === true || this.getInput.joy2.restart === true || this.scene.cursors.O.isDown || this.scene.cursors.R.isDown) {
             this.setTint(0xFF0000)
-            if (this.getInput.joy1.restart === true && this.getInput.joy2.restart === true) {
+            if ((this.getInput.joy1.restart === true && this.getInput.joy2.restart === true) || (this.scene.cursors.O.isDown && this.scene.cursors.R.isDown)) {
                 this.scene.reinicio();
             }
-        } else if (this.getInput.joy1.restart === false && this.getInput.joy2.restart === false) {
+        } else if ((this.getInput.joy1.restart === false && this.getInput.joy2.restart === false) || (this.scene.cursors.O.isUp && this.scene.cursors.R.isUp)) {
             this.clearTint();
         }
     }

@@ -5,6 +5,7 @@ export class Accionable extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y);
         this.distintivo = distintivo;
         this.tipo = tipo;
+        this.scene = scene;
     
         if (this.tipo === "puerta") {
             this.setTexture("puerta");

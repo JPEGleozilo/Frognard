@@ -34,7 +34,7 @@ export default class BotonV extends Phaser.Physics.Arcade.Sprite {
             this.scene.accionable.children.iterate(obj => {
                 obj.toggle(this.distintivo, true);
             });
-            this.scene.time.delayedCall(this.delay, () => {
+            this.callbackDelay = this.scene.time.delayedCall(this.delay, () => {
                 if (this.apretado === false) return;
                 console.log ("delay ", this.delay);
                 this.apretado = false;
@@ -44,6 +44,10 @@ export default class BotonV extends Phaser.Physics.Arcade.Sprite {
                 });
             })
         });
+    }
+
+    eliminarDelays() {
+        this.callbackDelay.destroy();
     }
 
     setApretado(valor) {
