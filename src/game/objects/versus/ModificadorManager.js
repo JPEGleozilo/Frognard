@@ -1,3 +1,5 @@
+import { EventBus } from '../../utils/EventBus.js';
+
 export default class ModificadorManager {
     constructor(scene) {
         this.scene = scene;
@@ -45,11 +47,6 @@ export default class ModificadorManager {
 
     // Añadir de forma segura un modificador a la lista (normaliza y valida)
     addModificador(mod) {
-        if (mod == null) {
-            console.warn('Intentando añadir modificador nulo/undefined:', mod);
-            return false;
-        }
-
         // extrae key si viene de la ruleta como objeto
         let name = mod;
         if (typeof mod === 'object') {
@@ -100,6 +97,7 @@ export default class ModificadorManager {
     // limpiar efectos visuales y de movimiento antes de reaplicar
     resetVisualsForReapply() {
         this.scene.cameras.main.setRotation(0);
+        EventBus.emit('pantallaInvertida', false);
         this.scene.velocidadReticula = 1;
         this.scene.disparoSpeed = this.scene.disparoSpeedBase ?? 12;
 
@@ -166,6 +164,7 @@ export default class ModificadorManager {
         switch (nombre) {
             case "pantallaInvertida":
                 this.scene.cameras.main.setRotation(Phaser.Math.DegToRad(180));
+                EventBus.emit('pantallaInvertida', true);
                 break;
             case "disparosLentos":
                 // guardamos velocidad base si no existe
