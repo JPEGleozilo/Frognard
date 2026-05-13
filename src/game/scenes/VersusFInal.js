@@ -221,4 +221,3 @@ export class VersusFinal extends Scene {
             this.scene.start('MainMenu');   this.scene.start('MainMenu');
         }        }
     }
-

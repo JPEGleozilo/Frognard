@@ -1,3 +1,5 @@
+import { EventBus } from '../../utils/EventBus.js';
+
 export default class ScoreManager {
     constructor(scene) {
         this.scene = scene;
@@ -23,7 +25,7 @@ export default class ScoreManager {
                 const p = (playerId === 'player1') ? this.scene.rana : this.scene.rata;
                 if (p) { x = p.x; y = p.y; }
             }
-            this.scene.events.emit('scorePopup', { x, y, value: puntos, player: playerId });
+            EventBus.emit('scorePopup', { x, y, value: puntos, player: playerId });
         }
     }
 
