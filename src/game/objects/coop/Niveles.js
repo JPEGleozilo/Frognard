@@ -48,20 +48,16 @@ export class NivelTemplate {
                 this.scene.capaInterruptores.objects.forEach(objeto => {
                     if (objeto.type === "Horizontal") {
                         new BotonH (this.scene, objeto.x, objeto.y, objeto.name);
-                        console.log(objeto.name, " horizontal");
                     } else if (objeto.type === "Vertical") {
                         new BotonV (this.scene, objeto.x, objeto.y, objeto.name, objeto.properties[0].value, objeto.properties[1].value, objeto.properties[2].value);
-                        console.log(objeto.name, " vertical");
                     } else if (objeto.type === "Palanca") {
                         new Palanca (this.scene, objeto.x, objeto.y, objeto.name);
-                        console.log(objeto.name, " palanca");
                     }
                 });
 
                 this.scene.capaAccionables = this.scene.mapa.getObjectLayer("accionables");
                 this.scene.capaAccionables.objects.forEach(objeto => {
                     new Accionable (this.scene, objeto.x, objeto.y, objeto.name, objeto.type);
-                    console.log(objeto.name, " puerta");
                 });
 
                 ///--- colliders ---///
