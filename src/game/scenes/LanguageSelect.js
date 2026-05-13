@@ -110,7 +110,7 @@ export class LanguageSelect extends Scene {
             this.canInput = false;
             const lang = this.options[this.selectedIndex];
             getTranslations(lang, () => {
-                this.scene.start('MainMenu');
+                this.scene.start('Login');
             });
         }
     }

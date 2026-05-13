@@ -14,6 +14,8 @@ import {
 } from "firebase/firestore";
 import {
   getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInAnonymously,
   onAuthStateChanged,
 } from "firebase/auth";
@@ -62,6 +64,24 @@ constructor(pluginManager) {
 
   async signInAnonymously() {
     const credentials = await signInAnonymously(this.auth);
+    return credentials.user;
+  }
+
+    async createUserWithEmail(email, password) {
+    const credentials = await createUserWithEmailAndPassword(
+      this.auth,
+      email,
+      password
+    );
+    return credentials.user;
+  }
+
+  async signInWithEmail(email, password) {
+    const credentials = await signInWithEmailAndPassword(
+      this.auth,
+      email,
+      password
+    );
     return credentials.user;
   }
 

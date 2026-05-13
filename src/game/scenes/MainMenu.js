@@ -124,7 +124,7 @@ export class MainMenu extends Scene
             }
             //estado para los assets de la rata y la rana cuando no estan seleccionados 
             if (this.cursor.left.isUp && this.cursor.right.isUp && this.state === "neutral") {
-                this.state = ""; // Por defecto, selecciona "coop"
+                this.state = "";
             }
             if (this.enter.isDown || (this.getInput.joy1.accion === true || this.getInput.joy2.accion === true)) {
                 try { if (this.confirmSoundKey) this.sound.play(this.confirmSoundKey); } catch(e) {}

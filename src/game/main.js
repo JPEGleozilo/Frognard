@@ -8,6 +8,7 @@ import {VersusFinal } from './scenes/VersusFInal';
 import { AUTO, Game, Physics } from 'phaser';
 import FirebasePlugin from '../plugins/FirebasePlugin.js';
 import { LanguageSelect } from './scenes/LanguageSelect';
+import Login from './scenes/Login.js';
 
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -48,6 +49,7 @@ const config = {
         Boot,
         Preloader,
         LanguageSelect,
+        Login,
         Coop,
         MainMenu,
         Versus,

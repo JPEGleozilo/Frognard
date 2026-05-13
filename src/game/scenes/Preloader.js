@@ -188,8 +188,14 @@ export class Preloader extends Scene
             this.gamepadController.update();
             this.getInput = this.gamepadController.getInput();
 
+                const MODE = import.meta.env.VITE_MODE;
+
             if (this.enterKey.isDown || this.getInput.joy1.accion || this.getInput.joy2.accion) {
-                this.scene.start("LanguageSelect");
+                if (MODE === 'production') {
+                    this.scene.start("LanguageSelect");    
+                }else if (MODE === 'arcade') {
+                    this.scene.start('MainMenu')
+                }
             }
         }
     }

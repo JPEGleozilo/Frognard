@@ -13,6 +13,13 @@ export async function getTranslations(lang, callback) {
         return callback ? callback() : false;
     }
 
+      const mode = import.meta.env.VITE_MODE;
+        if (mode === 'arcade') {
+            console.warn('VITE_MODE is set to "arcade". External fetch to Traducila API is disabled.');
+            if (callback) callback();
+            return;
+        }
+
     return await fetch(
         `https://traducila.vercel.app/api/translations/${PROJECT_ID}/${language}`
     )
