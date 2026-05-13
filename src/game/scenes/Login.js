@@ -10,7 +10,7 @@ export default class Login extends Phaser.Scene {
   create() {
     // agregar un texto "Login" en la parte superior de la pantalla
 
-    this.add.sprite(480, 270, 'fondo2').setScale(0.5).setDepth(-2); 
+    this.add.sprite(480, 270, 'fondo2').setScale(0.5).setDepth(0); 
 
     this.loginTexto = this.add
       .text(480, 100, "Login", {
@@ -22,7 +22,7 @@ export default class Login extends Phaser.Scene {
     })
     .setOrigin(0.5);
     // agregar un texto Ingresar con Email y contraseña que al hacer clic me levante un popup js para ingresar los datos
-    this.emailTexto = this.add.text(480, 250, "Ingresar con Email y contraseña", {
+    this.emailTexto = this.add.text(480, 250, getPhrase('Ingresar con Email y contraseña'), {
         fontFamily: '"VT323", monospace',
         fontSize: 38,
         color: '#7deeffff',
@@ -33,7 +33,7 @@ export default class Login extends Phaser.Scene {
     .setOrigin(0.5).setAlpha(1)
 
     // Agregar un texto "Ingresas de forma Anonima" que al hacer clic me levante un popup js para ingresar los datos
-    this.anonTexto = this.add.text(480, 350, "Ingresar de forma Anonima", {
+    this.anonTexto = this.add.text(480, 350, getPhrase('Ingresar de forma Anonima'), {
         fontFamily: '"VT323", monospace',
         fontSize: 38,
         color: '#444343ff',

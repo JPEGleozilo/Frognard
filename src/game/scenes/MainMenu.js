@@ -12,7 +12,6 @@ export class MainMenu extends Scene
     create ()
     { 
        this.add.sprite(480, 270, 'fondo2').setScale(0.5).setDepth(-2); 
-       this.instructionText = this.add.text(1, 1 + 300, '', { fontFamily: "vhs-gothic", fontSize: '18px', color: '#fff' }).setOrigin(0.5).setDepth(-100000000000);
 
       // reproducir música de fondo del menú (evitar duplicados si ya existe)
       this.menuMusicKey = 'musica_pantalla_seleccion';
@@ -137,14 +136,6 @@ export class MainMenu extends Scene
             }
         }
 
-        // Cambia el estado basado en la entrada del cursor
-        if (this.cursor.right.isDown && this.state != "coop"){
-            this.state = "coop";
-            
-        } else if (this.cursor.left.isDown && this.state != "vs"){
-            this.state = "vs";
-
-        }
         // Usar una variable para guardar el tamaño actual
         if (!this.vsFontSize) this.vsFontSize = 38;
         if (!this.coopFontSize) this.coopFontSize = 38;
@@ -200,18 +191,6 @@ export class MainMenu extends Scene
         } else {
             this.ranaIcon.setScale(2);
             this.rataIcon.setScale(2);
-        }
-
-       
-        // Iniciar la escena seleccionada al presionar Enter
-        if (this.enter.isDown) {
-            try { if (this.confirmSoundKey) this.sound.play(this.confirmSoundKey); } catch(e) {}
-            this.stopMenuMusic();
-            if (this.state === "coop") {
-                this.scene.start("Coop");
-            } else if (this.state === "vs") {
-                this.scene.start("Versus");
-            }
         }
     }
 

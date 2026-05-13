@@ -19,8 +19,7 @@ export class LanguageSelect extends Scene {
         const centerX = width / 2;
         const centerY = height / 2;
 
-        // Fondo
-        this.add.rectangle(centerX, centerY, width, height, 0x0a0a0a);
+        this.add.sprite(480, 270, 'fondo2').setScale(0.5).setDepth(0); 
 
         const esX = centerX - 160;
         const enX = centerX + 160;
